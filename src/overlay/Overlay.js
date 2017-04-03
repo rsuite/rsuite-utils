@@ -1,9 +1,38 @@
 import React, { cloneElement } from 'react';
 import classNames from 'classnames';
-import elementType from '../prop-types/elementType';
+import elementType from '../propTypes/elementType';
 
 import BaseOverlay from './BaseOverlay';
-import Fade from './Fade';
+import Fade from '../Animation/Fade';
+
+const propTypes = {
+    ...BaseOverlay.propTypes,
+
+    /**
+     * Set the visibility of the Overlay
+     */
+    show: React.PropTypes.bool,
+    /**
+     * Specify whether the overlay should trigger onHide when the user clicks outside the overlay
+     */
+    rootClose: React.PropTypes.bool,
+    /**
+     * A callback invoked by the overlay when it wishes to be hidden. Required if
+     * `rootClose` is specified.
+     */
+    onHide: React.PropTypes.func,
+
+    /**
+    * Use animation
+    */
+    animation: React.PropTypes.oneOfType([React.PropTypes.bool, elementType])
+};
+
+const defaultProps = {
+    animation: Fade,
+    rootClose: false,
+    show: false
+};
 
 class Overlay extends React.Component {
 
@@ -36,33 +65,7 @@ class Overlay extends React.Component {
     }
 }
 
-Overlay.propTypes = {
-    ...BaseOverlay.propTypes,
-
-    /**
-     * Set the visibility of the Overlay
-     */
-    show: React.PropTypes.bool,
-    /**
-     * Specify whether the overlay should trigger onHide when the user clicks outside the overlay
-     */
-    rootClose: React.PropTypes.bool,
-    /**
-     * A callback invoked by the overlay when it wishes to be hidden. Required if
-     * `rootClose` is specified.
-     */
-    onHide: React.PropTypes.func,
-
-    /**
-    * Use animation
-    */
-    animation: React.PropTypes.oneOfType([React.PropTypes.bool, elementType])
-};
-
-Overlay.defaultProps = {
-    animation: Fade,
-    rootClose: false,
-    show: false
-};
+Overlay.propTypes = propTypes;
+Overlay.defaultProps = defaultProps;
 
 export default Overlay;

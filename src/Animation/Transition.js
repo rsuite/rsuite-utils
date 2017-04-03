@@ -211,17 +211,13 @@ class Transition extends React.Component {
         this.safeSetState({
             status: EXITING
         }, () => {
-            this
-                .props
-                .onExiting(node);
+            this.props.onExiting(node);
 
             this.onTransitionEnd(node, () => {
                 this.safeSetState({
                     status: EXITED
                 }, () => {
-                    this
-                        .props
-                        .onExited(node);
+                    this.props.onExited(node);
                 });
             });
         });
@@ -229,9 +225,7 @@ class Transition extends React.Component {
 
     cancelNextCallback() {
         if (this.nextCallback !== null) {
-            this
-                .nextCallback
-                .cancel();
+            this.nextCallback.cancel();
             this.nextCallback = null;
         }
     }
@@ -284,9 +278,7 @@ class Transition extends React.Component {
             className,
             ...childProps
         } = this.props;
-        Object
-            .keys(Transition.propTypes)
-            .forEach(key => delete childProps[key]);
+        Object.keys(Transition.propTypes).forEach(key => delete childProps[key]);
 
         let transitionClassName;
         if (status === EXITED) {
@@ -299,9 +291,7 @@ class Transition extends React.Component {
             transitionClassName = this.props.exitingClassName;
         }
 
-        const child = React
-            .Children
-            .only(children);
+        const child = React.Children.only(children);
         return React.cloneElement(child, {
             ...childProps,
             className: classnames(child.props.className, className, transitionClassName)

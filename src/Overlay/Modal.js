@@ -1,6 +1,5 @@
 import React, { cloneElement } from 'react';
-import mountable from '../propTypes/mountable';
-import elementType from '../propTypes/elementType';
+import { mountable, elementType } from '../propTypes';
 import Portal from './Portal';
 import ModalManager from './ModalManager';
 import {
@@ -166,7 +165,7 @@ const defaultProps = {
     onHide: noop
 };
 
-class BaseModal extends React.Component {
+class Modal extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = { exited: !props.show };
@@ -415,8 +414,8 @@ class BaseModal extends React.Component {
     }
 }
 
-BaseModal.propTypes = propTypes;
-BaseModal.defaultProps = defaultProps;
-BaseModal.manager = modalManager;
+Modal.propTypes = propTypes;
+Modal.defaultProps = defaultProps;
+Modal.manager = modalManager;
 
-export default BaseModal;
+export default Modal;

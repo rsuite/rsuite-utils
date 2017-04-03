@@ -1,5 +1,46 @@
-import { ownerDocument, getOffset, getPosition, scrollTop } from 'dom-lib';
-const utils = {
+import {
+    ownerDocument,
+    getOffset,
+    getPosition,
+    scrollTop
+} from 'dom-lib';
+
+
+function getTopDelta(top, overlayHeight, container, padding) {
+    const containerDimensions = utils.getContainerDimensions(container);
+    const containerScroll = containerDimensions.scroll;
+    const containerHeight = containerDimensions.height;
+
+    const topEdgeOffset = top - padding - containerScroll;
+    const bottomEdgeOffset = top + padding - containerScroll + overlayHeight;
+
+    if (topEdgeOffset < 0) {
+        return -topEdgeOffset;
+    } else if (bottomEdgeOffset > containerHeight) {
+        return containerHeight - bottomEdgeOffset;
+    } else {
+        return 0;
+    }
+}
+
+function getLeftDelta(left, overlayWidth, container, padding) {
+    const containerDimensions = utils.getContainerDimensions(container);
+    const containerWidth = containerDimensions.width;
+
+    const leftEdgeOffset = left - padding;
+    const rightEdgeOffset = left + padding + overlayWidth;
+
+    if (leftEdgeOffset < 0) {
+        return -leftEdgeOffset;
+    } else if (rightEdgeOffset > containerWidth) {
+        return containerWidth - rightEdgeOffset;
+    } else {
+        return 0;
+    }
+}
+
+
+export default {
 
     getContainerDimensions(containerNode) {
         let width, height, scroll;
@@ -64,38 +105,3 @@ const utils = {
     }
 };
 
-
-function getTopDelta(top, overlayHeight, container, padding) {
-    const containerDimensions = utils.getContainerDimensions(container);
-    const containerScroll = containerDimensions.scroll;
-    const containerHeight = containerDimensions.height;
-
-    const topEdgeOffset = top - padding - containerScroll;
-    const bottomEdgeOffset = top + padding - containerScroll + overlayHeight;
-
-    if (topEdgeOffset < 0) {
-        return -topEdgeOffset;
-    } else if (bottomEdgeOffset > containerHeight) {
-        return containerHeight - bottomEdgeOffset;
-    } else {
-        return 0;
-    }
-}
-
-function getLeftDelta(left, overlayWidth, container, padding) {
-    const containerDimensions = utils.getContainerDimensions(container);
-    const containerWidth = containerDimensions.width;
-
-    const leftEdgeOffset = left - padding;
-    const rightEdgeOffset = left + padding + overlayWidth;
-
-    if (leftEdgeOffset < 0) {
-        return -leftEdgeOffset;
-    } else if (rightEdgeOffset > containerWidth) {
-        return containerWidth - rightEdgeOffset;
-    } else {
-        return 0;
-    }
-}
-
-export default utils;

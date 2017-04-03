@@ -1,1 +1,1 @@
-export propTypes from './propTypes';
+export  propTypes from './propTypes';
