@@ -1,0 +1,8 @@
+test/
+docs/
+tools/
+src/
+dev/
+dist/
+.vscode/
+examples/
