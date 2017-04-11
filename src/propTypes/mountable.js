@@ -13,15 +13,15 @@ import createChainableTypeChecker from './createChainableTypeChecker';
  * @returns {Error|undefined}
  */
 
-function validate(props, propName, componentName) {
-    if (typeof props[propName] !== 'object' ||
-        typeof props[propName].render !== 'function' && props[propName].nodeType !== 1) {
+function validate(props: Object, propName: String, componentName: String) {
+  if (typeof props[propName] !== 'object' ||
+    typeof props[propName].render !== 'function' && props[propName].nodeType !== 1) {
 
-        return new Error(
-            `Invalid prop \`${propName}\` of value \`${props[propName]}\` supplied to \`${componentName}\` , 
+    return new Error(
+      `Invalid prop \`${propName}\` of value \`${props[propName]}\` supplied to \`${componentName}\` ,
             expected a DOM element or an object that has a \`render\` method`
-            );
-    }
+    );
+  }
 }
 
 export default createChainableTypeChecker(validate);
