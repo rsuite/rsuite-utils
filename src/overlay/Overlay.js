@@ -5,7 +5,11 @@ import elementType from '../propTypes/elementType';
 import BaseOverlay from './BaseOverlay';
 import Fade from '../Animation/Fade';
 
-const propTypes = {
+
+
+class Overlay extends React.Component {
+
+  static propTypes = {
     ...BaseOverlay.propTypes,
 
     /**
@@ -26,46 +30,41 @@ const propTypes = {
     * Use animation
     */
     animation: React.PropTypes.oneOfType([React.PropTypes.bool, elementType])
-};
+  };
 
-const defaultProps = {
+  static defaultProps = {
     animation: Fade,
     rootClose: false,
     show: false
-};
+  };
 
-class Overlay extends React.Component {
-
-    render() {
-        let {
+  render() {
+    let {
             children: child,
-            animation: transition,
-            ...props
+      animation: transition,
+      ...props
         } = this.props;
 
-        if (transition === true) {
-            transition = Fade;
-        }
-
-        if (transition === false) {
-            transition = null;
-        }
-
-        if (!transition) {
-            child = cloneElement(child, {
-                className: classNames('in', child.props.className)
-            });
-        }
-
-        return (
-            <BaseOverlay {...props} transition={transition}>
-                {child}
-            </BaseOverlay>
-        );
+    if (transition === true) {
+      transition = Fade;
     }
-}
 
-Overlay.propTypes = propTypes;
-Overlay.defaultProps = defaultProps;
+    if (transition === false) {
+      transition = null;
+    }
+
+    if (!transition) {
+      child = cloneElement(child, {
+        className: classNames('in', child.props.className)
+      });
+    }
+
+    return (
+      <BaseOverlay {...props} transition={transition}>
+        {child}
+      </BaseOverlay>
+    );
+  }
+}
 
 export default Overlay;

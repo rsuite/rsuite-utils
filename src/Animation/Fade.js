@@ -2,7 +2,11 @@ import React from 'react';
 import classNames from 'classnames';
 import Transition from './Transition';
 
-const propTypes = {
+
+class Fade extends React.Component {
+
+  static displayName = 'Fade';
+  static propTypes = {
     /**
      * Show the component; triggers the fade in or fade out animation
      */
@@ -51,33 +55,30 @@ const propTypes = {
      * Callback fired after the component has faded out
      */
     onExited: React.PropTypes.func
-};
+  };
 
-const defaultProps = {
+  static defaultProps = {
     in: false,
     timeout: 300,
     unmountOnExit: false,
     transitionAppear: false
-};
+  };
 
-class Fade extends React.Component {
-    render() {
-        const { timeout, className, children, ...props } = this.props;
-        return (
-            <Transition
-                {...props}
-                timeout={timeout}
-                className={classNames(className, 'fade')}
-                enteredClassName="in"
-                enteringClassName="in">
-                {children}
-            </Transition>
-        );
-    }
+  render() {
+    const { timeout, className, children, ...props } = this.props;
+    return (
+      <Transition
+        {...props}
+        timeout={timeout}
+        className={classNames(className, 'fade')}
+        enteredClassName="in"
+        enteringClassName="in">
+        {children}
+      </Transition>
+    );
+  }
 }
 
-Fade.propTypes = propTypes;
-Fade.defaultProps = defaultProps;
-Fade.displayName = 'Fade';
+
 
 export default Fade;

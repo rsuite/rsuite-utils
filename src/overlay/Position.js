@@ -5,7 +5,25 @@ import { ownerDocument, getContainer } from 'dom-lib';
 import mountable from '../propTypes/mountable';
 import overlayPositionUtils from './overlayPositionUtils';
 
-const propTypes = {
+
+
+class Position extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      positionLeft: 0,
+      positionTop: 0,
+      arrowOffsetLeft: null,
+      arrowOffsetTop: null
+    };
+
+    this._needsFlush = false;
+    this._lastTarget = null;
+  }
+
+  static displayName = 'Position';
+  static propTypes = {
     /**
      * Function mapping props to a DOM node the component is positioned next to
      *
@@ -30,126 +48,107 @@ const propTypes = {
      * Whether the position should be changed on each update
      */
     shouldUpdatePosition: React.PropTypes.bool
-};
+  };
 
-const defaultProps = {
+  static defaultProps = {
     containerPadding: 0,
     placement: 'right',
     shouldUpdatePosition: false
-};
+  };
 
+  componentDidMount() {
+    this.updatePosition();
+  }
 
-class Position extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+  componentWillReceiveProps() {
+    this._needsFlush = true;
+  }
 
-        this.state = {
-            positionLeft: 0,
-            positionTop: 0,
-            arrowOffsetLeft: null,
-            arrowOffsetTop: null
-        };
-
-        this._needsFlush = false;
-        this._lastTarget = null;
+  componentDidUpdate(prevProps) {
+    if (this._needsFlush) {
+      this._needsFlush = false;
+      this.updatePosition(prevProps.placement !== this.props.placement);
     }
+  }
 
-    componentDidMount() {
-        this.updatePosition();
-    }
+  componentWillUnmount() {
+    // Probably not necessary, but just in case holding a reference to the
+    // target causes problems somewhere.
+    this._lastTarget = null;
+  }
 
-    componentWillReceiveProps() {
-        this._needsFlush = true;
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this._needsFlush) {
-            this._needsFlush = false;
-            this.updatePosition(prevProps.placement !== this.props.placement);
-        }
-    }
-
-    componentWillUnmount() {
-        // Probably not necessary, but just in case holding a reference to the
-        // target causes problems somewhere.
-        this._lastTarget = null;
-    }
-
-    render() {
-        const {
+  render() {
+    const {
             children,
-            className,
-            ...props
+      className,
+      ...props
         } = this.props;
-        const {
+    const {
             positionLeft,
-            positionTop,
-            ...arrowPosition
+      positionTop,
+      ...arrowPosition
         } = this.state;
 
-        // These should not be forwarded to the child.
-        delete props.target;
-        delete props.container;
-        delete props.containerPadding;
+    // These should not be forwarded to the child.
+    delete props.target;
+    delete props.container;
+    delete props.containerPadding;
 
-        const child = React
-            .Children
-            .only(children);
-        return cloneElement(child, {
-            ...props,
-            ...arrowPosition,
-            //do we need to also forward positionLeft and positionTop if they are set to style?
-            positionLeft,
-            positionTop,
-            className: classNames(className, child.props.className),
-            style: {
-                ...child.props.style,
-                left: positionLeft,
-                top: positionTop
-            }
-        });
+    const child = React
+      .Children
+      .only(children);
+    return cloneElement(child, {
+      ...props,
+      ...arrowPosition,
+      //do we need to also forward positionLeft and positionTop if they are set to style?
+      positionLeft,
+      positionTop,
+      className: classNames(className, child.props.className),
+      style: {
+        ...child.props.style,
+        left: positionLeft,
+        top: positionTop
+      }
+    });
+  }
+
+  getTargetSafe() {
+    if (!this.props.target) {
+      return null;
     }
 
-    getTargetSafe() {
-        if (!this.props.target) {
-            return null;
-        }
-
-        const target = this
-            .props
-            .target(this.props);
-        if (!target) {
-            // This is so we can just use === check below on all falsy targets.
-            return null;
-        }
-
-        return target;
+    const target = this
+      .props
+      .target(this.props);
+    if (!target) {
+      // This is so we can just use === check below on all falsy targets.
+      return null;
     }
 
-    updatePosition(placementChanged) {
-        const target = this.getTargetSafe();
+    return target;
+  }
 
-        if (!this.props.shouldUpdatePosition && target === this._lastTarget && !placementChanged) {
-            return;
-        }
+  updatePosition(placementChanged) {
+    const target = this.getTargetSafe();
 
-        this._lastTarget = target;
-
-        if (!target) {
-            this.setState({ positionLeft: 0, positionTop: 0, arrowOffsetLeft: null, arrowOffsetTop: null });
-
-            return;
-        }
-
-        const overlay = ReactDOM.findDOMNode(this);
-        const container = getContainer(this.props.container, ownerDocument(this).body);
-
-        this.setState(overlayPositionUtils.calcOverlayPosition(this.props.placement, overlay, target, container, this.props.containerPadding));
+    if (!this.props.shouldUpdatePosition && target === this._lastTarget && !placementChanged) {
+      return;
     }
+
+    this._lastTarget = target;
+
+    if (!target) {
+      this.setState({ positionLeft: 0, positionTop: 0, arrowOffsetLeft: null, arrowOffsetTop: null });
+
+      return;
+    }
+
+    const overlay = ReactDOM.findDOMNode(this);
+    const container = getContainer(this.props.container, ownerDocument(this).body);
+
+    this.setState(overlayPositionUtils.calcOverlayPosition(this.props.placement, overlay, target, container, this.props.containerPadding));
+  }
 }
 
-Position.propTypes = propTypes;
-Position.displayName = 'Position';
-Position.defaultProps = defaultProps;
 
 export default Position;
