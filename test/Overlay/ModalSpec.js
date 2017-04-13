@@ -1,18 +1,21 @@
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
-import ReactDOM from 'react-dom';
+import ReactDOM, { render, findDOMNode } from 'react-dom';
+import jQuery from 'jquery';
+import ReactTestUtils from 'react-dom/test-utils';
 import { Modal } from '../../src/Overlay';
+const $ = componentOrNode => jQuery(findDOMNode(componentOrNode));
 
-describe('Modal', () => {
+describe('<Modal>', () => {
+  let mountPoint;
 
+  beforeEach(() => {
+    mountPoint = document.createElement('div');
+    document.body.appendChild(mountPoint);
+  });
 
-  it('Should output a modal', () => {
-    let instance = ReactTestUtils.renderIntoDocument(
-      <Modal show><div >---</div></Modal>
-    );
-
-    console.error(instance, '----');
-    assert.ok("DIV", 'DIV');
+  it('Should render the modal content', () => {
+    let instance = render(<Modal show ><p>message</p></Modal>, mountPoint);
+    assert.equal(instance.modal.querySelectorAll('p').length, 1);
   });
 
 });
