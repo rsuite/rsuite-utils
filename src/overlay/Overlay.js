@@ -40,10 +40,10 @@ class Overlay extends React.Component {
 
   render() {
     let {
-            children: child,
+      children: child,
       animation: transition,
       ...props
-        } = this.props;
+    } = this.props;
 
     if (transition === true) {
       transition = Fade;

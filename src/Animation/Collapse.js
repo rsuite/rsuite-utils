@@ -69,22 +69,27 @@ class Collapse extends React.Component {
      * Callback fired before the component expands
      */
     onEnter: React.PropTypes.func,
+
     /**
      * Callback fired after the component starts to expand
      */
     onEntering: React.PropTypes.func,
+
     /**
      * Callback fired after the component has expanded
      */
     onEntered: React.PropTypes.func,
+
     /**
      * Callback fired before the component collapses
      */
     onExit: React.PropTypes.func,
+
     /**
      * Callback fired after the component starts to collapse
      */
     onExiting: React.PropTypes.func,
+
     /**
      * Callback fired after the component has collapsed
      */
@@ -135,8 +140,8 @@ class Collapse extends React.Component {
 
     return (
       <Transition
-        ref="transition"
         {...this.props}
+        ref={ref => this.transition = ref}
         aria-expanded={this.props.role ? this.props.in : null}
         className={classNames(this.props.className, { width: this._dimension() === 'width' })}
         exitedClassName="collapse"
@@ -194,7 +199,7 @@ class Collapse extends React.Component {
 
   // for testing
   _getTransitionInstance() {
-    return this.refs.transition;
+    return this.transition;
   }
 
   _getScrollDimensionValue(elem, dimension) {

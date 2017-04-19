@@ -7,6 +7,7 @@ class Fade extends React.Component {
 
   static displayName = 'Fade';
   static propTypes = {
+
     /**
      * Show the component; triggers the fade in or fade out animation
      */
@@ -78,7 +79,5 @@ class Fade extends React.Component {
     );
   }
 }
-
-
 
 export default Fade;

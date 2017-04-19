@@ -18,12 +18,14 @@ const modalManager = new ModalManager();
 const noop = () => { };
 
 class Modal extends React.Component {
+
   constructor(props, context) {
     super(props, context);
     this.state = { exited: !props.show };
     this.handleBackdropClick = this.handleBackdropClick.bind(this);
     this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
     this.handleHidden = this.handleHidden.bind(this);
+    this.enforceFocus = this.enforceFocus.bind(this);
   }
 
   static propTypes = {
@@ -204,6 +206,7 @@ class Modal extends React.Component {
     } else if (!prevProps.show && this.props.show) {
       this.onShow();
     }
+
   }
 
   componentWillUnmount() {
@@ -244,10 +247,6 @@ class Modal extends React.Component {
     this.restoreLastFocus();
   }
 
-  setMountNode(ref) {
-    this.mountNode = ref ? ref.getMountNode() : ref;
-  }
-
   handleHidden(...args) {
     this.setState({ exited: true });
     this.onHide();
@@ -258,6 +257,7 @@ class Modal extends React.Component {
   }
 
   handleBackdropClick(e) {
+
     if (e.target !== e.currentTarget) {
       return;
     }
@@ -316,7 +316,7 @@ class Modal extends React.Component {
   enforceFocus() {
     let { enforceFocus } = this.props;
 
-    if (!enforceFocus || !this.isMounted() || !this.isTopModal()) {
+    if (!enforceFocus || !this.isTopModal()) {
       return;
     }
 
@@ -365,12 +365,16 @@ class Modal extends React.Component {
 
   render() {
     let {
-            children,
+      children,
       transition: Transition,
       backdrop,
       dialogTransitionTimeout,
       ...props
-        } = this.props;
+    } = this.props;
+
+
+
+
 
     let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
 
@@ -394,14 +398,26 @@ class Modal extends React.Component {
 
     if (Transition) {
       dialog = (
-        <Transition transitionAppear unmountOnExit in={show} timeout={dialogTransitionTimeout} onExit={onExit} onExiting={onExiting} onExited={this.handleHidden} onEnter={onEnter} onEntering={onEntering} onEntered={onEntered}>
+        <Transition
+          transitionAppear
+          unmountOnExit
+          in={show}
+          timeout={dialogTransitionTimeout}
+          onExit={onExit}
+          onExiting={onExiting}
+          onExited={this.handleHidden}
+          onEnter={onEnter}
+          onEntering={onEntering}
+          onEntered={onEntered}
+        >
           {dialog}
         </Transition>
       );
     }
 
+
     return (
-      <Portal ref={this.setMountNode} container={props.container}>
+      <Portal ref={ref => this.mountNode = ref ? ref.getMountNode() : ref} container={props.container}>
         <div
           ref={ref => this.modal = ref}
           role={props.role || 'dialog'}
