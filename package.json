@@ -1,12 +1,13 @@
 {
   "name": "rsuite-utils",
   "version": "0.0.1",
-  "description": "RSuite Utils ",
+  "description": "RSuite Utils",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib/"
   },
   "scripts": {
+    "dev": "NODE_ENV=development webpack-dev-server  --inline --progress --colors --port 3100 --host 0.0.0.0 ",
     "build": "rm -rf lib && babel src --out-dir lib ",
     "tdd": "karma start",
     "lint": "eslint src  *.js",
@@ -49,9 +50,15 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.3.0",
-    "extract-text-webpack-plugin": "^1.0.1",
+    "extract-text-webpack-plugin": "^2.1.0",
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.22.0",
+    "less-loader": "^2.2.3",
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "file-loader": "^0.10.1",
+    "jquery": "^3.2.1",
     "karma": "^1.1.1",
     "karma-chrome-launcher": "^1.0.1",
     "karma-cli": "^1.0.1",
@@ -63,13 +70,14 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.5.3",
-    "react-addons-test-utils": "^15.4.2",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "rimraf": "^2.5.2",
+    "react-dom": "^0.14.2",
+    "react": "^0.14.2",
+    "react-addons-test-utils": "^15.4.0",
+    "react-hot-loader": "^3.0.0-beta.6",
+    "rsuite-theme": "^0.3.30",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
-    "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
   }
 }
