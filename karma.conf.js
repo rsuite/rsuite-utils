@@ -1,7 +1,5 @@
+
 var webpackConfig = {
-  output: {
-    pathinfo: true
-  },
   module: {
     loaders: [{
       test: /\.js$/,
@@ -11,7 +9,13 @@ var webpackConfig = {
       exclude: /node_modules/
     }]
   },
-  devtool: 'eval'
+  externals: {
+    'cheerio': 'window',
+    'react/addons': true,
+    'react/lib/ExecutionEnvironment': true,
+    'react/lib/ReactContext': true
+  },
+  devtool: 'inline-source-map'
 };
 
 module.exports = function (config) {
@@ -28,7 +32,7 @@ module.exports = function (config) {
 
     logLevel: config.LOG_INFO,
     preprocessors: {
-      'test/index.js': ['webpack'],
+      'test/index.js': ['webpack', 'sourcemap'],
     },
     webpack: webpackConfig,
     webpackMiddleware: {
