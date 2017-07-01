@@ -30,7 +30,7 @@ export default function createChainableTypeChecker(validate: Function) {
   ) {
     componentName = componentName || '<<anonymous>>';
     propFullName = propFullName || propName;
-    if (props[propName] == null) {
+    if (props[propName] == null) { //eslint-disable-line
       if (isRequired) {
         if (props[propName] === null) {
           return new PropTypeError(

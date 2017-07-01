@@ -26,6 +26,7 @@ class Modal extends React.Component {
     this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
     this.handleHidden = this.handleHidden.bind(this);
     this.enforceFocus = this.enforceFocus.bind(this);
+
   }
 
   static propTypes = {
@@ -258,6 +259,7 @@ class Modal extends React.Component {
 
   handleBackdropClick(e) {
 
+
     if (e.target !== e.currentTarget) {
       return;
     }
@@ -339,6 +341,7 @@ class Modal extends React.Component {
   }
 
   renderBackdrop() {
+
     let { transition: Transition, backdropTransitionTimeout } = this.props;
     let backdrop = (
       <div ref={ref => this.backdrop = ref}

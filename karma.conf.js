@@ -1,21 +1,17 @@
-
 var webpackConfig = {
+  output: {
+    pathinfo: true
+  },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loaders: [
-        'babel?babelrc'
+    rules: [{
+      test: /\.jsx?$/,
+      use: [
+        'babel-loader'
       ],
       exclude: /node_modules/
     }]
   },
-  externals: {
-    'cheerio': 'window',
-    'react/addons': true,
-    'react/lib/ExecutionEnvironment': true,
-    'react/lib/ReactContext': true
-  },
-  devtool: 'inline-source-map'
+  devtool: 'eval'
 };
 
 module.exports = function (config) {
