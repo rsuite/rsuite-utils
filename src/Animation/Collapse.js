@@ -1,15 +1,13 @@
-import { getStyle } from 'dom-lib';
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { getStyle } from 'dom-lib';
 import Transition from './Transition';
 
 import createChainedFunction from '../utils/createChainedFunction';
 
-let capitalize = str => str[0].toUpperCase() + str.substr(1);
-
-// reading a dimension prop will cause the browser to recalculate,
-// which will let our animations work
-let triggerBrowserReflow = node => node.offsetHeight;
+const capitalize = str => str[0].toUpperCase() + str.substr(1);
+const triggerBrowserReflow = node => node.offsetHeight;
 
 const MARGINS = {
   height: ['marginTop', 'marginBottom'],
@@ -42,84 +40,22 @@ class Collapse extends React.Component {
 
   static displayName = 'Collapse';
   static propTypes = {
-    /**
-     * Show the component; triggers the expand or collapse animation
-     */
-    in: React.PropTypes.bool,
-
-    /**
-     * Unmount the component (remove it from the DOM) when it is collapsed
-     */
-    unmountOnExit: React.PropTypes.bool,
-
-    /**
-     * Run the expand animation when the component mounts, if it is initially
-     * shown
-     */
-    transitionAppear: React.PropTypes.bool,
-
-    /**
-     * Duration of the collapse animation in milliseconds, to ensure that
-     * finishing callbacks are fired even if the original browser transition end
-     * events are canceled
-     */
-    timeout: React.PropTypes.number,
-
-    /**
-     * Callback fired before the component expands
-     */
-    onEnter: React.PropTypes.func,
-
-    /**
-     * Callback fired after the component starts to expand
-     */
-    onEntering: React.PropTypes.func,
-
-    /**
-     * Callback fired after the component has expanded
-     */
-    onEntered: React.PropTypes.func,
-
-    /**
-     * Callback fired before the component collapses
-     */
-    onExit: React.PropTypes.func,
-
-    /**
-     * Callback fired after the component starts to collapse
-     */
-    onExiting: React.PropTypes.func,
-
-    /**
-     * Callback fired after the component has collapsed
-     */
-    onExited: React.PropTypes.func,
-
-    /**
-     * The dimension used when collapsing, or a function that returns the
-     * dimension
-     *
-     * _Note: Bootstrap only partially supports 'width'!
-     * You will need to supply your own CSS animation for the `.width` CSS class._
-     */
-    dimension: React.PropTypes.oneOfType([
-      React.PropTypes.oneOf(['height', 'width']),
-      React.PropTypes.func
+    in: PropTypes.bool,
+    unmountOnExit: PropTypes.bool,
+    transitionAppear: PropTypes.bool,
+    timeout: PropTypes.number,
+    onEnter: PropTypes.func,
+    onEntering: PropTypes.func,
+    onEntered: PropTypes.func,
+    onExit: PropTypes.func,
+    onExiting: PropTypes.func,
+    onExited: PropTypes.func,
+    dimension: PropTypes.oneOfType([
+      PropTypes.oneOf(['height', 'width']),
+      PropTypes.func
     ]),
-
-    /**
-     * Function that returns the height or width of the animating DOM node
-     *
-     * Allows for providing some custom logic for how much the Collapse component
-     * should animate in its specified dimension. Called with the current
-     * dimension prop value and the DOM node.
-     */
-    getDimensionValue: React.PropTypes.func,
-
-    /**
-     * ARIA role of collapsible element
-     */
-    role: React.PropTypes.string
+    getDimensionValue: PropTypes.func,
+    role: PropTypes.string
   };
 
   static defaultProps = {
@@ -132,18 +68,18 @@ class Collapse extends React.Component {
   };
 
   render() {
-    let enter = createChainedFunction(this.onEnterListener, this.props.onEnter);
-    let entering = createChainedFunction(this.onEnteringListener, this.props.onEntering);
-    let entered = createChainedFunction(this.onEnteredListener, this.props.onEntered);
-    let exit = createChainedFunction(this.onExitListener, this.props.onExit);
-    let exiting = createChainedFunction(this.onExitingListener, this.props.onExiting);
-
+    const enter = createChainedFunction(this.onEnterListener, this.props.onEnter);
+    const entering = createChainedFunction(this.onEnteringListener, this.props.onEntering);
+    const entered = createChainedFunction(this.onEnteredListener, this.props.onEntered);
+    const exit = createChainedFunction(this.onExitListener, this.props.onExit);
+    const exiting = createChainedFunction(this.onExitingListener, this.props.onExiting);
+    const { dimension, getDimensionValue, role, className, onExited, ...props } = this.props;
     return (
       <Transition
-        {...this.props}
+        {...props}
         ref={ref => this.transition = ref}
-        aria-expanded={this.props.role ? this.props.in : null}
-        className={classNames(this.props.className, { width: this._dimension() === 'width' })}
+        aria-expanded={role ? this.props.in : null}
+        className={classNames(className, { width: this._dimension() === 'width' })}
         exitedClassName="collapse"
         exitingClassName="collapsing"
         enteredClassName="collapse in"
@@ -153,10 +89,8 @@ class Collapse extends React.Component {
         onEntered={entered}
         onExit={exit}
         onExiting={exiting}
-        onExited={this.props.onExited}
-      >
-        {this.props.children}
-      </Transition>
+        onExited={onExited}
+      />
     );
   }
 
