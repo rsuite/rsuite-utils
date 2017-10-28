@@ -1,10 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM, { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { ownerDocument, getContainer } from 'dom-lib';
 import mountable from '../propTypes/mountable';
-
-
 
 class Portal extends React.Component {
 
@@ -17,44 +15,65 @@ class Portal extends React.Component {
   };
 
   componentDidMount() {
-    this._renderOverlay();
+    this.renderOverlay();
   }
-
-  componentDidUpdate() {
-    this._renderOverlay();
-  }
-
   componentWillReceiveProps(nextProps) {
 
-    if (this._overlayTarget && nextProps.container !== this.props.container) {
-      this._portalContainerNode.removeChild(this._overlayTarget);
-      this._portalContainerNode = getContainer(nextProps.container, ownerDocument(this).body);
-      this._portalContainerNode.appendChild(this._overlayTarget);
+    if (this.overlayTarget && nextProps.container !== this.props.container) {
+      this.portalContainerNode.removeChild(this.overlayTarget);
+      this.portalContainerNode = getContainer(nextProps.container, ownerDocument(this).body);
+      this.portalContainerNode.appendChild(this.overlayTarget);
     }
+  }
+  componentDidUpdate() {
+    this.renderOverlay();
   }
 
   componentWillUnmount() {
-    this._unrenderOverlay();
-    this._unmountOverlayTarget();
+    this.unrenderOverlay();
+    this.unmountOverlayTarget();
+  }
+  getMountNode() {
+    return this.overlayTarget;
+  }
+  getOverlayDOMNode() {
+    if (!this.isMounted()) { //eslint-disable-line
+      throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
+    }
+
+    if (this.overlayInstance) {
+      if (this.overlayInstance.getWrappedDOMNode) {
+        return this.overlayInstance.getWrappedDOMNode();
+      }
+      return findDOMNode(this.overlayInstance);
+    }
+
+    return null;
+  }
+  mountOverlayTarget() {
+    if (!this.overlayTarget) {
+      this.overlayTarget = document.createElement('div');
+      this.portalContainerNode = getContainer(this.props.container, ownerDocument(this).body);
+      this.portalContainerNode.appendChild(this.overlayTarget);
+    }
+  }
+  unmountOverlayTarget() {
+    if (this.overlayTarget) {
+      this.portalContainerNode.removeChild(this.overlayTarget);
+      this.overlayTarget = null;
+    }
+    this.portalContainerNode = null;
   }
 
-  _mountOverlayTarget() {
-    if (!this._overlayTarget) {
-      this._overlayTarget = document.createElement('div');
-      this._portalContainerNode = getContainer(this.props.container, ownerDocument(this).body);
-      this._portalContainerNode.appendChild(this._overlayTarget);
+
+  unrenderOverlay() {
+    if (this.overlayTarget) {
+      ReactDOM.unmountComponentAtNode(this.overlayTarget);
+      this.overlayInstance = null;
     }
   }
 
-  _unmountOverlayTarget() {
-    if (this._overlayTarget) {
-      this._portalContainerNode.removeChild(this._overlayTarget);
-      this._overlayTarget = null;
-    }
-    this._portalContainerNode = null;
-  }
-
-  _renderOverlay() {
+  renderOverlay() {
 
     let overlay = !this.props.children
       ? null
@@ -62,48 +81,18 @@ class Portal extends React.Component {
 
     // Save reference for future access.
     if (overlay !== null) {
-      this._mountOverlayTarget();
-      this._overlayInstance = ReactDOM.unstable_renderSubtreeIntoContainer(
-        this, overlay, this._overlayTarget
+      this.mountOverlayTarget();
+      this.overlayInstance = ReactDOM.unstable_renderSubtreeIntoContainer(
+        this, overlay, this.overlayTarget
       );
     } else {
-      this._unrenderOverlay();
-      this._unmountOverlayTarget();
+      this.unrenderOverlay();
+      this.unmountOverlayTarget();
     }
   }
-
-  _unrenderOverlay() {
-    if (this._overlayTarget) {
-      ReactDOM.unmountComponentAtNode(this._overlayTarget);
-      this._overlayInstance = null;
-    }
-  }
-
-  getMountNode() {
-    return this._overlayTarget;
-  }
-
-  getOverlayDOMNode() {
-    if (!this.isMounted()) {
-      throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
-    }
-
-    if (this._overlayInstance) {
-      if (this._overlayInstance.getWrappedDOMNode) {
-        return this._overlayInstance.getWrappedDOMNode();
-      } else {
-        return ReactDOM.findDOMNode(this._overlayInstance);
-      }
-    }
-
-    return null;
-  }
-
   render() {
     return null;
   }
 }
-
-
 
 export default Portal;

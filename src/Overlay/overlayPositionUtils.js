@@ -6,25 +6,40 @@ import {
 } from 'dom-lib';
 
 
+function getContainerDimensions(containerNode) {
+  let width;
+  let height;
+  let scroll;
+  if (containerNode.tagName === 'BODY') {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    scroll = scrollTop(ownerDocument(containerNode).documentElement) || scrollTop(containerNode);
+  } else {
+    ({ width, height } = getOffset(containerNode));
+    scroll = scrollTop(containerNode);
+  }
+  return { width, height, scroll };
+}
+
 function getTopDelta(top, overlayHeight, container, padding) {
-  const containerDimensions = utils.getContainerDimensions(container);
+  const containerDimensions = getContainerDimensions(container);
   const containerScroll = containerDimensions.scroll;
   const containerHeight = containerDimensions.height;
 
   const topEdgeOffset = top - padding - containerScroll;
-  const bottomEdgeOffset = top + padding - containerScroll + overlayHeight;
+  const bottomEdgeOffset = ((top + padding) - containerScroll) + overlayHeight;
 
   if (topEdgeOffset < 0) {
     return -topEdgeOffset;
   } else if (bottomEdgeOffset > containerHeight) {
     return containerHeight - bottomEdgeOffset;
-  } else {
-    return 0;
   }
+
+  return 0;
 }
 
 function getLeftDelta(left, overlayWidth, container, padding) {
-  const containerDimensions = utils.getContainerDimensions(container);
+  const containerDimensions = getContainerDimensions(container);
   const containerWidth = containerDimensions.width;
 
   const leftEdgeOffset = left - padding;
@@ -34,27 +49,13 @@ function getLeftDelta(left, overlayWidth, container, padding) {
     return -leftEdgeOffset;
   } else if (rightEdgeOffset > containerWidth) {
     return containerWidth - rightEdgeOffset;
-  } else {
-    return 0;
   }
+
+  return 0;
 }
 
-
-export default {
-
-  getContainerDimensions(containerNode) {
-    let width, height, scroll;
-    if (containerNode.tagName === 'BODY') {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      scroll = scrollTop(ownerDocument(containerNode).documentElement) || scrollTop(containerNode);
-    } else {
-      ({ width, height } = getOffset(containerNode));
-      scroll = scrollTop(containerNode);
-    }
-    return { width, height, scroll };
-  },
-
+const utils = {
+  getContainerDimensions,
   getPosition(target, container) {
     const offset = container.tagName === 'BODY' ? getOffset(target) : getPosition(target, container);
     return offset;
@@ -65,10 +66,13 @@ export default {
     const childOffset = utils.getPosition(target, container);
     const { height: overlayHeight, width: overlayWidth } = getOffset(overlayNode);
 
-    let positionLeft, positionTop, arrowOffsetLeft, arrowOffsetTop;
+    let positionLeft;
+    let positionTop;
+    let arrowOffsetLeft;
+    let arrowOffsetTop;
 
     if (placement === 'left' || placement === 'right') {
-      positionTop = childOffset.top + (childOffset.height - overlayHeight) / 2;
+      positionTop = childOffset.top + ((childOffset.height - overlayHeight) / 2);
 
       if (placement === 'left') {
         positionLeft = childOffset.left - overlayWidth;
@@ -79,11 +83,11 @@ export default {
       const topDelta = getTopDelta(positionTop, overlayHeight, container, padding);
 
       positionTop += topDelta;
-      arrowOffsetTop = 50 * (1 - 2 * topDelta / overlayHeight) + '%';
-      arrowOffsetLeft = void 0;
+      arrowOffsetTop = `${50 * (1 - ((2 * topDelta) / overlayHeight))}%`;
+      arrowOffsetLeft = undefined;
 
     } else if (placement === 'top' || placement === 'bottom') {
-      positionLeft = childOffset.left + (childOffset.width - overlayWidth) / 2;
+      positionLeft = childOffset.left + ((childOffset.width - overlayWidth) / 2);
 
       if (placement === 'top') {
         positionTop = childOffset.top - overlayHeight;
@@ -93,8 +97,8 @@ export default {
 
       const leftDelta = getLeftDelta(positionLeft, overlayWidth, container, padding);
       positionLeft += leftDelta;
-      arrowOffsetLeft = 50 * (1 - 2 * leftDelta / overlayWidth) + '%';
-      arrowOffsetTop = void 0;
+      arrowOffsetLeft = `${50 * (1 - ((2 * leftDelta) / overlayWidth))}%`;
+      arrowOffsetTop = undefined;
     } else {
       throw new Error(
         `calcOverlayPosition(): No such placement of "${placement}" found.`
@@ -105,3 +109,4 @@ export default {
   }
 };
 
+export default utils;

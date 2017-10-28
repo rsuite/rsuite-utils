@@ -1,8 +1,5 @@
 import React, { cloneElement } from 'react';
 import PropTypes from 'prop-types';
-import { mountable, elementType } from '../propTypes';
-import Portal from './Portal';
-import ModalManager from './ModalManager';
 import {
   ownerDocument,
   canUseDom,
@@ -13,23 +10,15 @@ import {
   onFocus
 } from 'dom-lib';
 
+import { mountable, elementType } from '../propTypes';
+import Portal from './Portal';
+import ModalManager from './ModalManager';
 
 
 const modalManager = new ModalManager();
 const noop = () => { };
 
 class Modal extends React.Component {
-
-  constructor(props, context) {
-    super(props, context);
-    this.state = { exited: !props.show };
-    this.handleBackdropClick = this.handleBackdropClick.bind(this);
-    this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
-    this.handleHidden = this.handleHidden.bind(this);
-    this.enforceFocus = this.enforceFocus.bind(this);
-
-  }
-
   static propTypes = {
     ...Portal.propTypes,
 
@@ -70,6 +59,21 @@ class Modal extends React.Component {
     onHide: noop
   };
 
+  constructor(props, context) {
+    super(props, context);
+    this.state = { exited: !props.show };
+    this.handleBackdropClick = this.handleBackdropClick.bind(this);
+    this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
+    this.handleHidden = this.handleHidden.bind(this);
+    this.enforceFocus = this.enforceFocus.bind(this);
+
+  }
+  componentDidMount() {
+    if (this.props.show) {
+      this.onShow();
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.show) {
       this.setState({ exited: false });
@@ -82,12 +86,6 @@ class Modal extends React.Component {
   componentWillUpdate(nextProps) {
     if (!this.props.show && nextProps.show) {
       this.checkForFocus();
-    }
-  }
-
-  componentDidMount() {
-    if (this.props.show) {
-      this.onShow();
     }
   }
 
@@ -117,8 +115,8 @@ class Modal extends React.Component {
 
 
     modalManager.add(this, container, this.props.containerClassName);
-    this._onDocumentKeyupListener = on(doc, 'keyup', this.handleDocumentKeyUp);
-    this._onFocusinListener = onFocus(this.enforceFocus);
+    this.onDocumentKeyupListener = on(doc, 'keyup', this.handleDocumentKeyUp);
+    this.onFocusinListener = onFocus(this.enforceFocus);
 
     this.focus();
 
@@ -130,15 +128,21 @@ class Modal extends React.Component {
   onHide() {
     modalManager.remove(this);
 
-    if (this._onDocumentKeyupListener) {
-      this._onDocumentKeyupListener.off();
+    if (this.onDocumentKeyupListener) {
+      this.onDocumentKeyupListener.off();
     }
 
-    if (this._onFocusinListener) {
-      this._onFocusinListener.off();
+    if (this.onFocusinListener) {
+      this.onFocusinListener.off();
     }
 
     this.restoreLastFocus();
+  }
+
+  // instead of a ref, which might conflict with one the parent applied.
+  getDialogElement() {
+    let node = this.modal;
+    return node && node.lastChild;
   }
 
   handleHidden(...args) {
@@ -223,24 +227,29 @@ class Modal extends React.Component {
     }
   }
 
-  //instead of a ref, which might conflict with one the parent applied.
-  getDialogElement() {
-    let node = this.modal;
-    return node && node.lastChild;
-  }
-
   isTopModal() {
     return modalManager.isTopModal(this);
   }
 
   renderBackdrop() {
 
-    let { transition: Transition, backdropTransitionTimeout } = this.props;
+    const {
+      transition: Transition,
+      backdropTransitionTimeout,
+      backdropStyle,
+      backdropClassName
+    } = this.props;
+
     let backdrop = (
-      <div ref={ref => this.backdrop = ref}
-        style={this.props.backdropStyle}
-        className={this.props.backdropClassName}
+      <div
+        ref={(ref) => {
+          this.backdrop = ref;
+        }}
+        style={backdropStyle}
+        className={backdropClassName}
         onClick={this.handleBackdropClick}
+        role="button"
+        tabIndex={-1}
       />
     );
 

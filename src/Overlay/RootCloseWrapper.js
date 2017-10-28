@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { on, contains } from 'dom-lib';
 
@@ -11,19 +11,18 @@ function isModifiedEvent(event) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
 
-
 class RootCloseWrapper extends React.Component {
+
+  static propTypes = {
+    onRootClose: PropTypes.func.isRequired
+  };
+
   constructor(props, context) {
     super(props, context);
 
     this.handleDocumentClick = this.handleDocumentClick.bind(this);
     this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
   }
-
-
-  static propTypes = {
-    onRootClose: PropTypes.func.isRequired
-  };
 
   componentDidMount() {
     this.bindRootCloseHandlers();
@@ -35,12 +34,12 @@ class RootCloseWrapper extends React.Component {
 
   bindRootCloseHandlers() {
     let doc = window.document;
-    this._onDocumentClickListener = on(doc, 'click', this.handleDocumentClick);
-    this._onDocumentKeyupListener = on(doc, 'keyup', this.handleDocumentKeyUp);
+    this.onDocumentClickListener = on(doc, 'click', this.handleDocumentClick);
+    this.onDocumentKeyupListener = on(doc, 'keyup', this.handleDocumentKeyUp);
   }
 
   handleDocumentClick(event) {
-    if (contains(ReactDOM.findDOMNode(this), event.target)) {
+    if (contains(findDOMNode(this), event.target)) {
       return;
     }
     if (isModifiedEvent(event) || !isLeftClickEvent(event)) {
@@ -56,12 +55,12 @@ class RootCloseWrapper extends React.Component {
   }
 
   unbindRootCloseHandlers() {
-    if (this._onDocumentClickListener) {
-      this._onDocumentClickListener.off();
+    if (this.onDocumentClickListener) {
+      this.onDocumentClickListener.off();
     }
 
-    if (this._onDocumentKeyupListener) {
-      this._onDocumentKeyupListener.off();
+    if (this.onDocumentKeyupListener) {
+      this.onDocumentKeyupListener.off();
     }
   }
 

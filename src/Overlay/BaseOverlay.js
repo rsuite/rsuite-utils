@@ -6,14 +6,6 @@ import RootCloseWrapper from './RootCloseWrapper';
 import elementType from '../propTypes/elementType';
 
 class Overlay extends React.Component {
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = { exited: !props.show };
-    this.onHiddenListener = this.handleHidden.bind(this);
-  }
-
   static propTypes = {
     ...Portal.propTypes,
     ...Position.propTypes,
@@ -30,11 +22,26 @@ class Overlay extends React.Component {
     onExited: PropTypes.func
   }
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = { exited: !props.show };
+    this.onHiddenListener = this.handleHidden.bind(this);
+  }
+
   componentWillReceiveProps(nextProps: Object) {
     if (nextProps.show) {
       this.setState({ exited: false });
     } else if (!nextProps.transition) {
       this.setState({ exited: true });
+    }
+  }
+
+  handleHidden(...args) {
+    this.setState({ exited: true });
+
+    if (this.props.onExited) {
+      this.props.onExited(...args);
     }
   }
 
@@ -99,13 +106,7 @@ class Overlay extends React.Component {
     );
   }
 
-  handleHidden(...args) {
-    this.setState({ exited: true });
 
-    if (this.props.onExited) {
-      this.props.onExited(...args);
-    }
-  }
 }
 
 

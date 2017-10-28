@@ -6,8 +6,6 @@ import elementType from '../propTypes/elementType';
 import BaseOverlay from './BaseOverlay';
 import Fade from '../Animation/Fade';
 
-
-
 class Overlay extends React.Component {
 
   static propTypes = {
