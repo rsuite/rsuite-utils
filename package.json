@@ -1,6 +1,6 @@
 {
   "name": "rsuite-utils",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "RSuite Utils",
   "main": "lib/index.js",
   "directories": {
