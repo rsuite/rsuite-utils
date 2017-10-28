@@ -25,8 +25,7 @@ export default function createChainableTypeChecker(validate: Function) {
     propName,
     componentName,
     location,
-    propFullName,
-    secret,
+    propFullName
   ) {
     componentName = componentName || '<<anonymous>>';
     propFullName = propFullName || propName;
@@ -44,12 +43,12 @@ export default function createChainableTypeChecker(validate: Function) {
         );
       }
       return null;
-    } else {
-      return validate(props, propName, componentName, location, propFullName);
     }
+
+    return validate(props, propName, componentName, location, propFullName);
   }
 
-  var chainedCheckType = checkType.bind(null, false);
+  let chainedCheckType = checkType.bind(null, false);
   chainedCheckType.isRequired = checkType.bind(null, true);
 
   return chainedCheckType;

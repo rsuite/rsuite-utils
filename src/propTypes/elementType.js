@@ -14,7 +14,13 @@ import createChainableTypeChecker from './createChainableTypeChecker';
  * @returns {Error|undefined}
  */
 
-function elementType(props: Object, propName: String, componentName: String, location: String, propFullName: String) {
+function elementType(
+  props: Object,
+  propName: String,
+  componentName: String,
+  location: String,
+  propFullName: String
+) {
   const propValue = props[propName];
   const propType = typeof propValue;
 
