@@ -4,6 +4,7 @@ export default function deprecated(propType: Function, explanation: String) {
     ...args
   ) {
     if (props[propName] !== null) {
+      /*eslint-disable */
       new Error(`"${propName}" property of "${componentName}" has been deprecated.\n${explanation}`);
     }
 

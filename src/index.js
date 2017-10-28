@@ -1,1 +1,5 @@
-export  propTypes from './propTypes';
+import propTypes from './propTypes';
+
+export default {
+  propTypes
+};

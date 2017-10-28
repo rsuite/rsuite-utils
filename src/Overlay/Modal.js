@@ -32,6 +32,7 @@ class Modal extends React.Component {
     ]),
     onEscapeKeyUp: PropTypes.func,
     onBackdropClick: PropTypes.func,
+    /*eslint-disable */
     backdropStyle: PropTypes.object,
     backdropClassName: PropTypes.string,
     containerClassName: PropTypes.string,
@@ -197,7 +198,11 @@ class Modal extends React.Component {
 
       if (!modalContent.hasAttribute('tabIndex')) {
         modalContent.setAttribute('tabIndex', -1);
-        new Error(false, 'The modal content node does not accept focus. ' + 'For the benefit of assistive technologies, the tabIndex of the node is being set to "-1".');
+        new Error(false,
+          `The modal content node does not accept focus.
+          For the benefit of assistive technologies,
+          the tabIndex of the node is being set to "-1".`
+        );
       }
 
       modalContent.focus();
@@ -318,12 +323,20 @@ class Modal extends React.Component {
 
 
     return (
-      <Portal ref={ref => this.mountNode = ref ? ref.getMountNode() : ref} container={props.container}>
+      <Portal
+        ref={(ref) => {
+          this.mountNode = ref ? ref.getMountNode() : ref;
+        }}
+        container={props.container}
+      >
         <div
-          ref={ref => this.modal = ref}
+          ref={(ref) => {
+            this.modal = ref;
+          }}
           role={props.role || 'dialog'}
           style={props.style}
-          className={props.className}>
+          className={props.className}
+        >
           {backdrop && this.renderBackdrop()}
           {dialog}
         </div>

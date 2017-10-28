@@ -14,6 +14,7 @@ function findIndexOf(arr, cb) {
       idx = i;
       return true;
     }
+    return false;
   });
   return idx;
 }
@@ -34,8 +35,6 @@ class ModalManager {
   add(modal, container, className) {
     let modalIdx = this.modals.indexOf(modal);
     let containerIdx = this.containers.indexOf(container);
-
-
 
     if (modalIdx !== -1) {
       return modalIdx;
@@ -65,6 +64,7 @@ class ModalManager {
     data.overflowing = isOverflowing(container);
 
     if (data.overflowing) {
+      /*eslint-disable */
       style.paddingRight = parseInt(addStyle(container, 'paddingRight') || 0, 10) + getScrollbarSize() + 'px';
     }
 
