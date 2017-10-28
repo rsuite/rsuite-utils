@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { on, transition } from 'dom-lib';
 import classNames from 'classnames';
@@ -77,7 +77,7 @@ class Transition extends React.Component {
         this.setState({ status: EXITED });
       }
     } else {
-      this._needsUpdate = true;
+      this.needsUpdate = true;
     }
   }
 
@@ -94,17 +94,15 @@ class Transition extends React.Component {
       return;
     }
 
-    if (this._needsUpdate) {
-      this._needsUpdate = false;
+    if (this.needsUpdate) {
+      this.needsUpdate = false;
 
       if (this.props.in) {
         if (status === EXITING || status === EXITED) {
           this.performEnter(this.props);
         }
-      } else {
-        if (status === ENTERING || status === ENTERED) {
-          this.performExit(this.props);
-        }
+      } else if (status === ENTERING || status === ENTERED) {
+        this.performExit(this.props);
       }
     }
   }
@@ -113,9 +111,39 @@ class Transition extends React.Component {
     this.cancelNextCallback();
   }
 
+  onTransitionEnd(node, handler) {
+    this.setNextCallback(handler);
+
+    if (node) {
+      on(node, transition.end, this.nextCallback);
+      setTimeout(this.nextCallback, this.props.timeout);
+    } else {
+      setTimeout(this.nextCallback, 0);
+    }
+  }
+
+  setNextCallback(callback) {
+    let active = true;
+
+    this.nextCallback = (event) => {
+      if (active) {
+        active = false;
+        this.nextCallback = null;
+
+        callback(event);
+      }
+    };
+
+    this.nextCallback.cancel = () => {
+      active = false;
+    };
+
+    return this.nextCallback;
+  }
+
   performEnter(props) {
     this.cancelNextCallback();
-    const node = ReactDOM.findDOMNode(this);
+    const node = findDOMNode(this);
 
     props.onEnter(node);
 
@@ -136,7 +164,7 @@ class Transition extends React.Component {
 
   performExit(props) {
     this.cancelNextCallback();
-    const node = ReactDOM.findDOMNode(this);
+    const node = findDOMNode(this);
     props.onExit(node);
 
     this.safeSetState({
@@ -163,36 +191,6 @@ class Transition extends React.Component {
 
   safeSetState(nextState, callback) {
     this.setState(nextState, this.setNextCallback(callback));
-  }
-
-  setNextCallback(callback) {
-    let active = true;
-
-    this.nextCallback = (event) => {
-      if (active) {
-        active = false;
-        this.nextCallback = null;
-
-        callback(event);
-      }
-    };
-
-    this.nextCallback.cancel = () => {
-      active = false;
-    };
-
-    return this.nextCallback;
-  }
-
-  onTransitionEnd(node, handler) {
-    this.setNextCallback(handler);
-
-    if (node) {
-      on(node, transition.end, this.nextCallback);
-      setTimeout(this.nextCallback, this.props.timeout);
-    } else {
-      setTimeout(this.nextCallback, 0);
-    }
   }
 
   render() {

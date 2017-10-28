@@ -29,16 +29,15 @@ class Fade extends React.Component {
   };
 
   render() {
-    const { timeout, className, children, ...props } = this.props;
+    const { timeout, className, ...props } = this.props;
     return (
       <Transition
         {...props}
         timeout={timeout}
         className={classNames(className, 'fade')}
         enteredClassName="in"
-        enteringClassName="in">
-        {children}
-      </Transition>
+        enteringClassName="in"
+      />
     );
   }
 }

@@ -24,19 +24,12 @@ function getDimensionValue(dimension, elem) {
   );
 }
 
-
+function getScrollDimensionValue(elem, dimension) {
+  const value = elem[`scroll${capitalize(dimension)}`];
+  return `${value}px`;
+}
 
 class Collapse extends React.Component {
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.onEnterListener = this.handleEnter.bind(this);
-    this.onEnteringListener = this.handleEntering.bind(this);
-    this.onEnteredListener = this.handleEntered.bind(this);
-    this.onExitListener = this.handleExit.bind(this);
-    this.onExitingListener = this.handleExiting.bind(this);
-  }
 
   static displayName = 'Collapse';
   static propTypes = {
@@ -67,19 +60,85 @@ class Collapse extends React.Component {
     getDimensionValue
   };
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.onEnterListener = this.handleEnter.bind(this);
+    this.onEnteringListener = this.handleEntering.bind(this);
+    this.onEnteredListener = this.handleEntered.bind(this);
+    this.onExitListener = this.handleExit.bind(this);
+    this.onExitingListener = this.handleExiting.bind(this);
+  }
+
+  // for testing
+  getTransitionInstance() {
+    return this.transition;
+  }
+
+  handleEnter(elem) {
+    let dimension = this.dimension();
+    elem.style[dimension] = '0';
+  }
+
+  handleEntering(elem) {
+    let dimension = this.dimension();
+
+    elem.style[dimension] = getScrollDimensionValue(elem, dimension);
+  }
+
+  handleEntered(elem) {
+    let dimension = this.dimension();
+    elem.style[dimension] = null;
+  }
+
+  /* -- Collapsing -- */
+  handleExit(elem) {
+    const dimension = this.dimension();
+    const value = this.props.getDimensionValue(dimension, elem);
+    elem.style[dimension] = `${value}px`;
+  }
+
+  handleExiting(elem) {
+    let dimension = this.dimension();
+
+    triggerBrowserReflow(elem);
+    elem.style[dimension] = '0';
+  }
+
+  dimension() {
+    return typeof this.props.dimension === 'function' ? this.props.dimension() : this.props.dimension;
+  }
+
   render() {
-    const enter = createChainedFunction(this.onEnterListener, this.props.onEnter);
-    const entering = createChainedFunction(this.onEnteringListener, this.props.onEntering);
-    const entered = createChainedFunction(this.onEnteredListener, this.props.onEntered);
-    const exit = createChainedFunction(this.onExitListener, this.props.onExit);
-    const exiting = createChainedFunction(this.onExitingListener, this.props.onExiting);
-    const { dimension, getDimensionValue, role, className, onExited, ...props } = this.props;
+
+    const {
+      dimension,
+      getDimensionValue, //eslint-disable-line
+      role,
+      className,
+      onExited,
+      onEnter,
+      onEntering,
+      onEntered,
+      onExit,
+      onExiting,
+      ...props
+    } = this.props;
+
+    const enter = createChainedFunction(this.onEnterListener, onEnter);
+    const entering = createChainedFunction(this.onEnteringListener, onEntering);
+    const entered = createChainedFunction(this.onEnteredListener, onEntered);
+    const exit = createChainedFunction(this.onExitListener, onExit);
+    const exiting = createChainedFunction(this.onExitingListener, onExiting);
+
     return (
       <Transition
         {...props}
-        ref={ref => this.transition = ref}
+        ref={(ref) => {
+          this.transition = ref;
+        }}
         aria-expanded={role ? this.props.in : null}
-        className={classNames(className, { width: this._dimension() === 'width' })}
+        className={classNames(className, { width: this.dimension() === 'width' })}
         exitedClassName="collapse"
         exitingClassName="collapsing"
         enteredClassName="collapse in"
@@ -94,51 +153,7 @@ class Collapse extends React.Component {
     );
   }
 
-  /* -- Expanding -- */
-  handleEnter(elem) {
-    let dimension = this._dimension();
-    elem.style[dimension] = '0';
-  }
 
-  handleEntering(elem) {
-    let dimension = this._dimension();
-
-    elem.style[dimension] = this._getScrollDimensionValue(elem, dimension);
-  }
-
-  handleEntered(elem) {
-    let dimension = this._dimension();
-    elem.style[dimension] = null;
-  }
-
-  /* -- Collapsing -- */
-  handleExit(elem) {
-    let dimension = this._dimension();
-
-    elem.style[dimension] = this.props.getDimensionValue(dimension, elem) + 'px';
-  }
-
-  handleExiting(elem) {
-    let dimension = this._dimension();
-
-    triggerBrowserReflow(elem);
-    elem.style[dimension] = '0';
-  }
-
-  _dimension() {
-    return typeof this.props.dimension === 'function'
-      ? this.props.dimension()
-      : this.props.dimension;
-  }
-
-  // for testing
-  _getTransitionInstance() {
-    return this.transition;
-  }
-
-  _getScrollDimensionValue(elem, dimension) {
-    return elem[`scroll${capitalize(dimension)}`] + 'px';
-  }
 }
 
 export default Collapse;
