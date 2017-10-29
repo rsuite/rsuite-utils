@@ -39,6 +39,7 @@ class RootCloseWrapper extends React.Component {
   }
 
   handleDocumentClick(event) {
+    /* eslint-disable */
     if (contains(findDOMNode(this), event.target)) {
       return;
     }

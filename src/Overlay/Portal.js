@@ -45,6 +45,7 @@ class Portal extends React.Component {
       if (this.overlayInstance.getWrappedDOMNode) {
         return this.overlayInstance.getWrappedDOMNode();
       }
+      /* eslint-disable */
       return findDOMNode(this.overlayInstance);
     }
 

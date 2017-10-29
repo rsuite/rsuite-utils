@@ -88,6 +88,7 @@ class Position extends React.Component {
       return;
     }
 
+    /* eslint-disable */
     const overlay = findDOMNode(this);
     const container = getContainer(this.props.container, ownerDocument(this).body);
 
