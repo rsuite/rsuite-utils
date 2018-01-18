@@ -13,7 +13,7 @@ describe('<Modal>', () => {
 
   it('Should render the modal content', () => {
     let instance = render(<Modal show ><p>message</p></Modal>, mountPoint);
-    assert.equal(instance.modal.querySelectorAll('p').length, 1);
+    assert.equal(instance.modalNode.querySelectorAll('p').length, 1);
   });
 
 });

@@ -105,7 +105,12 @@ const utils = {
       );
     }
 
-    return { positionLeft, positionTop, arrowOffsetLeft, arrowOffsetTop };
+    return {
+      positionLeft,
+      positionTop,
+      arrowOffsetLeft,
+      arrowOffsetTop
+    };
   }
 };
 

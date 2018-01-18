@@ -1,4 +1,5 @@
 import React, { cloneElement } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {
   ownerDocument,
@@ -13,6 +14,7 @@ import {
 import { mountable, elementType } from '../propTypes';
 import Portal from './Portal';
 import ModalManager from './ModalManager';
+import RefHolder from './RefHolder';
 
 
 const modalManager = new ModalManager();
@@ -119,8 +121,6 @@ class Modal extends React.Component {
     this.onDocumentKeyupListener = on(doc, 'keyup', this.handleDocumentKeyUp);
     this.onFocusinListener = onFocus(this.enforceFocus);
 
-    this.focus();
-
     if (this.props.onShow) {
       this.props.onShow();
     }
@@ -140,11 +140,12 @@ class Modal extends React.Component {
     this.restoreLastFocus();
   }
 
-  // instead of a ref, which might conflict with one the parent applied.
   getDialogElement() {
-    let node = this.modal;
-    return node && node.lastChild;
+    console.log(this.dialog);
+    return ReactDOM.findDOMNode(this.dialog);
   }
+
+
 
   handleHidden(...args) {
     this.setState({ exited: true });
@@ -187,28 +188,6 @@ class Modal extends React.Component {
     }
   }
 
-  focus() {
-    let autoFocus = this.props.autoFocus;
-    let modalContent = this.getDialogElement();
-    let current = activeElement(ownerDocument(this));
-    let focusInModal = current && contains(modalContent, current);
-
-    if (modalContent && autoFocus && !focusInModal) {
-      this.lastFocus = current;
-
-      if (!modalContent.hasAttribute('tabIndex')) {
-        modalContent.setAttribute('tabIndex', -1);
-        new Error(false,
-          `The modal content node does not accept focus.
-          For the benefit of assistive technologies,
-          the tabIndex of the node is being set to "-1".`
-        );
-      }
-
-      modalContent.focus();
-    }
-  }
-
   restoreLastFocus() {
     // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
     if (this.lastFocus && this.lastFocus.focus) {
@@ -235,6 +214,19 @@ class Modal extends React.Component {
   isTopModal() {
     return modalManager.isTopModal(this);
   }
+
+  setMountNodeRef = (ref) => {
+    this.mountNode = ref ? ref.getMountNode() : ref;
+  }
+
+  setModalNodeRef = (ref) => {
+    this.modalNode = ref;
+  }
+
+  setDialogRef = (ref) => {
+    this.dialog = ref;
+  };
+
 
   renderBackdrop() {
 
@@ -324,21 +316,19 @@ class Modal extends React.Component {
 
     return (
       <Portal
-        ref={(ref) => {
-          this.mountNode = ref ? ref.getMountNode() : ref;
-        }}
+        ref={this.setMountNodeRef}
         container={props.container}
       >
         <div
-          ref={(ref) => {
-            this.modal = ref;
-          }}
+          ref={this.setModalNodeRef}
           role={props.role || 'dialog'}
           style={props.style}
           className={props.className}
         >
           {backdrop && this.renderBackdrop()}
-          {dialog}
+          <RefHolder ref={this.setDialogRef}>
+            {dialog}
+          </RefHolder>
         </div>
       </Portal>
     );

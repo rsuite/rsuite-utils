@@ -48,7 +48,11 @@ class Collapse extends React.Component {
       PropTypes.func
     ]),
     getDimensionValue: PropTypes.func,
-    role: PropTypes.string
+    role: PropTypes.string,
+    exitedClassName: PropTypes.string,
+    exitingClassName: PropTypes.string,
+    enteredClassName: PropTypes.string,
+    enteringClassName: PropTypes.string
   };
 
   static defaultProps = {
@@ -57,6 +61,10 @@ class Collapse extends React.Component {
     unmountOnExit: false,
     transitionAppear: false,
     dimension: 'height',
+    exitedClassName: 'collapse',
+    exitingClassName: 'collapsing',
+    enteredClassName: 'collapse in',
+    enteringClassName: 'collapsing',
     getDimensionValue
   };
 
@@ -139,10 +147,6 @@ class Collapse extends React.Component {
         }}
         aria-expanded={role ? this.props.in : null}
         className={classNames(className, { width: this.dimension() === 'width' })}
-        exitedClassName="collapse"
-        exitingClassName="collapsing"
-        enteredClassName="collapse in"
-        enteringClassName="collapsing"
         onEnter={enter}
         onEntering={entering}
         onEntered={entered}
