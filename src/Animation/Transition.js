@@ -14,14 +14,14 @@ export const EXITING = 4;
 function noop() { }
 
 type Props = {
-  in: boolean,
-  unmountOnExit: boolean,
-  transitionAppear: boolean,
-  timeout: number,
-  exitedClassName: string,
-  exitingClassName: string,
-  enteredClassName: string,
-  enteringClassName: string,
+  in?: boolean,
+  unmountOnExit?: boolean,
+  transitionAppear?: boolean,
+  timeout?: number,
+  exitedClassName?: string,
+  exitingClassName?: string,
+  enteredClassName?: string,
+  enteringClassName?: string,
   onEnter: (node?: React.Element<any>) => void,
   onEntering: (node?: React.Element<any>) => void,
   onEntered: (node?: React.Element<any>) => void,
