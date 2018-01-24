@@ -22,10 +22,7 @@ class Fade extends React.Component {
   };
 
   static defaultProps = {
-    in: false,
-    timeout: 300,
-    unmountOnExit: false,
-    transitionAppear: false
+    timeout: 300
   };
 
   render() {

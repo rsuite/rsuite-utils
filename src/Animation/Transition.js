@@ -1,9 +1,9 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import { findDOMNode } from 'react-dom';
-import PropTypes from 'prop-types';
 import { on, transition } from 'dom-lib';
 import classNames from 'classnames';
-
 
 export const UNMOUNTED = 0;
 export const EXITED = 1;
@@ -13,31 +13,29 @@ export const EXITING = 4;
 
 function noop() { }
 
-class Transition extends React.Component {
+type Props = {
+  in: boolean,
+  unmountOnExit: boolean,
+  transitionAppear: boolean,
+  timeout: number,
+  exitedClassName: string,
+  exitingClassName: string,
+  enteredClassName: string,
+  enteringClassName: string,
+  onEnter: (node?: React.Element<any>) => void,
+  onEntering: (node?: React.Element<any>) => void,
+  onEntered: (node?: React.Element<any>) => void,
+  onExit: (node?: React.Element<any>) => void,
+  onExiting: (node?: React.Element<any>) => void,
+  onExited: (node?: React.Element<any>) => void
+}
+
+class Transition extends React.Component<Props> {
 
   static displayName = 'Transition';
-  static propTypes = {
-    in: PropTypes.bool,
-    unmountOnExit: PropTypes.bool,
-    transitionAppear: PropTypes.bool,
-    timeout: PropTypes.number,
-    exitedClassName: PropTypes.string,
-    exitingClassName: PropTypes.string,
-    enteredClassName: PropTypes.string,
-    enteringClassName: PropTypes.string,
-    onEnter: PropTypes.func,
-    onEntering: PropTypes.func,
-    onEntered: PropTypes.func,
-    onExit: PropTypes.func,
-    onExiting: PropTypes.func,
-    onExited: PropTypes.func
-  };
 
   static defaultProps = {
-    in: false,
-    unmountOnExit: false,
-    transitionAppear: false,
-    timeout: 5000,
+    timeout: 1000,
 
     onEnter: noop,
     onEntering: noop,

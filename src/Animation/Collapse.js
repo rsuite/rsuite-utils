@@ -56,10 +56,7 @@ class Collapse extends React.Component {
   };
 
   static defaultProps = {
-    in: false,
     timeout: 300,
-    unmountOnExit: false,
-    transitionAppear: false,
     dimension: 'height',
     exitedClassName: 'collapse',
     exitingClassName: 'collapsing',
