@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ModalDemo from './ModalDemo';
+import TriggerDemo from './TriggerDemo';
 
 import './less/index.less';
 
@@ -12,7 +13,8 @@ class App extends React.Component {
         <div className="container">
           <h1>RSuite Utils</h1>
           <ModalDemo />
-
+          <hr />
+          <TriggerDemo />
         </div>
       </div>
     );

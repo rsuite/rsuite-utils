@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Modal } from '../src/Overlay';
-import { Fade, Collapse } from '../src/Animation';
+import { Fade } from '../src/Animation';
 
 class ModalDemo extends React.Component {
   constructor(props, context) {
@@ -31,7 +30,7 @@ class ModalDemo extends React.Component {
     return (
 
       <div className="row">
-
+        <h2>Modal</h2>
         <button onClick={this.handleOpenModal}>open modal</button>
         <Modal
           backdrop
