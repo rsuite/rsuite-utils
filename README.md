@@ -109,14 +109,20 @@ import Overlay from 'rsuite-utils/lib/Overlay/Overlay';
 import OverlayTrigger from 'rsuite-utils/lib/Overlay/OverlayTrigger';
 ```
 
-| 属性名称  | 类型 `(默认值)`                                                                                                                               | 描述                            |     |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | --- |
-| placement | enum: 'top', 'right', 'bottom', 'left','bottomLeft', 'bottomRight', 'topLeft', 'topRight', 'leftTop', 'rightTop', 'leftBottom', 'rightBottom' | 显示位置                        |     |
-| trigger   | union: 'click', 'hover', 'focus' `(['hover','focus'])`                                                                                        | 触发事件,可以通过数组配置多事件 |     |
-| delay     | number                                                                                                                                        | 延迟时间                        |     |
-| delayShow | number                                                                                                                                        | 展示的延迟时间                  |     |
-| delayHide | number                                                                                                                                        | 隐藏的延迟时间                  |     |
-| speaker   | React.Element<any>                                                                                                                            | 展示的元素                      |
+| 属性名称   | 类型 `(默认值)`                                                                                                                               | 描述                            |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| placement  | enum: 'top', 'right', 'bottom', 'left','bottomLeft', 'bottomRight', 'topLeft', 'topRight', 'leftTop', 'rightTop', 'leftBottom', 'rightBottom' | 显示位置                        |
+| trigger    | union: 'click', 'hover', 'focus' `(['hover','focus'])`                                                                                        | 触发事件,可以通过数组配置多事件 |
+| delay      | number                                                                                                                                        | 延迟时间                        |
+| delayShow  | number                                                                                                                                        | 展示的延迟时间                  |
+| delayHide  | number                                                                                                                                        | 隐藏的延迟时间                  |
+| speaker    | React.Element<any>                                                                                                                            | 展示的元素                      |
+| onEnter    | (node?: React.Element<any>) => void                                                                                                           | 显示前动画过渡的回调函数        |
+| onEntering | (node?: React.Element<any>) => void                                                                                                           | 显示中动画过渡的回调函数        |
+| onEntered  | (node?: React.Element<any>) => void                                                                                                           | 显示后动画过渡的回调函数        |
+| onExit     | (node?: React.Element<any>) => void                                                                                                           | 退出前动画过渡的回调函数        |
+| onExiting  | (node?: React.Element<any>) => void                                                                                                           | 退出中动画过渡的回调函数        |
+| onExited   | (node?: React.Element<any>) => void                                                                                                           | 退出后动画过渡的回调函数        |
 
 ### `<RootCloseWrapper>` 代理外部关闭事件
 
@@ -124,6 +130,6 @@ import OverlayTrigger from 'rsuite-utils/lib/Overlay/OverlayTrigger';
 import RootCloseWrapper from 'rsuite-utils/lib/Overlay/RootCloseWrapper';
 ```
 
-| 属性名称    | 类型 `(默认值)` | 描述               |     |
+| 属性名称    | 类型 `(默认值)` | 描述               |
 | ----------- | --------------- | ------------------ |
 | onRootClose |                 | 触发关闭的回调函数 |
