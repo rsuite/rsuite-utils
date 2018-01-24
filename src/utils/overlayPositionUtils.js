@@ -5,7 +5,6 @@ import {
   scrollTop
 } from 'dom-lib';
 
-
 function getContainerDimensions(containerNode) {
   let width;
   let height;
@@ -99,6 +98,30 @@ const utils = {
       positionLeft += leftDelta;
       arrowOffsetLeft = `${50 * (1 - ((2 * leftDelta) / overlayWidth))}%`;
       arrowOffsetTop = undefined;
+    } else if (placement === 'topLeft') {
+      positionLeft = childOffset.left;
+      positionTop = childOffset.top - overlayHeight;
+    } else if (placement === 'topRight') {
+      positionLeft = childOffset.left + (childOffset.width - overlayWidth);
+      positionTop = childOffset.top - overlayHeight;
+    } else if (placement === 'leftTop') {
+      positionLeft = childOffset.left - overlayWidth;
+      positionTop = childOffset.top + (childOffset.height - overlayHeight);
+    } else if (placement === 'leftBottom') {
+      positionLeft = childOffset.left - overlayWidth;
+      positionTop = childOffset.top;
+    } else if (placement === 'bottomLeft') {
+      positionLeft = childOffset.left;
+      positionTop = childOffset.top + childOffset.height;
+    } else if (placement === 'bottomRight') {
+      positionLeft = childOffset.left + (childOffset.width - overlayWidth);
+      positionTop = childOffset.top + childOffset.height;
+    } else if (placement === 'rightTop') {
+      positionLeft = childOffset.left + childOffset.width;
+      positionTop = childOffset.top + (childOffset.height - overlayHeight);
+    } else if (placement === 'rightBottom') {
+      positionLeft = childOffset.left + childOffset.width;
+      positionTop = childOffset.top;
     } else {
       throw new Error(
         `calcOverlayPosition(): No such placement of "${placement}" found.`

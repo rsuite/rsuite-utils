@@ -141,11 +141,8 @@ class Modal extends React.Component {
   }
 
   getDialogElement() {
-    console.log(this.dialog);
     return ReactDOM.findDOMNode(this.dialog);
   }
-
-
 
   handleHidden(...args) {
     this.setState({ exited: true });

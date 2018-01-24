@@ -2,9 +2,11 @@ import React, { cloneElement } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import _ from 'lodash';
 import { ownerDocument, getContainer } from 'dom-lib';
 import mountable from '../propTypes/mountable';
-import overlayPositionUtils from './overlayPositionUtils';
+import overlayPositionUtils from '../utils/overlayPositionUtils';
+
 
 class Position extends React.Component {
 
@@ -13,9 +15,14 @@ class Position extends React.Component {
     target: PropTypes.func,
     container: PropTypes.oneOfType([mountable, PropTypes.func]),
     containerPadding: PropTypes.number,
-    placement: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+    placement: PropTypes.oneOf([
+      'top', 'right', 'bottom', 'left',
+      'bottomLeft', 'bottomRight', 'topLeft', 'topRight',
+      'leftTop', 'rightTop', 'leftBottom', 'rightBottom'
+    ]),
     shouldUpdatePosition: PropTypes.bool
   };
+
 
   static defaultProps = {
     containerPadding: 0,
@@ -114,14 +121,10 @@ class Position extends React.Component {
       ...arrowPosition
     } = this.state;
 
-    delete props.target;
-    delete props.container;
-    delete props.containerPadding;
-
     const child = React.Children.only(children);
 
     return cloneElement(child, {
-      ...props,
+      ..._.omit(props, ['target', 'container', 'containerPadding']),
       ...arrowPosition,
       positionLeft,
       positionTop,
