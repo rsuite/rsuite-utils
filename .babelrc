@@ -7,7 +7,6 @@
   "plugins": [
     "lodash",
     "transform-class-properties",
-    "flow-react-proptypes",
     "transform-react-flow-handled-props"
   ]
 }

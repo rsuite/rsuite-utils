@@ -12,7 +12,7 @@ import isOneOf from '../utils/isOneOf';
 
 type Props = {
   target?: () => void,
-  container?: React.ElementType | Function,
+  container?: HTMLElement | Function,
   containerPadding?: number,
   placement?: 'top' | 'right' | 'bottom' | 'left',
   show?: boolean,
@@ -100,7 +100,7 @@ class Whisper extends React.Component<Props, States> {
 
 
     const overlayProps = {
-      ..._.pick(this.props, Object.keys(Overlay.propTypes)),
+      ..._.pick(this.props, Overlay.handledProps),
       show: this.state.isOverlayShown,
       onHide: this.handleHide,
       target: this.getOverlayTarget

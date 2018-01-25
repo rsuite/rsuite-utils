@@ -1,21 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
 import classNames from 'classnames';
-import { getStyle } from 'dom-lib';
+import { getStyle, addStyle } from 'dom-lib';
+import _ from 'lodash';
+
 import Transition from './Transition';
-
 import createChainedFunction from '../utils/createChainedFunction';
+import type { AnimationEventFunction, Dimension } from '../utils/TypeDefinition';
 
-const capitalize = str => str[0].toUpperCase() + str.substr(1);
-const triggerBrowserReflow = node => node.offsetHeight;
+const triggerBrowserReflow = node => _.get(node, 'offsetHeight');
 
 const MARGINS = {
   height: ['marginTop', 'marginBottom'],
   width: ['marginLeft', 'marginRight']
 };
 
-function getDimensionValue(dimension, elem) {
-  let value = elem[`offset${capitalize(dimension)}`];
+function defaultGetDimensionValue(dimension: Dimension, elem: Element): number {
+  let value = _.get(elem, `offset${_.capitalize(dimension)}`);
   let margins = MARGINS[dimension];
 
   return (value +
@@ -24,37 +26,33 @@ function getDimensionValue(dimension, elem) {
   );
 }
 
-function getScrollDimensionValue(elem, dimension) {
-  const value = elem[`scroll${capitalize(dimension)}`];
+function getScrollDimensionValue(elem: Element, dimension: Dimension) {
+  const value = _.get(elem, `scroll${_.capitalize(dimension)}`);
   return `${value}px`;
 }
 
-class Collapse extends React.Component {
+type Props = {
+  in?: boolean,
+  timeout?: number,
+  className?: string,
+  onEnter?: AnimationEventFunction,
+  onEntering?: AnimationEventFunction,
+  onEntered?: AnimationEventFunction,
+  onExit?: AnimationEventFunction,
+  onExiting?: AnimationEventFunction,
+  onExited?: AnimationEventFunction,
+  dimension?: Dimension | (() => (Dimension)),
+  getDimensionValue?: (dimension: Dimension, elem: Element) => number,
+  role?: string,
+  exitedClassName?: string,
+  exitingClassName?: string,
+  enteredClassName?: string,
+  enteringClassName?: string
+}
+
+class Collapse extends React.Component<Props> {
 
   static displayName = 'Collapse';
-  static propTypes = {
-    in: PropTypes.bool,
-    unmountOnExit: PropTypes.bool,
-    transitionAppear: PropTypes.bool,
-    timeout: PropTypes.number,
-    onEnter: PropTypes.func,
-    onEntering: PropTypes.func,
-    onEntered: PropTypes.func,
-    onExit: PropTypes.func,
-    onExiting: PropTypes.func,
-    onExited: PropTypes.func,
-    dimension: PropTypes.oneOfType([
-      PropTypes.oneOf(['height', 'width']),
-      PropTypes.func
-    ]),
-    getDimensionValue: PropTypes.func,
-    role: PropTypes.string,
-    exitedClassName: PropTypes.string,
-    exitingClassName: PropTypes.string,
-    enteredClassName: PropTypes.string,
-    enteringClassName: PropTypes.string
-  };
-
   static defaultProps = {
     timeout: 300,
     dimension: 'height',
@@ -62,57 +60,50 @@ class Collapse extends React.Component {
     exitingClassName: 'collapsing',
     enteredClassName: 'collapse in',
     enteringClassName: 'collapsing',
-    getDimensionValue
+    getDimensionValue: defaultGetDimensionValue
   };
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.onEnterListener = this.handleEnter.bind(this);
-    this.onEnteringListener = this.handleEntering.bind(this);
-    this.onEnteredListener = this.handleEntered.bind(this);
-    this.onExitListener = this.handleExit.bind(this);
-    this.onExitingListener = this.handleExiting.bind(this);
-  }
 
   // for testing
   getTransitionInstance() {
     return this.transition;
   }
 
-  handleEnter(elem) {
-    let dimension = this.dimension();
-    elem.style[dimension] = '0';
+  handleEnter = (elem: Element) => {
+    const dimension = this.dimension();
+    addStyle(elem, dimension, 0);
   }
 
-  handleEntering(elem) {
-    let dimension = this.dimension();
-
-    elem.style[dimension] = getScrollDimensionValue(elem, dimension);
+  handleEntering = (elem: Element) => {
+    const dimension = this.dimension();
+    addStyle(elem, dimension, getScrollDimensionValue(elem, dimension));
   }
 
-  handleEntered(elem) {
-    let dimension = this.dimension();
-    elem.style[dimension] = null;
+  handleEntered = (elem: Element) => {
+    const dimension = this.dimension();
+    addStyle(elem, dimension, null);
   }
 
   /* -- Collapsing -- */
-  handleExit(elem) {
+  handleExit = (elem: Element) => {
     const dimension = this.dimension();
-    const value = this.props.getDimensionValue(dimension, elem);
-    elem.style[dimension] = `${value}px`;
+    const { getDimensionValue } = this.props;
+    const value = getDimensionValue ? getDimensionValue(dimension, elem) : 0;
+    addStyle(elem, dimension, `${value}px`);
   }
 
-  handleExiting(elem) {
-    let dimension = this.dimension();
-
+  handleExiting = (elem: Element) => {
+    const dimension = this.dimension();
     triggerBrowserReflow(elem);
-    elem.style[dimension] = '0';
+    addStyle(elem, dimension, 0);
   }
 
-  dimension() {
-    return typeof this.props.dimension === 'function' ? this.props.dimension() : this.props.dimension;
+  dimension(): Dimension {
+    const { dimension } = this.props;
+
+    return typeof dimension === 'function' ? dimension() : dimension;
   }
+
+  transition = null;
 
   render() {
 
@@ -130,11 +121,11 @@ class Collapse extends React.Component {
       ...props
     } = this.props;
 
-    const enter = createChainedFunction(this.onEnterListener, onEnter);
-    const entering = createChainedFunction(this.onEnteringListener, onEntering);
-    const entered = createChainedFunction(this.onEnteredListener, onEntered);
-    const exit = createChainedFunction(this.onExitListener, onExit);
-    const exiting = createChainedFunction(this.onExitingListener, onExiting);
+    const enter = createChainedFunction(this.handleEnter, onEnter);
+    const entering = createChainedFunction(this.handleEntering, onEntering);
+    const entered = createChainedFunction(this.handleEntered, onEntered);
+    const exit = createChainedFunction(this.handleExit, onExit);
+    const exiting = createChainedFunction(this.handleExiting, onExiting);
 
     return (
       <Transition

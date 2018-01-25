@@ -1,32 +1,47 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
 import Portal from './Portal';
 import Position from './Position';
 import RootCloseWrapper from './RootCloseWrapper';
-import elementType from '../propTypes/elementType';
 
-class Overlay extends React.Component {
-  static propTypes = {
-    ...Portal.propTypes,
-    ...Position.propTypes,
+import type { AnimationEventFunction, DefaultEventFunction, Placement } from '../utils/TypeDefinition';
 
-    show: PropTypes.bool,
-    rootClose: PropTypes.bool,
-    onHide: PropTypes.func,
-    transition: elementType,
-    onEnter: PropTypes.func,
-    onEntering: PropTypes.func,
-    onEntered: PropTypes.func,
-    onExit: PropTypes.func,
-    onExiting: PropTypes.func,
-    onExited: PropTypes.func
-  }
+type Props = {
 
-  constructor(props, context) {
-    super(props, context);
+  container?: HTMLElement | (() => HTMLElement),
+  onRendered?: Function,
+  children?: React.Node,
+  children?: React.Node,
+  className?: string,
+  target?: Function,
+  container?: HTMLElement | (() => HTMLElement),
+  containerPadding?: number,
+  placement?: Placement,
+  shouldUpdatePosition?: boolean,
 
+  show?: boolean,
+  rootClose?: boolean,
+  onHide?: DefaultEventFunction,
+  animation?: boolean | React.ElementType,
+
+  onEnter?: AnimationEventFunction,
+  onEntering?: AnimationEventFunction,
+  onEntered?: AnimationEventFunction,
+  onExit?: AnimationEventFunction,
+  onExiting?: AnimationEventFunction,
+  onExited?: AnimationEventFunction
+}
+
+type States = {
+  exited?: boolean
+}
+
+class Overlay extends React.Component<Props, States> {
+
+  constructor(props: Props) {
+    super(props);
     this.state = { exited: !props.show };
-    this.onHiddenListener = this.handleHidden.bind(this);
   }
 
   componentWillReceiveProps(nextProps: Object) {
@@ -37,7 +52,7 @@ class Overlay extends React.Component {
     }
   }
 
-  handleHidden(...args) {
+  handleHidden = (...args: Array<any>) => {
     this.setState({ exited: true });
 
     if (this.props.onExited) {
@@ -56,10 +71,12 @@ class Overlay extends React.Component {
       rootClose,
       children,
       transition: Transition,
+      show,
+      onHide,
       ...props
     } = this.props;
 
-    const mountOverlay = props.show || (Transition && !this.state.exited);
+    const mountOverlay = show || (Transition && !this.state.exited);
 
     if (!mountOverlay) {
       return null;
@@ -77,11 +94,11 @@ class Overlay extends React.Component {
       let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
       child = (
         <Transition
-          in={props.show}
+          in={show}
           transitionAppear
           onExit={onExit}
           onExiting={onExiting}
-          onExited={this.onHiddenListener}
+          onExited={this.handleHidden}
           onEnter={onEnter}
           onEntering={onEntering}
           onEntered={onEntered}
@@ -93,7 +110,7 @@ class Overlay extends React.Component {
 
     if (rootClose) {
       child = (
-        <RootCloseWrapper onRootClose={props.onHide}>
+        <RootCloseWrapper onRootClose={onHide}>
           {child}
         </RootCloseWrapper>
       );

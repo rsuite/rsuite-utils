@@ -1,9 +1,12 @@
+
 // @flow
 
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import { on, transition } from 'dom-lib';
 import classNames from 'classnames';
+import _ from 'lodash';
+import type { ReactFindDOMNode, DefaultEvent, AnimationEventProps } from '../utils/TypeDefinition';
 
 export const UNMOUNTED = 0;
 export const EXITED = 1;
@@ -13,7 +16,9 @@ export const EXITING = 4;
 
 function noop() { }
 
-type Props = {
+type OwnProps = {
+  children?: React.Node,
+  className?: string,
   in?: boolean,
   unmountOnExit?: boolean,
   transitionAppear?: boolean,
@@ -22,18 +27,22 @@ type Props = {
   exitingClassName?: string,
   enteredClassName?: string,
   enteringClassName?: string,
-  onEnter: (node?: React.Element<any>) => void,
-  onEntering: (node?: React.Element<any>) => void,
-  onEntered: (node?: React.Element<any>) => void,
-  onExit: (node?: React.Element<any>) => void,
-  onExiting: (node?: React.Element<any>) => void,
-  onExited: (node?: React.Element<any>) => void
 }
 
-class Transition extends React.Component<Props> {
+type Props = OwnProps & AnimationEventProps;
+
+type States = {
+  status?: number
+}
+
+class Transition extends React.Component<Props, States> {
 
   static displayName = 'Transition';
-
+  /**
+   * Note that `handledProps` are generated automatically during
+   * build with `babel-plugin-transform-react-flow-handled-props`
+   */
+  static handledProps = [];
   static defaultProps = {
     timeout: 1000,
 
@@ -46,15 +55,16 @@ class Transition extends React.Component<Props> {
     onExited: noop
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props: Props) {
+    super(props);
 
-    let initialStatus;
+    let initialStatus: number;
     if (props.in) {
       initialStatus = props.transitionAppear ? EXITED : ENTERED;
     } else {
       initialStatus = props.unmountOnExit ? UNMOUNTED : EXITED;
     }
+
     this.state = {
       status: initialStatus
     };
@@ -68,7 +78,7 @@ class Transition extends React.Component<Props> {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.in && this.props.unmountOnExit) {
       if (this.state.status === UNMOUNTED) {
         // Start enter transition in componentDidUpdate.
@@ -80,9 +90,10 @@ class Transition extends React.Component<Props> {
   }
 
   componentDidUpdate() {
-    const status = this.state.status;
+    const { status } = this.state;
+    const { unmountOnExit } = this.props;
 
-    if (this.props.unmountOnExit && status === EXITED) {
+    if (unmountOnExit && status === EXITED) {
 
       if (this.props.in) {
         this.performEnter(this.props);
@@ -110,7 +121,7 @@ class Transition extends React.Component<Props> {
     this.cancelNextCallback();
   }
 
-  onTransitionEnd(node, handler) {
+  onTransitionEnd(node: ReactFindDOMNode, handler: Function) {
     this.setNextCallback(handler);
 
     if (node) {
@@ -121,10 +132,10 @@ class Transition extends React.Component<Props> {
     }
   }
 
-  setNextCallback(callback) {
+  setNextCallback(callback: (event: DefaultEvent) => void) {
     let active = true;
 
-    this.nextCallback = (event) => {
+    this.nextCallback = (event: any) => {
       if (active) {
         active = false;
         this.nextCallback = null;
@@ -140,42 +151,46 @@ class Transition extends React.Component<Props> {
     return this.nextCallback;
   }
 
-  performEnter(props) {
-    this.cancelNextCallback();
-    const node = findDOMNode(this);
+  performEnter(props: Props) {
 
-    props.onEnter(node);
+    const { onEnter, onEntering, onEntered } = props || this.props;
+
+    this.cancelNextCallback();
+    const node: ReactFindDOMNode = findDOMNode(this);
+
+    onEnter(node);
 
     this.safeSetState({
       status: ENTERING
     }, () => {
-      this.props.onEntering(node);
-
+      onEntering(node);
       this.onTransitionEnd(node, () => {
         this.safeSetState({
           status: ENTERED
         }, () => {
-          this.props.onEntered(node);
+          onEntered(node);
         });
       });
     });
   }
 
-  performExit(props) {
+  performExit(props: Props) {
+    const { onExit, onExiting, onExited } = props || this.props;
+
     this.cancelNextCallback();
     const node = findDOMNode(this);
-    props.onExit(node);
+    onExit(node);
 
     this.safeSetState({
       status: EXITING
     }, () => {
-      this.props.onExiting(node);
+      onExiting(node);
 
       this.onTransitionEnd(node, () => {
         this.safeSetState({
           status: EXITED
         }, () => {
-          this.props.onExited(node);
+          onExited(node);
         });
       });
     });
@@ -188,9 +203,12 @@ class Transition extends React.Component<Props> {
     }
   }
 
-  safeSetState(nextState, callback) {
+  safeSetState(nextState: States, callback: Function) {
     this.setState(nextState, this.setNextCallback(callback));
   }
+
+  nextCallback = null;
+  needsUpdate = null;
 
   render() {
 
@@ -203,20 +221,25 @@ class Transition extends React.Component<Props> {
     const {
       children,
       className,
-      ...childProps
+      exitedClassName,
+      enteringClassName,
+      enteredClassName,
+      exitingClassName,
+      ...rest
     } = this.props;
 
-    Object.keys(Transition.propTypes).forEach(key => delete childProps[key]);
+
+    const childProps = _.omit(rest, Transition.handledProps);
 
     let transitionClassName;
     if (status === EXITED) {
-      transitionClassName = this.props.exitedClassName;
+      transitionClassName = exitedClassName;
     } else if (status === ENTERING) {
-      transitionClassName = this.props.enteringClassName;
+      transitionClassName = enteringClassName;
     } else if (status === ENTERED) {
-      transitionClassName = this.props.enteredClassName;
+      transitionClassName = enteredClassName;
     } else if (status === EXITING) {
-      transitionClassName = this.props.exitingClassName;
+      transitionClassName = exitingClassName;
     }
 
     const child = React.Children.only(children);

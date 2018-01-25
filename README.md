@@ -15,22 +15,22 @@ import Transition from 'rsuite-utils/lib/Animation/Transition';
 ```
 
 
-| 属性名称          | 类型 `(默认值)`                     | 描述                       |
-| ----------------- | ----------------------------------- | -------------------------- |
-| in                | boolean                             | 进入                       |
-| unmountOnExit     | boolean                             | 在退出时卸载组件           |
-| transitionAppear  | boolean                             | 初始显示的时候开启过渡效果 |
-| timeout           | number `(1000)`                     | 动画过渡延迟时间           |
-| exitedClassName   | string                              | 退出动画过渡后 className   |
-| exitingClassName  | string                              | 退出动画过渡中 className   |
-| enteredClassName  | string                              | 进入动画过渡后 className   |
-| enteringClassName | string                              | 进入动画过渡中 className   |
-| onEnter           | (node?: React.Element<any>) => void | 显示动画过渡的回调函数     |
-| onEntering        | (node?: React.Element<any>) => void | 显示中动画过渡的回调函数   |
-| onEntered         | (node?: React.Element<any>) => void | 显示后动画过渡的回调函数   |
-| onExit            | (node?: React.Element<any>) => void | 退出前动画过渡的回调函数   |
-| onExiting         | (node?: React.Element<any>) => void | 退出中动画过渡的回调函数   |
-| onExited          | (node?: React.Element<any>) => void | 退出后动画过渡的回调函数   |
+| 属性名称          | 类型 `(默认值)`                        | 描述                       |
+| ----------------- | -------------------------------------- | -------------------------- |
+| in                | boolean                                | 进入                       |
+| unmountOnExit     | boolean                                | 在退出时卸载组件           |
+| transitionAppear  | boolean                                | 初始显示的时候开启过渡效果 |
+| timeout           | number `(1000)`                        | 动画过渡延迟时间           |
+| exitedClassName   | string                                 | 退出动画过渡后 className   |
+| exitingClassName  | string                                 | 退出动画过渡中 className   |
+| enteredClassName  | string                                 | 进入动画过渡后 className   |
+| enteringClassName | string                                 | 进入动画过渡中 className   |
+| onEnter           | (node?: null , Element , Text) => void | 显示动画过渡的回调函数     |
+| onEntering        | (node?: null , Element , Text) => void | 显示中动画过渡的回调函数   |
+| onEntered         | (node?: null , Element , Text) => void | 显示后动画过渡的回调函数   |
+| onExit            | (node?: null , Element , Text) => void | 退出前动画过渡的回调函数   |
+| onExiting         | (node?: null , Element , Text) => void | 退出中动画过渡的回调函数   |
+| onExited          | (node?: null , Element , Text) => void | 退出后动画过渡的回调函数   |
 
 
 ### `<Collapse>` 折叠效果
@@ -49,12 +49,12 @@ import Collapse from 'rsuite-utils/lib/Animation/Collapse';
 | exitingClassName  | string `('collapsing')`                          | 退出动画过渡中 className   |
 | enteredClassName  | string `('collapse in')`                         | 进入动画过渡后 className   |
 | enteringClassName | string `('collapsing')`                          | 进入动画过渡中 className   |
-| onEnter           | (node?: React.Element<any>) => void              | 显示前动画过渡的回调函数   |
-| onEntering        | (node?: React.Element<any>) => void              | 显示中动画过渡的回调函数   |
-| onEntered         | (node?: React.Element<any>) => void              | 显示后动画过渡的回调函数   |
-| onExit            | (node?: React.Element<any>) => void              | 退出前动画过渡的回调函数   |
-| onExiting         | (node?: React.Element<any>) => void              | 退出中动画过渡的回调函数   |
-| onExited          | (node?: React.Element<any>) => void              | 退出后动画过渡的回调函数   |
+| onEnter           | (node?: null , Element , Text) => void           | 显示前动画过渡的回调函数   |
+| onEntering        | (node?: null , Element , Text) => void           | 显示中动画过渡的回调函数   |
+| onEntered         | (node?: null , Element , Text) => void           | 显示后动画过渡的回调函数   |
+| onExit            | (node?: null , Element , Text) => void           | 退出前动画过渡的回调函数   |
+| onExiting         | (node?: null , Element , Text) => void           | 退出中动画过渡的回调函数   |
+| onExited          | (node?: null , Element , Text) => void           | 退出后动画过渡的回调函数   |
 | role              | string                                           | HTML role                  |
 | dimension         | union: 'height', 'width' ()=>('height', 'width') | 设置折叠尺寸类型           |
 | getDimensionValue | ()=>number                                       | 自定义尺寸值               |
@@ -73,12 +73,12 @@ import Fade from 'rsuite-utils/lib/Animation/Fade';
 | exitingClassName  | string                              | 退出动画过渡中 className   |
 | enteredClassName  | string                              | 进入动画过渡后 className   |
 | enteringClassName | string                              | 进入动画过渡中 className   |
-| onEnter           | (node?: React.Element<any>) => void | 显示动画过渡的回调函数     |
-| onEntering        | (node?: React.Element<any>) => void | 显示中动画过渡的回调函数   |
-| onEntered         | (node?: React.Element<any>) => void | 显示后动画过渡的回调函数   |
-| onExit            | (node?: React.Element<any>) => void | 退出前动画过渡的回调函数   |
-| onExiting         | (node?: React.Element<any>) => void | 退出中动画过渡的回调函数   |
-| onExited          | (node?: React.Element<any>) => void | 退出后动画过渡的回调函数   |
+| onEnter           | (node?: null , Element , Text) => void | 显示动画过渡的回调函数     |
+| onEntering        | (node?: null , Element , Text) => void | 显示中动画过渡的回调函数   |
+| onEntered         | (node?: null , Element , Text) => void | 显示后动画过渡的回调函数   |
+| onExit            | (node?: null , Element , Text) => void | 退出前动画过渡的回调函数   |
+| onExiting         | (node?: null , Element , Text) => void | 退出中动画过渡的回调函数   |
+| onExited          | (node?: null , Element , Text) => void | 退出后动画过渡的回调函数   |
 
 
 ## Overlay 浮层
@@ -94,12 +94,12 @@ import Overlay from 'rsuite-utils/lib/Overlay/Overlay';
 | show       | boolean                                    | 显示                       |
 | rootClose  | boolean `(true)`                           | 启用 RootCloseWrapper 代理 |
 | animation  | union: boolean, React.ElementType `(Fade)` | 动画                       |
-| onEnter    | (node?: React.Element<any>) => void        | 显示前动画过渡的回调函数   |
-| onEntering | (node?: React.Element<any>) => void        | 显示中动画过渡的回调函数   |
-| onEntered  | (node?: React.Element<any>) => void        | 显示后动画过渡的回调函数   |
-| onExit     | (node?: React.Element<any>) => void        | 退出前动画过渡的回调函数   |
-| onExiting  | (node?: React.Element<any>) => void        | 退出中动画过渡的回调函数   |
-| onExited   | (node?: React.Element<any>) => void        | 退出后动画过渡的回调函数   |
+| onEnter    | (node?: null , Element , Text) => void     | 显示前动画过渡的回调函数   |
+| onEntering | (node?: null , Element , Text) => void     | 显示中动画过渡的回调函数   |
+| onEntered  | (node?: null , Element , Text) => void     | 显示后动画过渡的回调函数   |
+| onExit     | (node?: null , Element , Text) => void     | 退出前动画过渡的回调函数   |
+| onExiting  | (node?: null , Element , Text) => void     | 退出中动画过渡的回调函数   |
+| onExited   | (node?: null , Element , Text) => void     | 退出后动画过渡的回调函数   |
 
 
 
@@ -117,12 +117,12 @@ import OverlayTrigger from 'rsuite-utils/lib/Overlay/OverlayTrigger';
 | delayShow  | number                                                                                                                                        | 展示的延迟时间                  |
 | delayHide  | number                                                                                                                                        | 隐藏的延迟时间                  |
 | speaker    | React.Element<any>                                                                                                                            | 展示的元素                      |
-| onEnter    | (node?: React.Element<any>) => void                                                                                                           | 显示前动画过渡的回调函数        |
-| onEntering | (node?: React.Element<any>) => void                                                                                                           | 显示中动画过渡的回调函数        |
-| onEntered  | (node?: React.Element<any>) => void                                                                                                           | 显示后动画过渡的回调函数        |
-| onExit     | (node?: React.Element<any>) => void                                                                                                           | 退出前动画过渡的回调函数        |
-| onExiting  | (node?: React.Element<any>) => void                                                                                                           | 退出中动画过渡的回调函数        |
-| onExited   | (node?: React.Element<any>) => void                                                                                                           | 退出后动画过渡的回调函数        |
+| onEnter    | (node?: null , Element , Text) => void                                                                                                        | 显示前动画过渡的回调函数        |
+| onEntering | (node?: null , Element , Text) => void                                                                                                        | 显示中动画过渡的回调函数        |
+| onEntered  | (node?: null , Element , Text) => void                                                                                                        | 显示后动画过渡的回调函数        |
+| onExit     | (node?: null , Element , Text) => void                                                                                                        | 退出前动画过渡的回调函数        |
+| onExiting  | (node?: null , Element , Text) => void                                                                                                        | 退出中动画过渡的回调函数        |
+| onExited   | (node?: null , Element , Text) => void                                                                                                        | 退出后动画过渡的回调函数        |
 
 ### `<RootCloseWrapper>` 代理外部关闭事件
 
@@ -132,4 +132,4 @@ import RootCloseWrapper from 'rsuite-utils/lib/Overlay/RootCloseWrapper';
 
 | 属性名称    | 类型 `(默认值)` | 描述               |
 | ----------- | --------------- | ------------------ |
-| onRootClose |                 | 触发关闭的回调函数 |
+| onRootClose | ()=>void        | 触发关闭的回调函数 |

@@ -1,26 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
 import classNames from 'classnames';
 import Transition from './Transition';
 
+type Props = {
+  timeout?: number,
+  className?: string,
+  in?: boolean
+}
 
-class Fade extends React.Component {
+class Fade extends React.Component<Props> {
 
   static displayName = 'Fade';
-  static propTypes = {
-
-    in: PropTypes.bool,
-    unmountOnExit: PropTypes.bool,
-    transitionAppear: PropTypes.bool,
-    timeout: PropTypes.number,
-    onEnter: PropTypes.func,
-    onEntering: PropTypes.func,
-    onEntered: PropTypes.func,
-    onExit: PropTypes.func,
-    onExiting: PropTypes.func,
-    onExited: PropTypes.func
-  };
-
   static defaultProps = {
     timeout: 300
   };

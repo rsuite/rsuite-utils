@@ -1,20 +1,19 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 
-const propTypes = {
-  children: PropTypes.node,
-};
+// @flow
+import * as React from 'react';
+
+type Props = {
+  children?: React.Node
+}
 
 /**
  * Internal helper component to allow attaching a non-conflicting ref to a
  * child element that may not accept refs.
  */
-class RefHolder extends React.Component {
+class RefHolder extends React.Component<Props> {
   render() {
     return this.props.children;
   }
 }
-
-RefHolder.propTypes = propTypes;
 
 export default RefHolder;

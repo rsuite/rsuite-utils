@@ -1,25 +1,27 @@
-import React from 'react';
-import ReactDOM, { findDOMNode } from 'react-dom';
-import PropTypes from 'prop-types';
-import { ownerDocument, getContainer } from 'dom-lib';
-import mountable from '../propTypes/mountable';
+// @flow
 
-class Portal extends React.Component {
+import * as React from 'react';
+import ReactDOM, { findDOMNode } from 'react-dom';
+import { ownerDocument, getContainer } from 'dom-lib';
+
+export type Props = {
+  container?: HTMLElement | (() => HTMLElement),
+}
+
+class Portal extends React.Component<Props> {
 
   static displayName = 'Portal';
-  static propTypes = {
-    container: PropTypes.oneOfType([
-      mountable,
-      PropTypes.func
-    ])
-  };
 
   componentDidMount() {
     this.renderOverlay();
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
 
-    if (this.overlayTarget && nextProps.container !== this.props.container) {
+    if (
+      this.overlayTarget &&
+      this.portalContainerNode &&
+      nextProps.container !== this.props.container
+    ) {
       this.portalContainerNode.removeChild(this.overlayTarget);
       this.portalContainerNode = getContainer(nextProps.container, ownerDocument(this).body);
       this.portalContainerNode.appendChild(this.overlayTarget);
@@ -59,7 +61,7 @@ class Portal extends React.Component {
     }
   }
   unmountOverlayTarget() {
-    if (this.overlayTarget) {
+    if (this.overlayTarget && this.portalContainerNode) {
       this.portalContainerNode.removeChild(this.overlayTarget);
       this.overlayTarget = null;
     }
@@ -91,6 +93,9 @@ class Portal extends React.Component {
       this.unmountOverlayTarget();
     }
   }
+  overlayTarget = null;
+  overlayInstance = null;
+  portalContainerNode = null;
   render() {
     return null;
   }

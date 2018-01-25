@@ -1,5 +1,2 @@
-import propTypes from './propTypes';
-
-export default {
-  propTypes
-};
+export * as Overlay from './Overlay';
+export * as Animation from './Animation';

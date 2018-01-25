@@ -6,7 +6,7 @@ import { getContainer, ownerDocument } from 'dom-lib';
 
 type Props = {
   onRendered?: () => void,
-  container?: React.ElementType,
+  container?: HTMLElement,
   children?: React.ChildrenArray<any>
 }
 

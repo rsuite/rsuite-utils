@@ -1,47 +1,48 @@
-import React, { cloneElement } from 'react';
+// @flow
+
+import * as React from 'react';
 import { findDOMNode } from 'react-dom';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { ownerDocument, getContainer } from 'dom-lib';
-import mountable from '../propTypes/mountable';
 import overlayPositionUtils from '../utils/overlayPositionUtils';
+import type { Placement } from '../utils/TypeDefinition';
 
 
-class Position extends React.Component {
+export type Props = {
+  children?: React.Node,
+  className?: string,
+  target?: Function,
+  container?: HTMLElement | (() => HTMLElement),
+  containerPadding?: number,
+  placement?: Placement,
+  shouldUpdatePosition?: boolean
+};
+
+type States = {
+  positionLeft?: number,
+  positionTop?: number,
+  arrowOffsetLeft?: null | number,
+  arrowOffsetTop?: null | number
+}
+
+class Position extends React.Component<Props, States> {
 
   static displayName = 'Position';
-  static propTypes = {
-    target: PropTypes.func,
-    container: PropTypes.oneOfType([mountable, PropTypes.func]),
-    containerPadding: PropTypes.number,
-    placement: PropTypes.oneOf([
-      'top', 'right', 'bottom', 'left',
-      'bottomLeft', 'bottomRight', 'topLeft', 'topRight',
-      'leftTop', 'rightTop', 'leftBottom', 'rightBottom'
-    ]),
-    shouldUpdatePosition: PropTypes.bool
-  };
-
-
   static defaultProps = {
     containerPadding: 0,
     placement: 'right',
     shouldUpdatePosition: false
   };
 
-  constructor(props, context) {
-    super(props, context);
-
+  constructor(props: Props) {
+    super(props);
     this.state = {
       positionLeft: 0,
       positionTop: 0,
       arrowOffsetLeft: null,
       arrowOffsetTop: null
     };
-
-    this.needsFlush = false;
-    this.lastTarget = null;
   }
 
   componentDidMount() {
@@ -52,7 +53,7 @@ class Position extends React.Component {
     this.needsFlush = true;
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (this.needsFlush) {
       this.needsFlush = false;
       this.updatePosition(prevProps.placement !== this.props.placement);
@@ -64,19 +65,24 @@ class Position extends React.Component {
   }
 
   getTargetSafe() {
-    if (!this.props.target) {
-      return null;
-    }
-
-    const target = this.props.target(this.props);
+    const { target } = this.props;
     if (!target) {
       return null;
     }
 
-    return target;
+    const targetSafe = target(this.props);
+
+    if (!targetSafe) {
+      return null;
+    }
+
+    return targetSafe;
   }
 
-  updatePosition(placementChanged) {
+  lastTarget = false;
+  needsFlush = null;
+
+  updatePosition(placementChanged?: boolean) {
     const target = this.getTargetSafe();
 
     if (!this.props.shouldUpdatePosition && target === this.lastTarget && !placementChanged) {
@@ -108,12 +114,15 @@ class Position extends React.Component {
     ));
   }
 
+
   render() {
+
     const {
       children,
       className,
-      ...props
+      ...rest
     } = this.props;
+
 
     const {
       positionLeft,
@@ -123,8 +132,8 @@ class Position extends React.Component {
 
     const child = React.Children.only(children);
 
-    return cloneElement(child, {
-      ..._.omit(props, ['target', 'container', 'containerPadding']),
+    return React.cloneElement(child, {
+      ..._.omit(rest, ['target', 'container', 'containerPadding']),
       ...arrowPosition,
       positionLeft,
       positionTop,

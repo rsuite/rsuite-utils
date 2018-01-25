@@ -1,28 +1,29 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { on, contains } from 'dom-lib';
+import _ from 'lodash';
 
 function isLeftClickEvent(event) {
-  return event.button === 0;
+  return _.get(event, 'button') === 0;
 }
 
 function isModifiedEvent(event) {
-  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
+  return !!(event.metaKey || event.altKey || event.ctrlKey || _.get(event, 'shiftKey'));
 }
 
-class RootCloseWrapper extends React.Component {
+type Props = {
+  children: React.Node,
+  onRootClose?: () => void
+}
+
+class RootCloseWrapper extends React.Component<Props> {
 
   static propTypes = {
     onRootClose: PropTypes.func.isRequired
   };
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.handleDocumentClick = this.handleDocumentClick.bind(this);
-    this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
-  }
 
   componentDidMount() {
     this.bindRootCloseHandlers();
@@ -31,6 +32,8 @@ class RootCloseWrapper extends React.Component {
   componentWillUnmount() {
     this.unbindRootCloseHandlers();
   }
+  onDocumentClickListener = null;
+  onDocumentKeyupListener = null;
 
   bindRootCloseHandlers() {
     let doc = window.document;
@@ -38,7 +41,8 @@ class RootCloseWrapper extends React.Component {
     this.onDocumentKeyupListener = on(doc, 'keyup', this.handleDocumentKeyUp);
   }
 
-  handleDocumentClick(event) {
+  handleDocumentClick = (event: SyntheticEvent<*>) => {
+
     /* eslint-disable */
     if (contains(findDOMNode(this), event.target)) {
       return;
@@ -46,12 +50,14 @@ class RootCloseWrapper extends React.Component {
     if (isModifiedEvent(event) || !isLeftClickEvent(event)) {
       return;
     }
-    this.props.onRootClose();
+    const { onRootClose } = this.props;
+    onRootClose && onRootClose();
   }
 
-  handleDocumentKeyUp(event) {
+  handleDocumentKeyUp = (event: SyntheticEvent<*>) => {
     if (event.keyCode === 27) {
-      this.props.onRootClose();
+      const { onRootClose } = this.props;
+      onRootClose && onRootClose();
     }
   }
 

@@ -1,6 +1,7 @@
-import React, { cloneElement } from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
+import { findDOMNode } from 'react-dom';
 import {
   ownerDocument,
   canUseDom,
@@ -11,50 +12,54 @@ import {
   onFocus
 } from 'dom-lib';
 
-import { mountable, elementType } from '../propTypes';
 import Portal from './Portal';
 import ModalManager from './ModalManager';
 import RefHolder from './RefHolder';
+import type { AnimationEventFunction, DefaultEventFunction } from '../utils/TypeDefinition';
 
+type Props = {
+
+  /** Portal Props */
+  container?: HTMLElement | (() => HTMLElement),
+  onRendered?: Function,
+  children?: React.Node,
+
+  /** Transition Props */
+  transition: boolean | React.ElementType,
+  onEnter?: AnimationEventFunction,
+  onEntering?: AnimationEventFunction,
+  onEntered?: AnimationEventFunction,
+  onExit?: AnimationEventFunction,
+  onExiting?: AnimationEventFunction,
+  onExited?: AnimationEventFunction,
+
+  show: boolean,
+  onShow: DefaultEventFunction,
+  onHide: DefaultEventFunction,
+  backdrop: boolean | 'static',
+  onEscapeKeyUp: DefaultEventFunction,
+  onBackdropClick: DefaultEventFunction,
+  backdropStyle: Object,
+  backdropClassName: string,
+  containerClassName: string,
+  keyboard: boolean,
+
+  dialogTransitionTimeout: number,
+  backdropTransitionTimeout: number,
+  autoFocus: boolean,
+  enforceFocus: boolean
+}
+
+type States = {
+  exited?: boolean
+}
 
 const modalManager = new ModalManager();
 const noop = () => { };
 
-class Modal extends React.Component {
-  static propTypes = {
-    ...Portal.propTypes,
-
-    show: PropTypes.bool,
-    container: PropTypes.oneOfType([mountable, PropTypes.func]),
-    onShow: PropTypes.func,
-    onHide: PropTypes.func,
-    backdrop: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.oneOf(['static'])
-    ]),
-    onEscapeKeyUp: PropTypes.func,
-    onBackdropClick: PropTypes.func,
-    /*eslint-disable */
-    backdropStyle: PropTypes.object,
-    backdropClassName: PropTypes.string,
-    containerClassName: PropTypes.string,
-    keyboard: PropTypes.bool,
-    transition: elementType,
-    dialogTransitionTimeout: PropTypes.number,
-    backdropTransitionTimeout: PropTypes.number,
-    autoFocus: PropTypes.bool,
-    enforceFocus: PropTypes.bool,
-    onEnter: PropTypes.func,
-    onEntering: PropTypes.func,
-    onEntered: PropTypes.func,
-    onExit: PropTypes.func,
-    onExiting: PropTypes.func,
-    onExited: PropTypes.func
-
-  };
+class Modal extends React.Component<Props, States> {
 
   static defaultProps = {
-    show: false,
     backdrop: true,
     keyboard: true,
     autoFocus: true,
@@ -62,14 +67,9 @@ class Modal extends React.Component {
     onHide: noop
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props: Props) {
+    super(props);
     this.state = { exited: !props.show };
-    this.handleBackdropClick = this.handleBackdropClick.bind(this);
-    this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
-    this.handleHidden = this.handleHidden.bind(this);
-    this.enforceFocus = this.enforceFocus.bind(this);
-
   }
   componentDidMount() {
     if (this.props.show) {
@@ -77,7 +77,7 @@ class Modal extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.show) {
       this.setState({ exited: false });
     } else if (!nextProps.transition) {
@@ -141,10 +141,12 @@ class Modal extends React.Component {
   }
 
   getDialogElement() {
-    return ReactDOM.findDOMNode(this.dialog);
+    /* eslint-disable */
+    return findDOMNode(this.dialog);
   }
 
-  handleHidden(...args) {
+
+  handleHidden = (...args: Array<any>) => {
     this.setState({ exited: true });
     this.onHide();
 
@@ -153,7 +155,7 @@ class Modal extends React.Component {
     }
   }
 
-  handleBackdropClick(e) {
+  handleBackdropClick = (e) => {
 
 
     if (e.target !== e.currentTarget) {
@@ -170,7 +172,7 @@ class Modal extends React.Component {
     }
   }
 
-  handleDocumentKeyUp(e) {
+  handleDocumentKeyUp = (e) => {
     if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
       if (this.props.onEscapeKeyUp) {
         this.props.onEscapeKeyUp(e);
@@ -193,7 +195,7 @@ class Modal extends React.Component {
     }
   }
 
-  enforceFocus() {
+  enforceFocus = () => {
     let { enforceFocus } = this.props;
 
     if (!enforceFocus || !this.isTopModal()) {
@@ -285,7 +287,7 @@ class Modal extends React.Component {
     let { role, tabIndex } = dialog.props;
 
     if (role === undefined || tabIndex === undefined) {
-      dialog = cloneElement(dialog, {
+      dialog = React.cloneElement(dialog, {
         role: role === undefined ? 'document' : role,
         tabIndex: tabIndex === null ? '-1' : tabIndex
       });

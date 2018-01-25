@@ -1,5 +1,5 @@
 import React from 'react';
-import { OverlayTrigger } from '../src/Overlay';
+import OverlayTrigger from '../src/Overlay/OverlayTrigger';
 
 const Tooltip = ({ style, children }) => (
   <div

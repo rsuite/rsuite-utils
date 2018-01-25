@@ -1,25 +1,42 @@
-import React, { cloneElement } from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
 import classNames from 'classnames';
-import elementType from '../propTypes/elementType';
 
 import BaseOverlay from './BaseOverlay';
 import Fade from '../Animation/Fade';
 
-class Overlay extends React.Component {
+import type { AnimationEventFunction, DefaultEventFunction, Placement } from '../utils/TypeDefinition';
 
-  static propTypes = {
-    ...BaseOverlay.propTypes,
-    show: PropTypes.bool,
-    rootClose: PropTypes.bool,
-    onHide: PropTypes.func,
-    animation: PropTypes.oneOfType([PropTypes.bool, elementType])
-  };
+type Props = {
+
+  container?: HTMLElement | (() => HTMLElement),
+  onRendered?: Function,
+  children: React.Element<any>,
+  className?: string,
+  target?: Function,
+  container?: HTMLElement | (() => HTMLElement),
+  containerPadding?: number,
+  placement?: Placement,
+  shouldUpdatePosition?: boolean,
+
+  onEnter?: AnimationEventFunction,
+  onEntering?: AnimationEventFunction,
+  onEntered?: AnimationEventFunction,
+  onExit?: AnimationEventFunction,
+  onExiting?: AnimationEventFunction,
+  onExited?: AnimationEventFunction,
+
+  show?: boolean,
+  rootClose?: boolean,
+  onHide?: DefaultEventFunction,
+  animation?: boolean | React.ElementType
+}
+
+class Overlay extends React.Component<Props> {
 
   static defaultProps = {
-    animation: Fade,
-    rootClose: false,
-    show: false
+    animation: Fade
   };
 
   render() {
@@ -38,7 +55,8 @@ class Overlay extends React.Component {
     }
 
     if (!transition) {
-      child = cloneElement(child, {
+      child = React.Children.only(child);
+      child = React.cloneElement(child, {
         className: classNames('in', child.props.className)
       });
     }

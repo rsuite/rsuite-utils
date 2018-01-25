@@ -1,3 +1,5 @@
+// @flow
+
 import {
   addClass,
   removeClass,
@@ -25,14 +27,20 @@ function findContainer(data, modal) {
 
 class ModalManager {
 
-  constructor(hideSiblingNodes = true) {
+  constructor(hideSiblingNodes: boolean = true) {
     this.hideSiblingNodes = hideSiblingNodes;
     this.modals = [];
     this.containers = [];
     this.data = [];
   }
 
-  add(modal, container, className) {
+  hideSiblingNodes = null;
+  modals = [];
+  containers = [];
+  data = [];
+
+
+  add(modal: Object, container: Object, className: string) {
     let modalIdx = this.modals.indexOf(modal);
     let containerIdx = this.containers.indexOf(container);
 
@@ -48,20 +56,19 @@ class ModalManager {
       return modalIdx;
     }
 
-    let data = {
+    let data: Object = {
       modals: [modal],
       classes: className ? className.split(/\s+/) : [],
       style: {
         overflow: container.style.overflow,
         paddingRight: container.style.paddingRight
-      }
+      },
+      overflowing: isOverflowing(container)
     };
 
-    let style = {
+    let style: Object = {
       overflow: 'hidden'
     };
-
-    data.overflowing = isOverflowing(container);
 
     if (data.overflowing) {
       /*eslint-disable */
@@ -78,7 +85,7 @@ class ModalManager {
     return modalIdx;
   }
 
-  remove(modal) {
+  remove(modal: Object) {
 
     let modalIdx = this.modals.indexOf(modal);
 
@@ -107,7 +114,8 @@ class ModalManager {
     }
   }
 
-  isTopModal(modal) {
+
+  isTopModal(modal: Object) {
     return !!this.modals.length && this.modals[this.modals.length - 1] === modal;
   }
 }

@@ -13,11 +13,13 @@ import isOneOf from '../utils/isOneOf';
 import OverlayTriggerLegacy from './OverlayTriggerLegacy';
 import OverlayTriggerPortal from './OverlayTriggerPortal';
 
+import type { Placement, DefaultEventFunction, DefaultEvent, TriggerName } from '../utils/TypeDefinition';
+
 type Props = {
   target?: Function,
-  container?: React.ElementType | Function,
+  container?: HTMLElement | Function,
   containerPadding?: number,
-  placement?: 'top' | 'right' | 'bottom' | 'left' | 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight' | 'leftTop' | 'rightTop' | 'leftBottom' | 'rightBottom',
+  placement?: Placement,
   show?: boolean,
   rootClose?: boolean,
   onHide?: Function,
@@ -29,27 +31,27 @@ type Props = {
   onExiting?: Function,
   onExited?: Function,
   animation?: React.ElementType | boolean,
-  trigger?: 'click' | 'hover' | 'focus' | Array<'click' | 'hover' | 'focus'>,
+  trigger: TriggerName | Array<TriggerName>,
   delay?: number,
   delayShow?: number,
   delayHide?: number,
   defaultOverlayShown?: boolean,
   speaker: React.Element<any>,
   children: React.Node,
-  onMouseOver?: (event: SyntheticEvent<*>) => void,
-  onMouseOut?: (event: SyntheticEvent<*>) => void,
-  onClick?: (event: SyntheticEvent<*>) => void,
-  onBlur?: (event: SyntheticEvent<*>) => void,
-  onFocus?: (event: SyntheticEvent<*>) => void
+  onMouseOver?: DefaultEventFunction,
+  onMouseOut?: DefaultEventFunction,
+  onClick?: DefaultEventFunction,
+  onBlur?: DefaultEventFunction,
+  onFocus?: DefaultEventFunction
 }
 
 type OverlayTriggerProps = {
   'aria-describedby': string,
-  onMouseOver?: (event: SyntheticEvent<*>) => void,
-  onMouseOut?: (event: SyntheticEvent<*>) => void,
-  onBlur?: (event: SyntheticEvent<*>) => void,
-  onClick?: (event: SyntheticEvent<*>) => void,
-  onFocus?: (event: SyntheticEvent<*>) => void,
+  onMouseOver?: DefaultEventFunction,
+  onMouseOut?: DefaultEventFunction,
+  onBlur?: DefaultEventFunction,
+  onClick?: DefaultEventFunction,
+  onFocus?: DefaultEventFunction,
 }
 
 type States = {
@@ -69,8 +71,8 @@ class OverlayTrigger extends React.Component<Props, States> {
   constructor(props: Props) {
     super(props);
 
-    this.handleMouseOver = (e: SyntheticEvent<*>) => handleMouseOverOut(this.handleDelayedShow, e);
-    this.handleMouseOut = (e: SyntheticEvent<*>) => handleMouseOverOut(this.handleDelayedHide, e);
+    this.handleMouseOver = (e: DefaultEvent) => handleMouseOverOut(this.handleDelayedShow, e);
+    this.handleMouseOut = (e: DefaultEvent) => handleMouseOverOut(this.handleDelayedHide, e);
 
     this.state = {
       isOverlayShown: props.defaultOverlayShown
@@ -89,7 +91,7 @@ class OverlayTrigger extends React.Component<Props, States> {
 
 
     const overlayProps = {
-      ..._.pick(this.props, Object.keys(Overlay.propTypes)),
+      ..._.pick(this.props, Overlay.handledProps),
       show: this.state.isOverlayShown,
       onHide: this.handleHide,
       target: this.getOverlayTarget
