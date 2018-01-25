@@ -6,7 +6,7 @@ import { findDOMNode } from 'react-dom';
 import { on, transition } from 'dom-lib';
 import classNames from 'classnames';
 import _ from 'lodash';
-import type { ReactFindDOMNode, DefaultEvent, AnimationEventProps } from '../utils/TypeDefinition';
+import type { ReactFindDOMNode, DefaultEvent, AnimationEventFunction } from '../utils/TypeDefinition';
 
 export const UNMOUNTED = 0;
 export const EXITED = 1;
@@ -16,7 +16,7 @@ export const EXITING = 4;
 
 function noop() { }
 
-type OwnProps = {
+type Props = {
   children?: React.Node,
   className?: string,
   in?: boolean,
@@ -27,9 +27,20 @@ type OwnProps = {
   exitingClassName?: string,
   enteredClassName?: string,
   enteringClassName?: string,
+
+  exitedClassName?: string,
+  exitingClassName?: string,
+  enteredClassName?: string,
+  enteringClassName?: string,
+
+  onEnter: AnimationEventFunction,
+  onEntering: AnimationEventFunction,
+  onEntered: AnimationEventFunction,
+  onExit: AnimationEventFunction,
+  onExiting: AnimationEventFunction,
+  onExited: AnimationEventFunction
 }
 
-type Props = OwnProps & AnimationEventProps;
 
 type States = {
   status?: number

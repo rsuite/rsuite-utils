@@ -1,7 +1,7 @@
 {
   "name": "rsuite-utils",
   "version": "0.1.2",
-  "description": "RSuite Utils",
+  "description": "RSUITE Utils",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib/"
@@ -35,8 +35,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "dom-lib": "^0.2.6",
-    "lodash": "^4.17.4",
-    "prop-types": "^15.6.0"
+    "lodash": "^4.17.4"
   },
   "peerDependencies": {
     "react": "^0.14.9 || >=15.3.0",

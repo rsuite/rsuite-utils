@@ -23,8 +23,7 @@ type Props = {
   show?: boolean,
   rootClose?: boolean,
   onHide?: DefaultEventFunction,
-  animation?: boolean | React.ElementType,
-
+  transition?: React.ElementType,
   onEnter?: AnimationEventFunction,
   onEntering?: AnimationEventFunction,
   onEntered?: AnimationEventFunction,

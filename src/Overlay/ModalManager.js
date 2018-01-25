@@ -40,7 +40,7 @@ class ModalManager {
   data = [];
 
 
-  add(modal: Object, container: Object, className: string) {
+  add(modal: Object, container: Object, className?: string) {
     let modalIdx = this.modals.indexOf(modal);
     let containerIdx = this.containers.indexOf(container);
 

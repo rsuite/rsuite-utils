@@ -11,7 +11,7 @@ import createChainedFunction from '../utils/createChainedFunction';
 import handleMouseOverOut from '../utils/handleMouseOverOut';
 import isOneOf from '../utils/isOneOf';
 import OverlayTriggerLegacy from './OverlayTriggerLegacy';
-import OverlayTriggerPortal from './OverlayTriggerPortal';
+import Portal from './Portal';
 
 import type { Placement, DefaultEventFunction, DefaultEvent, TriggerName } from '../utils/TypeDefinition';
 
@@ -118,6 +118,7 @@ class OverlayTrigger extends React.Component<Props, States> {
   hoverShowDelay = null;
   hoverHideDelay = null;
   target = null;
+
 
   enterSpeaker = false;
   enterTrigger = false;
@@ -276,7 +277,7 @@ class OverlayTrigger extends React.Component<Props, States> {
 
     return [
       React.cloneElement(triggerComponent, props),
-      <OverlayTriggerPortal key="portal">{this.getOverlay()}</OverlayTriggerPortal>
+      <Portal key="portal">{this.getOverlay()}</Portal>
     ];
   }
 }

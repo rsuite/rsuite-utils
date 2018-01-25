@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
-import PropTypes from 'prop-types';
 import { on, contains } from 'dom-lib';
 import _ from 'lodash';
 
@@ -20,10 +19,6 @@ type Props = {
 }
 
 class RootCloseWrapper extends React.Component<Props> {
-
-  static propTypes = {
-    onRootClose: PropTypes.func.isRequired
-  };
 
   componentDidMount() {
     this.bindRootCloseHandlers();

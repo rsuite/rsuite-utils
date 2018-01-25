@@ -30,28 +30,34 @@ type Props = {
   show?: boolean,
   rootClose?: boolean,
   onHide?: DefaultEventFunction,
-  animation?: boolean | React.ElementType
+  transition?: React.ElementType,
+  animation?: boolean
 }
 
 class Overlay extends React.Component<Props> {
 
   static defaultProps = {
-    animation: Fade
+    animation: true,
+    transition: Fade
   };
+
+  /**
+   * Note that `handledProps` are generated automatically during
+   * build with `babel-plugin-transform-react-flow-handled-props`
+   */
+  static handledProps = [];
 
   render() {
     let {
       children: child,
-      animation: transition,
+      animation,
+      transition,
       ...props
     } = this.props;
 
-    if (transition === true) {
-      transition = Fade;
-    }
 
-    if (transition === false) {
-      transition = null;
+    if (!animation) {
+      transition = undefined;
     }
 
     if (!transition) {

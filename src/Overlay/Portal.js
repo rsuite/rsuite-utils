@@ -52,8 +52,10 @@ class Portal extends React.Component<Props> {
   portalContainerNode = null;
 
   render() {
-    return this.props.children && this.portalContainerNode ?
-      ReactDOM.createPortal(this.props.children, this.portalContainerNode) :
+
+    const { children } = this.props;
+    return children && this.portalContainerNode ?
+      ReactDOM.createPortal(children, this.portalContainerNode) :
       null;
   }
 
