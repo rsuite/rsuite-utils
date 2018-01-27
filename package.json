@@ -1,6 +1,6 @@
 {
   "name": "rsuite-utils",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "RSUITE Utils",
   "main": "lib/index.js",
   "directories": {
@@ -80,9 +80,9 @@
     "karma-webpack": "2.0.3",
     "less-loader": "^4.0.5",
     "mocha": "^2.5.3",
-    "react": "^16.2.0",
+    "react": "15.6.2",
+    "react-dom": "15.6.2",
     "react-addons-test-utils": "^15.4.0",
-    "react-dom": "^16.2.0",
     "react-hot-loader": "^3.1.3",
     "rsuite-theme": "^2.0.10",
     "sinon": "^4.1.2",
