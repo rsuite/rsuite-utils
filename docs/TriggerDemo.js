@@ -98,6 +98,29 @@ class TriggerDemo extends React.Component {
             </tr>
           </tbody>
         </table>
+
+        <h3>defaultOpen</h3>
+
+        <OverlayTrigger
+          trigger="click"
+          speaker={<Tooltip />}
+          placement="rightBottom"
+          defaultOpen
+        >
+          <button>defaultOpen</button>
+        </OverlayTrigger>
+
+        <h3>open</h3>
+
+        <OverlayTrigger
+          trigger="click"
+          placement="rightBottom"
+          speaker={<Tooltip />}
+          open
+        >
+          <button>open</button>
+        </OverlayTrigger>
+
       </div>
 
     );
