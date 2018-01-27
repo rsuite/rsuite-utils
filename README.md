@@ -109,20 +109,28 @@ import Overlay from 'rsuite-utils/lib/Overlay/Overlay';
 import OverlayTrigger from 'rsuite-utils/lib/Overlay/OverlayTrigger';
 ```
 
-| 属性名称   | 类型 `(默认值)`                                                                                                                               | 描述                            |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| placement  | enum: 'top', 'right', 'bottom', 'left','bottomLeft', 'bottomRight', 'topLeft', 'topRight', 'leftTop', 'rightTop', 'leftBottom', 'rightBottom' | 显示位置                        |
-| trigger    | union: 'click', 'hover', 'focus' `(['hover','focus'])`                                                                                        | 触发事件,可以通过数组配置多事件 |
-| delay      | number                                                                                                                                        | 延迟时间                        |
-| delayShow  | number                                                                                                                                        | 展示的延迟时间                  |
-| delayHide  | number                                                                                                                                        | 隐藏的延迟时间                  |
-| speaker    | React.Element<any>                                                                                                                            | 展示的元素                      |
-| onEnter    | (node?: null, Element, Text) => void                                                                                                          | 显示前动画过渡的回调函数        |
-| onEntering | (node?: null, Element, Text) => void                                                                                                          | 显示中动画过渡的回调函数        |
-| onEntered  | (node?: null, Element, Text) => void                                                                                                          | 显示后动画过渡的回调函数        |
-| onExit     | (node?: null, Element, Text) => void                                                                                                          | 退出前动画过渡的回调函数        |
-| onExiting  | (node?: null, Element, Text) => void                                                                                                          | 退出中动画过渡的回调函数        |
-| onExited   | (node?: null, Element, Text) => void                                                                                                          | 退出后动画过渡的回调函数        |
+```js
+type PlacementAround = 'top' | 'right' | 'bottom' | 'left';
+type PlacementEighPoints = 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight' | 'leftTop' | 'rightTop' | 'leftBottom' | 'rightBottom';
+type Placement = PlacementAround | PlacementEighPoints;
+```
+
+| 属性名称    | 类型 `(默认值)`                                        | 描述                            |
+| ----------- | ------------------------------------------------------ | ------------------------------- |
+| placement   | enum: Placement                                        | 显示位置                        |
+| trigger     | union: 'click', 'hover', 'focus' `(['hover','focus'])` | 触发事件,可以通过数组配置多事件 |
+| delay       | number                                                 | 延迟时间                        |
+| delayShow   | number                                                 | 展示的延迟时间                  |
+| delayHide   | number                                                 | 隐藏的延迟时间                  |
+| speaker     | React.Element<any>                                     | 展示的元素                      |
+| onEnter     | (node?: null, Element, Text) => void                   | 显示前动画过渡的回调函数        |
+| onEntering  | (node?: null, Element, Text) => void                   | 显示中动画过渡的回调函数        |
+| onEntered   | (node?: null, Element, Text) => void                   | 显示后动画过渡的回调函数        |
+| onExit      | (node?: null, Element, Text) => void                   | 退出前动画过渡的回调函数        |
+| onExiting   | (node?: null, Element, Text) => void                   | 退出中动画过渡的回调函数        |
+| onExited    | (node?: null, Element, Text) => void                   | 退出后动画过渡的回调函数        |
+| defaultOpen | boolean                                                | 默认打开                        |
+| open        | boolean                                                | 打开（受控）                    |
 
 ### `<RootCloseWrapper>` 代理外部关闭事件
 
