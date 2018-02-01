@@ -27,7 +27,12 @@ describe('Toggle', () => {
       done();
     };
     const instance = ReactTestUtils.renderIntoDocument(
-      <Toggle title="title" value="title" cleanable onClean={doneOp}>
+      <Toggle
+        title="title"
+        hasValue
+        cleanable
+        onClean={doneOp}
+      >
         Title
       </Toggle>
     );
