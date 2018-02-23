@@ -80,7 +80,7 @@ class Collapse extends React.Component<Props> {
 
   handleEntered = (elem: Element) => {
     const dimension = this.dimension();
-    addStyle(elem, dimension, null);
+    addStyle(elem, dimension, 'auto');
   }
 
   /* -- Collapsing -- */

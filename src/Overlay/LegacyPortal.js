@@ -38,21 +38,6 @@ class Portal extends React.Component<Props> {
   getMountNode() {
     return this.overlayTarget;
   }
-  getOverlayDOMNode() {
-    if (!this.isMounted()) { //eslint-disable-line
-      throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
-    }
-
-    if (this.overlayInstance) {
-      if (this.overlayInstance.getWrappedDOMNode) {
-        return this.overlayInstance.getWrappedDOMNode();
-      }
-      /* eslint-disable */
-      return findDOMNode(this.overlayInstance);
-    }
-
-    return null;
-  }
   mountOverlayTarget() {
     if (!this.overlayTarget) {
       this.overlayTarget = document.createElement('div');

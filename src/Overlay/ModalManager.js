@@ -9,7 +9,7 @@ import {
 } from 'dom-lib';
 
 
-function findIndexOf(arr, cb) {
+function findIndexOf(arr, cb: (d: any, i: any) => boolean) {
   let idx = -1;
   arr.some((d, i) => {
     if (cb(d, i)) {

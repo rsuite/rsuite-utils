@@ -115,7 +115,6 @@ class OverlayTrigger extends React.Component<Props, States> {
     const overlayProps = {
       ..._.pick(this.props, Overlay.handledProps),
       show: _.isUndefined(open) ? isOverlayShown : open,
-      onHide: this.hide,
       target: this.getOverlayTarget
     };
 
@@ -137,8 +136,8 @@ class OverlayTrigger extends React.Component<Props, States> {
   speaker = null;
   handleMouseOver = null;
   handleMouseOut = null;
-  hoverShowDelay = null;
-  hoverHideDelay = null;
+  hoverShowDelay: any = null;
+  hoverHideDelay: any = null;
   target = null;
   mountNode = null;
 
@@ -160,7 +159,6 @@ class OverlayTrigger extends React.Component<Props, States> {
 
   hide = () => {
     this.setState({ isOverlayShown: false });
-
   }
 
   show = () => {

@@ -218,7 +218,7 @@ class Transition extends React.Component<Props, States> {
     this.setState(nextState, this.setNextCallback(callback));
   }
 
-  nextCallback = null;
+  nextCallback: any = null;
   needsUpdate = null;
 
   render() {
