@@ -1,6 +1,6 @@
 {
   "name": "rsuite-utils",
-  "version": "1.0.0-next.4",
+  "version": "1.0.0-next.7",
   "description": "RSUITE Utils",
   "main": "lib/index.js",
   "directories": {
@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "NODE_ENV=development webpack-dev-server  --inline --progress --colors --port 3100 --host 0.0.0.0 ",
     "build": "rm -rf lib && babel src --out-dir lib ",
-    "docs": "rm -rf assets &&  NODE_ENV=production webpack ",
+    "docs": "rm -rf assets &&  NODE_ENV=production webpack",
     "publish-docs": "node docs/gh-pages.js",
     "tdd": "karma start",
     "lint": "eslint src  *.js",
@@ -19,7 +19,7 @@
   "keywords": [
     "react",
     "rsuite",
-    "react-utils"
+    "utils"
   ],
   "author": "Simon Guo <simonguo.2009@gmail.com>",
   "license": "MIT",
