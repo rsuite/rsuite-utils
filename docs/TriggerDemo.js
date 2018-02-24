@@ -1,8 +1,10 @@
 import React from 'react';
 import OverlayTrigger from '../src/Overlay/OverlayTrigger';
 
-const Tooltip = ({ style, children }) => (
+const Tooltip = ({ style, children, onMouseLeave, onMouseEnter }) => (
   <div
+    onMouseLeave={onMouseLeave}
+    onMouseEnter={onMouseEnter}
     style={{
       display: 'inline-block',
       position: 'absolute',
