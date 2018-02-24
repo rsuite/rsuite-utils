@@ -110,13 +110,17 @@ class OverlayTrigger extends React.Component<Props, States> {
 
   getOverlay() {
 
-    const { open, speaker } = this.props;
+    const { open, speaker, trigger } = this.props;
     const { isOverlayShown } = this.state;
     const overlayProps = {
       ..._.pick(this.props, Overlay.handledProps),
       show: _.isUndefined(open) ? isOverlayShown : open,
       target: this.getOverlayTarget
     };
+
+    if (isOneOf('click', trigger)) {
+      overlayProps.onHide = this.hide;
+    }
 
     const speakerProps: Object = {
       onMouseEnter: this.handleSpeakerMouseEnter,
