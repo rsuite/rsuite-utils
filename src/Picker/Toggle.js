@@ -19,23 +19,21 @@ type Props = {
 };
 
 class Toggle extends React.Component<Props> {
-
   static defaultProps = {
     classPrefix: `${namespace}-toggle`,
     caret: true
-  }
+  };
 
   addPrefix = (name: string) => prefix(this.props.classPrefix)(name);
 
   renderToggleClean() {
-
     const { onClean } = this.props;
     return (
       <span
         className={this.addPrefix('clean')}
         role="button"
         tabIndex="-1"
-        onClick={(e) => {
+        onClick={e => {
           onClean && onClean();
           e.stopPropagation();
         }}
@@ -45,31 +43,17 @@ class Toggle extends React.Component<Props> {
     );
   }
   render() {
-
-    const {
-      children,
-      className,
-      hasValue,
-      cleanable,
-      classPrefix,
-      caret,
-      ...rest
-    } = this.props;
+    const { children, className, hasValue, cleanable, classPrefix, caret, ...rest } = this.props;
 
     const classes = classNames(classPrefix, className);
     const unhandled = getUnhandledProps(Toggle, rest);
 
     return (
-      <a
-        {...unhandled}
-        role="button"
-        tabIndex="-1"
-        className={classes}
-      >
-        {hasValue ? <span className={this.addPrefix('value')}>{children}</span> : (
-          <span className={this.addPrefix('placeholder')} >
-            {children}
-          </span>
+      <a {...unhandled} role="button" tabIndex="-1" className={classes}>
+        {hasValue ? (
+          <span className={this.addPrefix('value')}>{children}</span>
+        ) : (
+          <span className={this.addPrefix('placeholder')}>{children}</span>
         )}
         {caret && <span className={this.addPrefix('caret')} />}
         {hasValue && cleanable && this.renderToggleClean()}

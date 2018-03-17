@@ -15,10 +15,14 @@ import {
 import Portal from './Portal';
 import ModalManager from './ModalManager';
 import RefHolder from './RefHolder';
-import type { AnimationEventFunction, DefaultEventFunction, DefaultEvent, ReactFindDOMNode } from '../utils/TypeDefinition';
+import type {
+  AnimationEventFunction,
+  DefaultEventFunction,
+  DefaultEvent,
+  ReactFindDOMNode
+} from '../utils/TypeDefinition';
 
 type Props = {
-
   /** Portal Props */
   container?: HTMLElement | (() => HTMLElement),
   onRendered?: Function,
@@ -50,18 +54,17 @@ type Props = {
   enforceFocus?: boolean,
 
   style?: Object,
-  className?: string,
-}
+  className?: string
+};
 
 type States = {
   exited?: boolean
-}
+};
 
 const modalManager = new ModalManager();
-const noop = () => { };
+const noop = () => {};
 
 class Modal extends React.Component<Props, States> {
-
   static defaultProps = {
     backdrop: true,
     keyboard: true,
@@ -98,7 +101,6 @@ class Modal extends React.Component<Props, States> {
   }
 
   componentDidUpdate(prevProps: Props) {
-
     const { transition } = this.props;
 
     if (prevProps.show && !this.props.show && !transition) {
@@ -107,7 +109,6 @@ class Modal extends React.Component<Props, States> {
     } else if (!prevProps.show && this.props.show) {
       this.onShow();
     }
-
   }
 
   componentWillUnmount() {
@@ -122,7 +123,6 @@ class Modal extends React.Component<Props, States> {
     const doc = ownerDocument(this);
     const container = getContainer(this.props.container, doc.body);
     const { containerClassName } = this.props;
-
 
     modalManager.add(this, container, containerClassName);
 
@@ -168,10 +168,9 @@ class Modal extends React.Component<Props, States> {
     const { onExited } = this.props;
 
     onExited && onExited(...args);
-  }
+  };
 
   handleBackdropClick = (event: DefaultEvent) => {
-
     if (event.target !== event.currentTarget) {
       return;
     }
@@ -179,8 +178,8 @@ class Modal extends React.Component<Props, States> {
     const { onBackdropClick, backdrop, onHide } = this.props;
 
     onBackdropClick && onBackdropClick(event);
-    (backdrop && onHide) && onHide();
-  }
+    backdrop && onHide && onHide();
+  };
 
   handleDocumentKeyUp = (event: DefaultEvent) => {
     const { keyboard, onHide, onEscapeKeyUp } = this.props;
@@ -188,7 +187,7 @@ class Modal extends React.Component<Props, States> {
       onEscapeKeyUp && onEscapeKeyUp(event);
       onHide && onHide();
     }
-  }
+  };
 
   checkForFocus() {
     if (canUseDom) {
@@ -217,7 +216,7 @@ class Modal extends React.Component<Props, States> {
     if (modal && modal !== active && !contains(modal, active)) {
       modal.focus();
     }
-  }
+  };
 
   isTopModal() {
     return modalManager.isTopModal(this);
@@ -225,19 +224,17 @@ class Modal extends React.Component<Props, States> {
 
   setMountNodeRef = (ref: React.ElementRef<*>) => {
     this.mountNode = ref ? ref.getMountNode() : ref;
-  }
+  };
 
   setModalNodeRef = (ref: React.ElementRef<*>) => {
     this.modalNode = ref;
-  }
+  };
 
   setDialogRef = (ref: React.ElementRef<*>) => {
     this.dialog = ref;
   };
 
-
   renderBackdrop() {
-
     const {
       transition: Transition,
       backdropTransitionTimeout,
@@ -247,7 +244,7 @@ class Modal extends React.Component<Props, States> {
 
     let backdrop = (
       <div
-        ref={(ref) => {
+        ref={ref => {
           this.backdrop = ref;
         }}
         style={backdropStyle}
@@ -260,11 +257,7 @@ class Modal extends React.Component<Props, States> {
 
     if (Transition) {
       backdrop = (
-        <Transition
-          transitionAppear
-          in={this.props.show}
-          timeout={backdropTransitionTimeout}
-        >
+        <Transition transitionAppear in={this.props.show} timeout={backdropTransitionTimeout}>
           {backdrop}
         </Transition>
       );
@@ -324,12 +317,8 @@ class Modal extends React.Component<Props, States> {
       );
     }
 
-
     return (
-      <Portal
-        ref={this.setMountNodeRef}
-        container={container}
-      >
+      <Portal ref={this.setMountNodeRef} container={container}>
         <div
           ref={this.setModalNodeRef}
           role={rest.role || 'dialog'}
@@ -337,9 +326,7 @@ class Modal extends React.Component<Props, States> {
           className={className}
         >
           {backdrop && this.renderBackdrop()}
-          <RefHolder ref={this.setDialogRef}>
-            {dialog}
-          </RefHolder>
+          <RefHolder ref={this.setDialogRef}>{dialog}</RefHolder>
         </div>
       </Portal>
     );

@@ -8,10 +8,9 @@ type Props = {
   timeout?: number,
   className?: string,
   in?: boolean
-}
+};
 
 class Fade extends React.Component<Props> {
-
   static displayName = 'Fade';
   static defaultProps = {
     timeout: 300

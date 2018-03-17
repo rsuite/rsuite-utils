@@ -15,7 +15,7 @@ export type Props = {
   container?: HTMLElement | (() => HTMLElement),
   onRendered?: Function,
   children?: React.Node
-}
+};
 
 /**
  * The `<Portal/>` component renders its children into a new "subtree" outside of
@@ -41,24 +41,19 @@ class Portal extends React.Component<Props> {
   }
 
   setContainer = (props: Props = this.props) => {
-    this.portalContainerNode = getContainer(
-      props.container, ownerDocument(this).body,
-    );
-  }
+    this.portalContainerNode = getContainer(props.container, ownerDocument(this).body);
+  };
 
-
-  getMountNode = () => (this.portalContainerNode)
+  getMountNode = () => this.portalContainerNode;
 
   portalContainerNode = null;
 
   render() {
-
     const { children } = this.props;
-    return children && this.portalContainerNode ?
-      ReactDOM.createPortal(children, this.portalContainerNode) :
-      null;
+    return children && this.portalContainerNode
+      ? ReactDOM.createPortal(children, this.portalContainerNode)
+      : null;
   }
-
 }
 
-export default ReactDOM.createPortal ? Portal : LegacyPortal;
+export default (ReactDOM.createPortal ? Portal : LegacyPortal);

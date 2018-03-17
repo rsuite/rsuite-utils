@@ -6,10 +6,13 @@ import classNames from 'classnames';
 import BaseOverlay from './BaseOverlay';
 import Fade from '../Animation/Fade';
 
-import type { AnimationEventFunction, DefaultEventFunction, Placement } from '../utils/TypeDefinition';
+import type {
+  AnimationEventFunction,
+  DefaultEventFunction,
+  Placement
+} from '../utils/TypeDefinition';
 
 type Props = {
-
   container?: HTMLElement | (() => HTMLElement),
   onRendered?: Function,
   children: React.Element<any>,
@@ -32,10 +35,9 @@ type Props = {
   onHide?: DefaultEventFunction,
   transition?: React.ElementType,
   animation?: boolean
-}
+};
 
 class Overlay extends React.Component<Props> {
-
   static defaultProps = {
     animation: true,
     transition: Fade
@@ -48,13 +50,7 @@ class Overlay extends React.Component<Props> {
   static handledProps = [];
 
   render() {
-    let {
-      children: child,
-      animation,
-      transition,
-      ...props
-    } = this.props;
-
+    let { children: child, animation, transition, ...props } = this.props;
 
     if (!animation) {
       transition = undefined;

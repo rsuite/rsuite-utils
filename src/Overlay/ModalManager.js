@@ -1,13 +1,6 @@
 // @flow
 
-import {
-  addClass,
-  removeClass,
-  addStyle,
-  getScrollbarSize,
-  isOverflowing
-} from 'dom-lib';
-
+import { addClass, removeClass, addStyle, getScrollbarSize, isOverflowing } from 'dom-lib';
 
 function findIndexOf(arr, cb: (d: any, i: any) => boolean) {
   let idx = -1;
@@ -26,7 +19,6 @@ function findContainer(data, modal) {
 }
 
 class ModalManager {
-
   constructor(hideSiblingNodes: boolean = true) {
     this.hideSiblingNodes = hideSiblingNodes;
     this.modals = [];
@@ -38,7 +30,6 @@ class ModalManager {
   modals = [];
   containers = [];
   data = [];
-
 
   add(modal: Object, container: Object, className?: string) {
     let modalIdx = this.modals.indexOf(modal);
@@ -56,7 +47,7 @@ class ModalManager {
       return modalIdx;
     }
 
-    let data: Object = {
+    const data = {
       modals: [modal],
       classes: className ? className.split(/\s+/) : [],
       style: {
@@ -66,16 +57,14 @@ class ModalManager {
       overflowing: isOverflowing(container)
     };
 
-    let style: Object = {
-      overflow: 'hidden'
-    };
-
     if (data.overflowing) {
       /*eslint-disable */
-      style.paddingRight = parseInt(addStyle(container, 'paddingRight') || 0, 10) + getScrollbarSize() + 'px';
+      const style = {
+        paddingRight:
+          parseInt(addStyle(container, 'paddingRight') || 0, 10) + getScrollbarSize() + 'px'
+      };
+      addStyle(container, style);
     }
-
-    addStyle(container, style);
 
     data.classes.forEach(addClass.bind(null, container));
 
@@ -86,9 +75,7 @@ class ModalManager {
   }
 
   remove(modal: Object) {
-
     let modalIdx = this.modals.indexOf(modal);
-
 
     if (modalIdx === -1) {
       return;
@@ -99,13 +86,12 @@ class ModalManager {
     let data = this.data[containerIdx];
     let container = this.containers[containerIdx];
 
-
     data.modals.splice(data.modals.indexOf(modal), 1);
 
     this.modals.splice(modalIdx, 1);
 
     if (data.modals.length === 0) {
-      Object.keys(data.style).forEach(key => container.style[key] = data.style[key]);
+      Object.keys(data.style).forEach(key => (container.style[key] = data.style[key]));
 
       data.classes.forEach(removeClass.bind(null, container));
 
@@ -113,7 +99,6 @@ class ModalManager {
       this.data.splice(containerIdx, 1);
     }
   }
-
 
   isTopModal(modal: Object) {
     return !!this.modals.length && this.modals[this.modals.length - 1] === modal;

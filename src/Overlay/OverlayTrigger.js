@@ -1,4 +1,3 @@
-
 // @flow
 
 import * as React from 'react';
@@ -12,7 +11,12 @@ import handleMouseOverOut from '../utils/handleMouseOverOut';
 import isOneOf from '../utils/isOneOf';
 import Portal from './Portal';
 
-import type { Placement, DefaultEventFunction, DefaultEvent, TriggerName } from '../utils/TypeDefinition';
+import type {
+  Placement,
+  DefaultEventFunction,
+  DefaultEvent,
+  TriggerName
+} from '../utils/TypeDefinition';
 
 const unsupportedCreatePortal = !ReactDOM.createPortal;
 
@@ -46,7 +50,7 @@ type Props = {
   onBlur?: DefaultEventFunction,
   onFocus?: DefaultEventFunction,
   disabled?: boolean
-}
+};
 
 type OverlayTriggerProps = {
   'aria-describedby': string,
@@ -54,16 +58,15 @@ type OverlayTriggerProps = {
   onMouseOut?: DefaultEventFunction,
   onBlur?: DefaultEventFunction,
   onClick?: DefaultEventFunction,
-  onFocus?: DefaultEventFunction,
-}
+  onFocus?: DefaultEventFunction
+};
 
 type States = {
   isOverlayShown?: boolean,
   isOnSpeaker?: boolean
-}
+};
 
 class OverlayTrigger extends React.Component<Props, States> {
-
   static defaultProps = {
     trigger: ['hover', 'focus'],
     delayHide: 200,
@@ -105,11 +108,9 @@ class OverlayTrigger extends React.Component<Props, States> {
     }
   }
 
-  getOverlayTarget = () => findDOMNode(this) // eslint-disable-line react/no-find-dom-node
-
+  getOverlayTarget = () => findDOMNode(this); // eslint-disable-line react/no-find-dom-node
 
   getOverlay() {
-
     const { open, speaker, trigger } = this.props;
     const { isOverlayShown } = this.state;
     const overlayProps = {
@@ -128,13 +129,7 @@ class OverlayTrigger extends React.Component<Props, States> {
       placement: overlayProps.placement
     };
 
-    return (
-      <Overlay
-        {...overlayProps}
-      >
-        {React.cloneElement(speaker, speakerProps)}
-      </Overlay>
-    );
+    return <Overlay {...overlayProps}>{React.cloneElement(speaker, speakerProps)}</Overlay>;
   }
 
   speaker = null;
@@ -145,13 +140,12 @@ class OverlayTrigger extends React.Component<Props, States> {
   target = null;
   mountNode = null;
 
-
   enterSpeaker = false;
   enterTrigger = false;
 
   handleSpeakerMouseEnter = () => {
     this.enterSpeaker = true;
-  }
+  };
 
   handleSpeakerMouseLeave = () => {
     const { trigger } = this.props;
@@ -159,21 +153,21 @@ class OverlayTrigger extends React.Component<Props, States> {
     if (!isOneOf('click', trigger)) {
       this.handleHide();
     }
-  }
+  };
 
   hide = () => {
     this.setState({ isOverlayShown: false });
-  }
+  };
 
   show = () => {
     this.setState({ isOverlayShown: true });
-  }
+  };
 
   handleHide = () => {
     if (!this.enterSpeaker && !this.enterTrigger) {
       this.hide();
     }
-  }
+  };
 
   handleToggle = () => {
     if (this.state.isOverlayShown) {
@@ -181,10 +175,9 @@ class OverlayTrigger extends React.Component<Props, States> {
     } else {
       this.show();
     }
-  }
+  };
 
   handleDelayedShow = () => {
-
     const { delayShow, delay } = this.props;
 
     this.enterTrigger = true;
@@ -210,11 +203,9 @@ class OverlayTrigger extends React.Component<Props, States> {
       this.hoverShowDelay = null;
       this.show();
     }, nextDelay);
-
-  }
+  };
 
   handleDelayedHide = () => {
-
     const { delayHide, delay } = this.props;
     this.enterTrigger = false;
     if (!isNullOrUndefined(this.hoverShowDelay)) {
@@ -243,7 +234,7 @@ class OverlayTrigger extends React.Component<Props, States> {
       this.hoverHideDelay = null;
       this.handleHide();
     }, nextDelay);
-  }
+  };
 
   renderOverlay() {
     if (this.speaker) {
@@ -266,7 +257,6 @@ class OverlayTrigger extends React.Component<Props, States> {
 
     const triggerComponent = React.Children.only(children);
     const triggerProps = triggerComponent.props;
-
 
     const props: OverlayTriggerProps = {
       key: 'triggerComponent',
@@ -294,18 +284,13 @@ class OverlayTrigger extends React.Component<Props, States> {
       }
 
       if (isOneOf('focus', trigger)) {
-
         props.onFocus = createChainedFunction(
           this.handleDelayedShow,
           onFocus,
           triggerProps.onFocus
         );
 
-        props.onBlur = createChainedFunction(
-          this.handleDelayedHide,
-          onBlur,
-          triggerProps.onBlur
-        );
+        props.onBlur = createChainedFunction(this.handleDelayedHide, onBlur, triggerProps.onBlur);
       }
     }
 
@@ -318,7 +303,6 @@ class OverlayTrigger extends React.Component<Props, States> {
       React.cloneElement(triggerComponent, props),
       <Portal key="portal">{this.getOverlay()}</Portal>
     ];
-
   }
 }
 

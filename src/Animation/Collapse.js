@@ -20,9 +20,8 @@ function defaultGetDimensionValue(dimension: Dimension, elem: Element): number {
   let value = _.get(elem, `offset${_.capitalize(dimension)}`);
   let margins = MARGINS[dimension];
 
-  return (value +
-    parseInt(getStyle(elem, margins[0]), 10) +
-    parseInt(getStyle(elem, margins[1]), 10)
+  return (
+    value + parseInt(getStyle(elem, margins[0]), 10) + parseInt(getStyle(elem, margins[1]), 10)
   );
 }
 
@@ -41,17 +40,16 @@ type Props = {
   onExit?: AnimationEventFunction,
   onExiting?: AnimationEventFunction,
   onExited?: AnimationEventFunction,
-  dimension?: Dimension | (() => (Dimension)),
+  dimension?: Dimension | (() => Dimension),
   getDimensionValue?: (dimension: Dimension, elem: Element) => number,
   role?: string,
   exitedClassName?: string,
   exitingClassName?: string,
   enteredClassName?: string,
   enteringClassName?: string
-}
+};
 
 class Collapse extends React.Component<Props> {
-
   static displayName = 'Collapse';
   static defaultProps = {
     timeout: 300,
@@ -71,17 +69,17 @@ class Collapse extends React.Component<Props> {
   handleEnter = (elem: Element) => {
     const dimension = this.dimension();
     addStyle(elem, dimension, 0);
-  }
+  };
 
   handleEntering = (elem: Element) => {
     const dimension = this.dimension();
     addStyle(elem, dimension, getScrollDimensionValue(elem, dimension));
-  }
+  };
 
   handleEntered = (elem: Element) => {
     const dimension = this.dimension();
     addStyle(elem, dimension, 'auto');
-  }
+  };
 
   /* -- Collapsing -- */
   handleExit = (elem: Element) => {
@@ -89,13 +87,13 @@ class Collapse extends React.Component<Props> {
     const { getDimensionValue } = this.props;
     const value = getDimensionValue ? getDimensionValue(dimension, elem) : 0;
     addStyle(elem, dimension, `${value}px`);
-  }
+  };
 
   handleExiting = (elem: Element) => {
     const dimension = this.dimension();
     triggerBrowserReflow(elem);
     addStyle(elem, dimension, 0);
-  }
+  };
 
   dimension(): Dimension {
     const { dimension } = this.props;
@@ -106,7 +104,6 @@ class Collapse extends React.Component<Props> {
   transition = null;
 
   render() {
-
     const {
       dimension,
       getDimensionValue, //eslint-disable-line
@@ -130,7 +127,7 @@ class Collapse extends React.Component<Props> {
     return (
       <Transition
         {...props}
-        ref={(ref) => {
+        ref={ref => {
           this.transition = ref;
         }}
         aria-expanded={role ? this.props.in : null}
@@ -144,8 +141,6 @@ class Collapse extends React.Component<Props> {
       />
     );
   }
-
-
 }
 
 export default Collapse;

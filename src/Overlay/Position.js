@@ -8,7 +8,6 @@ import { ownerDocument, getContainer } from 'dom-lib';
 import overlayPositionUtils from '../utils/overlayPositionUtils';
 import type { Placement } from '../utils/TypeDefinition';
 
-
 export type Props = {
   children?: React.Node,
   className?: string,
@@ -24,10 +23,9 @@ type States = {
   positionTop?: number,
   arrowOffsetLeft?: null | number,
   arrowOffsetTop?: null | number
-}
+};
 
 class Position extends React.Component<Props, States> {
-
   static displayName = 'Position';
   static defaultProps = {
     containerPadding: 0,
@@ -105,30 +103,21 @@ class Position extends React.Component<Props, States> {
     const overlay = findDOMNode(this);
     const container = getContainer(this.props.container, ownerDocument(this).body);
 
-    this.setState(overlayPositionUtils.calcOverlayPosition(
-      this.props.placement,
-      overlay,
-      target,
-      container,
-      this.props.containerPadding
-    ));
+    this.setState(
+      overlayPositionUtils.calcOverlayPosition(
+        this.props.placement,
+        overlay,
+        target,
+        container,
+        this.props.containerPadding
+      )
+    );
   }
 
-
   render() {
+    const { children, className, ...rest } = this.props;
 
-    const {
-      children,
-      className,
-      ...rest
-    } = this.props;
-
-
-    const {
-      positionLeft,
-      positionTop,
-      ...arrowPosition
-    } = this.state;
+    const { positionLeft, positionTop, ...arrowPosition } = this.state;
 
     const child = React.Children.only(children);
 

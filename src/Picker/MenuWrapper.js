@@ -16,10 +16,7 @@ const placementProps = [
 ];
 
 const MenuWrapper = ({ className, ...rest }: Object) => (
-  <div
-    {..._.omit(rest, placementProps)}
-    className={classNames(`${namespace}-menu`, className)}
-  />
+  <div {..._.omit(rest, placementProps)} className={classNames(`${namespace}-menu`, className)} />
 );
 
 export default MenuWrapper;

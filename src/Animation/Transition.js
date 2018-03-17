@@ -1,4 +1,3 @@
-
 // @flow
 
 import * as React from 'react';
@@ -6,7 +5,11 @@ import { findDOMNode } from 'react-dom';
 import { on, transition } from 'dom-lib';
 import classNames from 'classnames';
 import _ from 'lodash';
-import type { ReactFindDOMNode, DefaultEvent, AnimationEventFunction } from '../utils/TypeDefinition';
+import type {
+  ReactFindDOMNode,
+  DefaultEvent,
+  AnimationEventFunction
+} from '../utils/TypeDefinition';
 
 export const UNMOUNTED = 0;
 export const EXITED = 1;
@@ -14,7 +17,7 @@ export const ENTERING = 2;
 export const ENTERED = 3;
 export const EXITING = 4;
 
-function noop() { }
+function noop() {}
 
 type Props = {
   children?: React.Node,
@@ -39,15 +42,13 @@ type Props = {
   onExit: AnimationEventFunction,
   onExiting: AnimationEventFunction,
   onExited: AnimationEventFunction
-}
-
+};
 
 type States = {
   status?: number
-}
+};
 
 class Transition extends React.Component<Props, States> {
-
   static displayName = 'Transition';
   /**
    * Note that `handledProps` are generated automatically during
@@ -105,7 +106,6 @@ class Transition extends React.Component<Props, States> {
     const { unmountOnExit } = this.props;
 
     if (unmountOnExit && status === EXITED) {
-
       if (this.props.in) {
         this.performEnter(this.props);
       } else {
@@ -163,7 +163,6 @@ class Transition extends React.Component<Props, States> {
   }
 
   performEnter(props: Props) {
-
     const { onEnter, onEntering, onEntered } = props || this.props;
 
     this.cancelNextCallback();
@@ -171,18 +170,24 @@ class Transition extends React.Component<Props, States> {
 
     onEnter(node);
 
-    this.safeSetState({
-      status: ENTERING
-    }, () => {
-      onEntering(node);
-      this.onTransitionEnd(node, () => {
-        this.safeSetState({
-          status: ENTERED
-        }, () => {
-          onEntered(node);
+    this.safeSetState(
+      {
+        status: ENTERING
+      },
+      () => {
+        onEntering(node);
+        this.onTransitionEnd(node, () => {
+          this.safeSetState(
+            {
+              status: ENTERED
+            },
+            () => {
+              onEntered(node);
+            }
+          );
         });
-      });
-    });
+      }
+    );
   }
 
   performExit(props: Props) {
@@ -192,19 +197,25 @@ class Transition extends React.Component<Props, States> {
     const node = findDOMNode(this);
     onExit(node);
 
-    this.safeSetState({
-      status: EXITING
-    }, () => {
-      onExiting(node);
+    this.safeSetState(
+      {
+        status: EXITING
+      },
+      () => {
+        onExiting(node);
 
-      this.onTransitionEnd(node, () => {
-        this.safeSetState({
-          status: EXITED
-        }, () => {
-          onExited(node);
+        this.onTransitionEnd(node, () => {
+          this.safeSetState(
+            {
+              status: EXITED
+            },
+            () => {
+              onExited(node);
+            }
+          );
         });
-      });
-    });
+      }
+    );
   }
 
   cancelNextCallback() {
@@ -222,7 +233,6 @@ class Transition extends React.Component<Props, States> {
   needsUpdate = null;
 
   render() {
-
     const status = this.state.status;
 
     if (status === UNMOUNTED) {
@@ -238,7 +248,6 @@ class Transition extends React.Component<Props, States> {
       exitingClassName,
       ...rest
     } = this.props;
-
 
     const childProps = _.omit(rest, Transition.handledProps);
 
@@ -261,6 +270,5 @@ class Transition extends React.Component<Props, States> {
     });
   }
 }
-
 
 export default Transition;

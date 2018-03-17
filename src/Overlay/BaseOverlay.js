@@ -5,10 +5,13 @@ import Portal from './Portal';
 import Position from './Position';
 import RootCloseWrapper from './RootCloseWrapper';
 
-import type { AnimationEventFunction, DefaultEventFunction, Placement } from '../utils/TypeDefinition';
+import type {
+  AnimationEventFunction,
+  DefaultEventFunction,
+  Placement
+} from '../utils/TypeDefinition';
 
 type Props = {
-
   container?: HTMLElement | (() => HTMLElement),
   onRendered?: Function,
   children?: React.Node,
@@ -30,14 +33,13 @@ type Props = {
   onExit?: AnimationEventFunction,
   onExiting?: AnimationEventFunction,
   onExited?: AnimationEventFunction
-}
+};
 
 type States = {
   exited?: boolean
-}
+};
 
 class Overlay extends React.Component<Props, States> {
-
   constructor(props: Props) {
     super(props);
     this.state = { exited: !props.show };
@@ -57,10 +59,9 @@ class Overlay extends React.Component<Props, States> {
     if (this.props.onExited) {
       this.props.onExited(...args);
     }
-  }
+  };
 
   render() {
-
     const {
       container,
       containerPadding,
@@ -108,22 +109,11 @@ class Overlay extends React.Component<Props, States> {
     }
 
     if (rootClose) {
-      child = (
-        <RootCloseWrapper onRootClose={onHide}>
-          {child}
-        </RootCloseWrapper>
-      );
+      child = <RootCloseWrapper onRootClose={onHide}>{child}</RootCloseWrapper>;
     }
 
-    return (
-      <Portal container={container}>
-        {child}
-      </Portal>
-    );
+    return <Portal container={container}>{child}</Portal>;
   }
-
-
 }
-
 
 export default Overlay;

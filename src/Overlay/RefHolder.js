@@ -1,10 +1,9 @@
-
 // @flow
 import * as React from 'react';
 
 type Props = {
   children?: React.Node
-}
+};
 
 /**
  * Internal helper component to allow attaching a non-conflicting ref to a

@@ -16,10 +16,9 @@ function isModifiedEvent(event) {
 type Props = {
   children: React.Node,
   onRootClose?: () => void
-}
+};
 
 class RootCloseWrapper extends React.Component<Props> {
-
   componentDidMount() {
     this.bindRootCloseHandlers();
   }
@@ -37,7 +36,6 @@ class RootCloseWrapper extends React.Component<Props> {
   }
 
   handleDocumentClick = (event: SyntheticEvent<*>) => {
-
     /* eslint-disable */
     if (contains(findDOMNode(this), event.target)) {
       return;
@@ -47,14 +45,14 @@ class RootCloseWrapper extends React.Component<Props> {
     }
     const { onRootClose } = this.props;
     onRootClose && onRootClose();
-  }
+  };
 
   handleDocumentKeyUp = (event: SyntheticEvent<*>) => {
     if (event.keyCode === 27) {
       const { onRootClose } = this.props;
       onRootClose && onRootClose();
     }
-  }
+  };
 
   unbindRootCloseHandlers() {
     if (this.onDocumentClickListener) {

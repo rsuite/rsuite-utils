@@ -1,22 +1,20 @@
 // @flow
 
 import * as React from 'react';
-import ReactDOM, { findDOMNode } from 'react-dom';
+import ReactDOM from 'react-dom';
 import { ownerDocument, getContainer } from 'dom-lib';
 
 export type Props = {
-  container?: HTMLElement | (() => HTMLElement),
-}
+  container?: HTMLElement | (() => HTMLElement)
+};
 
 class Portal extends React.Component<Props> {
-
   static displayName = 'Portal';
 
   componentDidMount() {
     this.renderOverlay();
   }
   componentWillReceiveProps(nextProps: Props) {
-
     if (
       this.overlayTarget &&
       this.portalContainerNode &&
@@ -53,34 +51,33 @@ class Portal extends React.Component<Props> {
     this.portalContainerNode = null;
   }
 
-
   unrenderOverlay() {
     if (this.overlayTarget) {
       ReactDOM.unmountComponentAtNode(this.overlayTarget);
       this.overlayInstance = null;
     }
   }
+  overlayTarget = null;
+  overlayInstance = null;
+  portalContainerNode = null;
 
   renderOverlay() {
-
-    let overlay = !this.props.children
-      ? null
-      : React.Children.only(this.props.children);
+    let overlay = !this.props.children ? null : React.Children.only(this.props.children);
 
     // Save reference for future access.
     if (overlay !== null) {
       this.mountOverlayTarget();
       this.overlayInstance = ReactDOM.unstable_renderSubtreeIntoContainer(
-        this, overlay, this.overlayTarget
+        this,
+        overlay,
+        this.overlayTarget
       );
     } else {
       this.unrenderOverlay();
       this.unmountOverlayTarget();
     }
   }
-  overlayTarget = null;
-  overlayInstance = null;
-  portalContainerNode = null;
+
   render() {
     return null;
   }
