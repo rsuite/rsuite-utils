@@ -1,10 +1,9 @@
 import _ from 'lodash';
 
 export default function getDataGroupBy(data = [], key) {
-
   const tempData = {};
 
-  data.forEach((item) => {
+  data.forEach(item => {
     if (!tempData[item[key]]) {
       tempData[item[key]] = [];
     }

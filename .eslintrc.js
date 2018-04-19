@@ -66,6 +66,7 @@ module.exports = {
     'react/jsx-filename-extension': OFF,
     'react/prefer-stateless-function': OFF,
     'react/require-default-props': OFF,
+    'react/no-find-dom-node': OFF,
 
     /**
      * Flowtype
