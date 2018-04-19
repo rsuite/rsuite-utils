@@ -101,7 +101,7 @@ class TriggerDemo extends React.Component {
         </OverlayTrigger>
 
         <OverlayTrigger trigger="focus" speaker={<Tooltip />}>
-          <input value="focus" />
+          <input />
         </OverlayTrigger>
 
         <OverlayTrigger trigger="hover" speaker={<Tooltip />}>
