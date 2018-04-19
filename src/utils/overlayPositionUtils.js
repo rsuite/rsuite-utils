@@ -1,9 +1,4 @@
-import {
-  ownerDocument,
-  getOffset,
-  getPosition,
-  scrollTop
-} from 'dom-lib';
+import { ownerDocument, getOffset, getPosition, scrollTop } from 'dom-lib';
 
 function getContainerDimensions(containerNode) {
   let width;
@@ -26,7 +21,7 @@ function getTopDelta(top, overlayHeight, container, padding) {
   const containerHeight = containerDimensions.height;
 
   const topEdgeOffset = top - padding - containerScroll;
-  const bottomEdgeOffset = ((top + padding) - containerScroll) + overlayHeight;
+  const bottomEdgeOffset = top + padding - containerScroll + overlayHeight;
 
   if (topEdgeOffset < 0) {
     return -topEdgeOffset;
@@ -56,12 +51,12 @@ function getLeftDelta(left, overlayWidth, container, padding) {
 const utils = {
   getContainerDimensions,
   getPosition(target, container) {
-    const offset = container.tagName === 'BODY' ? getOffset(target) : getPosition(target, container);
+    const offset =
+      container.tagName === 'BODY' ? getOffset(target) : getPosition(target, container);
     return offset;
   },
 
   calcOverlayPosition(placement, overlayNode, target, container, padding) {
-
     const childOffset = utils.getPosition(target, container);
     const { height: overlayHeight, width: overlayWidth } = getOffset(overlayNode);
 
@@ -71,7 +66,7 @@ const utils = {
     let arrowOffsetTop;
 
     if (placement === 'left' || placement === 'right') {
-      positionTop = childOffset.top + ((childOffset.height - overlayHeight) / 2);
+      positionTop = childOffset.top + (childOffset.height - overlayHeight) / 2;
 
       if (placement === 'left') {
         positionLeft = childOffset.left - overlayWidth;
@@ -82,11 +77,10 @@ const utils = {
       const topDelta = getTopDelta(positionTop, overlayHeight, container, padding);
 
       positionTop += topDelta;
-      arrowOffsetTop = `${50 * (1 - ((2 * topDelta) / overlayHeight))}%`;
+      arrowOffsetTop = `${50 * (1 - 2 * topDelta / overlayHeight)}%`;
       arrowOffsetLeft = undefined;
-
     } else if (placement === 'top' || placement === 'bottom') {
-      positionLeft = childOffset.left + ((childOffset.width - overlayWidth) / 2);
+      positionLeft = childOffset.left + (childOffset.width - overlayWidth) / 2;
 
       if (placement === 'top') {
         positionTop = childOffset.top - overlayHeight;
@@ -96,7 +90,7 @@ const utils = {
 
       const leftDelta = getLeftDelta(positionLeft, overlayWidth, container, padding);
       positionLeft += leftDelta;
-      arrowOffsetLeft = `${50 * (1 - ((2 * leftDelta) / overlayWidth))}%`;
+      arrowOffsetLeft = `${50 * (1 - 2 * leftDelta / overlayWidth)}%`;
       arrowOffsetTop = undefined;
     } else if (placement === 'topLeft') {
       positionLeft = childOffset.left;
@@ -106,10 +100,10 @@ const utils = {
       positionTop = childOffset.top - overlayHeight;
     } else if (placement === 'leftTop') {
       positionLeft = childOffset.left - overlayWidth;
-      positionTop = childOffset.top + (childOffset.height - overlayHeight);
+      positionTop = childOffset.top;
     } else if (placement === 'leftBottom') {
       positionLeft = childOffset.left - overlayWidth;
-      positionTop = childOffset.top;
+      positionTop = childOffset.top + (childOffset.height - overlayHeight);
     } else if (placement === 'bottomLeft') {
       positionLeft = childOffset.left;
       positionTop = childOffset.top + childOffset.height;
@@ -118,14 +112,12 @@ const utils = {
       positionTop = childOffset.top + childOffset.height;
     } else if (placement === 'rightTop') {
       positionLeft = childOffset.left + childOffset.width;
-      positionTop = childOffset.top + (childOffset.height - overlayHeight);
+      positionTop = childOffset.top;
     } else if (placement === 'rightBottom') {
       positionLeft = childOffset.left + childOffset.width;
-      positionTop = childOffset.top;
+      positionTop = childOffset.top + (childOffset.height - overlayHeight);
     } else {
-      throw new Error(
-        `calcOverlayPosition(): No such placement of "${placement}" found.`
-      );
+      throw new Error(`calcOverlayPosition(): No such placement of "${placement}" found.`);
     }
 
     return {

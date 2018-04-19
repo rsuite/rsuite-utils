@@ -2,15 +2,7 @@
 
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
-import {
-  ownerDocument,
-  canUseDom,
-  activeElement,
-  contains,
-  getContainer,
-  on,
-  onFocus
-} from 'dom-lib';
+import { ownerDocument, canUseDom, activeElement, contains, getContainer, on } from 'dom-lib';
 
 import Portal from './Portal';
 import ModalManager from './ModalManager';
@@ -127,7 +119,7 @@ class Modal extends React.Component<Props, States> {
     modalManager.add(this, container, containerClassName);
 
     this.onDocumentKeyupListener = on(doc, 'keyup', this.handleDocumentKeyUp);
-    this.onFocusinListener = onFocus(this.enforceFocus);
+    this.onFocusinListener = on(doc, 'focus', this.enforceFocus);
 
     if (this.props.onShow) {
       this.props.onShow();
@@ -152,15 +144,24 @@ class Modal extends React.Component<Props, States> {
   onFocusinListener = null;
 
   getDialogElement(): ReactFindDOMNode {
-    /* eslint-disable */
     return findDOMNode(this.dialog);
   }
 
-  mountNode = null;
-  modalNode = null;
-  backdrop = null;
-  dialog = null;
-  lastFocus = null;
+  setMountNodeRef = (ref: React.ElementRef<*>) => {
+    this.mountNode = ref ? ref.getMountNode() : ref;
+  };
+
+  setModalNodeRef = (ref: React.ElementRef<*>) => {
+    this.modalNode = ref;
+  };
+
+  setDialogRef = (ref: React.ElementRef<*>) => {
+    this.dialog = ref;
+  };
+
+  isTopModal() {
+    return modalManager.isTopModal(this);
+  }
 
   handleHidden = (...args: Array<any>) => {
     this.setState({ exited: true });
@@ -196,7 +197,7 @@ class Modal extends React.Component<Props, States> {
   }
 
   restoreLastFocus() {
-    // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
+    // Support: <=IE11 doesn't support `focus()` on svg elements
     if (this.lastFocus && this.lastFocus.focus) {
       this.lastFocus.focus();
       this.lastFocus = null;
@@ -218,21 +219,11 @@ class Modal extends React.Component<Props, States> {
     }
   };
 
-  isTopModal() {
-    return modalManager.isTopModal(this);
-  }
-
-  setMountNodeRef = (ref: React.ElementRef<*>) => {
-    this.mountNode = ref ? ref.getMountNode() : ref;
-  };
-
-  setModalNodeRef = (ref: React.ElementRef<*>) => {
-    this.modalNode = ref;
-  };
-
-  setDialogRef = (ref: React.ElementRef<*>) => {
-    this.dialog = ref;
-  };
+  mountNode = null;
+  modalNode = null;
+  backdrop = null;
+  dialog = null;
+  lastFocus = null;
 
   renderBackdrop() {
     const {

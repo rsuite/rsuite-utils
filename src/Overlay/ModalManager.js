@@ -1,6 +1,13 @@
 // @flow
 
-import { addClass, removeClass, addStyle, getScrollbarSize, isOverflowing } from 'dom-lib';
+import {
+  addClass,
+  removeClass,
+  addStyle,
+  getStyle,
+  getScrollbarSize,
+  isOverflowing
+} from 'dom-lib';
 
 function findIndexOf(arr, cb: (d: any, i: any) => boolean) {
   let idx = -1;
@@ -61,7 +68,7 @@ class ModalManager {
       /*eslint-disable */
       const style = {
         paddingRight:
-          parseInt(addStyle(container, 'paddingRight') || 0, 10) + getScrollbarSize() + 'px'
+          parseInt(getStyle(container, 'paddingRight') || 0, 10) + getScrollbarSize() + 'px'
       };
       addStyle(container, style);
     }

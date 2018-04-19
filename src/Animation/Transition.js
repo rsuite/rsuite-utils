@@ -26,10 +26,6 @@ type Props = {
   unmountOnExit?: boolean,
   transitionAppear?: boolean,
   timeout?: number,
-  exitedClassName?: string,
-  exitingClassName?: string,
-  enteredClassName?: string,
-  enteringClassName?: string,
 
   exitedClassName?: string,
   exitingClassName?: string,

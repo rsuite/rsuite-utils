@@ -14,7 +14,6 @@ Utilities for creating rsuite components
 import Transition from 'rsuite-utils/lib/Animation/Transition';
 ```
 
-
 | 属性名称          | 类型 `(默认值)`                      | 描述                       |
 | ----------------- | ------------------------------------ | -------------------------- |
 | in                | boolean                              | 进入                       |
@@ -31,7 +30,6 @@ import Transition from 'rsuite-utils/lib/Animation/Transition';
 | onExit            | (node?: null, Element, Text) => void | 退出前动画过渡的回调函数   |
 | onExiting         | (node?: null, Element, Text) => void | 退出中动画过渡的回调函数   |
 | onExited          | (node?: null, Element, Text) => void | 退出后动画过渡的回调函数   |
-
 
 ### `<Collapse>` 折叠效果
 
@@ -59,27 +57,28 @@ import Collapse from 'rsuite-utils/lib/Animation/Collapse';
 | dimension         | union: 'height', 'width' ()=>('height', 'width') | 设置折叠尺寸类型           |
 | getDimensionValue | ()=>number                                       | 自定义尺寸值               |
 
-### `<Fade>`  淡进淡出
+### `<Fade>` 淡进淡出
 
 ```js
 import Fade from 'rsuite-utils/lib/Animation/Fade';
 ```
 
-| in                | boolean                             | 进入                       |
-| unmountOnExit     | boolean                             | 在退出时卸载组件           |
-| transitionAppear  | boolean                             | 初始显示的时候开启过渡效果 |
-| timeout           | number `(300)`                     | 动画过渡延迟时间           |
-| exitedClassName   | string                              | 退出动画过渡后 className   |
-| exitingClassName  | string                              | 退出动画过渡中 className   |
-| enteredClassName  | string                              | 进入动画过渡后 className   |
-| enteringClassName | string                              | 进入动画过渡中 className   |
+| 属性名称          | 类型 `(默认值)`                      | 描述                       |
+| ----------------- | ------------------------------------ | -------------------------- |
+| in                | boolean                              | 进入                       |
+| unmountOnExit     | boolean                              | 在退出时卸载组件           |
+| transitionAppear  | boolean                              | 初始显示的时候开启过渡效果 |
+| timeout           | number `(300)`                       | 动画过渡延迟时间           |
+| exitedClassName   | string                               | 退出动画过渡后 className   |
+| exitingClassName  | string                               | 退出动画过渡中 className   |
+| enteredClassName  | string                               | 进入动画过渡后 className   |
+| enteringClassName | string                               | 进入动画过渡中 className   |
 | onEnter           | (node?: null, Element, Text) => void | 显示动画过渡的回调函数     |
 | onEntering        | (node?: null, Element, Text) => void | 显示中动画过渡的回调函数   |
 | onEntered         | (node?: null, Element, Text) => void | 显示后动画过渡的回调函数   |
 | onExit            | (node?: null, Element, Text) => void | 退出前动画过渡的回调函数   |
 | onExiting         | (node?: null, Element, Text) => void | 退出中动画过渡的回调函数   |
 | onExited          | (node?: null, Element, Text) => void | 退出后动画过渡的回调函数   |
-
 
 ## Overlay 浮层
 
@@ -101,8 +100,6 @@ import Overlay from 'rsuite-utils/lib/Overlay/Overlay';
 | onExiting  | (node?: null, Element, Text) => void       | 退出中动画过渡的回调函数   |
 | onExited   | (node?: null, Element, Text) => void       | 退出后动画过渡的回调函数   |
 
-
-
 ### `<OverlayTrigger>` 覆盖层触发器
 
 ```js
@@ -111,7 +108,15 @@ import OverlayTrigger from 'rsuite-utils/lib/Overlay/OverlayTrigger';
 
 ```js
 type PlacementAround = 'top' | 'right' | 'bottom' | 'left';
-type PlacementEighPoints = 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight' | 'leftTop' | 'rightTop' | 'leftBottom' | 'rightBottom';
+type PlacementEighPoints =
+  | 'bottomLeft'
+  | 'bottomRight'
+  | 'topLeft'
+  | 'topRight'
+  | 'leftTop'
+  | 'rightTop'
+  | 'leftBottom'
+  | 'rightBottom';
 type Placement = PlacementAround | PlacementEighPoints;
 ```
 
