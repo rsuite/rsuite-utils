@@ -15,8 +15,20 @@ const placementProps = [
   'positionTop'
 ];
 
-const MenuWrapper = ({ className, ...rest }: Object) => (
-  <div {..._.omit(rest, placementProps)} className={classNames(`${namespace}-menu`, className)} />
-);
+type Props = {
+  className?: string
+};
+
+class MenuWrapper extends React.Component<Props> {
+  render() {
+    const { className, ...rest } = this.props;
+    return (
+      <div
+        {..._.omit(rest, placementProps)}
+        className={classNames(`${namespace}-menu`, className)}
+      />
+    );
+  }
+}
 
 export default MenuWrapper;
