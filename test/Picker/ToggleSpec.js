@@ -10,11 +10,7 @@ const cleanClassName = `.${namespace}-toggle-clean`;
 describe('Toggle', () => {
   it('Should output a toggle', () => {
     const Title = 'Title';
-    const instance = ReactTestUtils.renderIntoDocument(
-      <Toggle title="title" >
-        {Title}
-      </Toggle>
-    );
+    const instance = ReactTestUtils.renderIntoDocument(<Toggle title="title">{Title}</Toggle>);
 
     const instanceDom = findDOMNode(instance);
     assert.equal(instanceDom.tagName, 'A');
@@ -22,17 +18,26 @@ describe('Toggle', () => {
     assert.equal(instanceDom.innerText, Title);
   });
 
-  it('Should call `onClean` callback', (done) => {
+  it('Should output a button', () => {
+    const Title = 'Title';
+    const instance = ReactTestUtils.renderIntoDocument(
+      <Toggle title="title" componentClass="button">
+        {Title}
+      </Toggle>
+    );
+
+    const instanceDom = findDOMNode(instance);
+    assert.equal(instanceDom.tagName, 'BUTTON');
+    assert.ok(instanceDom.className.match(/\btoggle\b/));
+    assert.equal(instanceDom.innerText, Title);
+  });
+
+  it('Should call `onClean` callback', done => {
     const doneOp = () => {
       done();
     };
     const instance = ReactTestUtils.renderIntoDocument(
-      <Toggle
-        title="title"
-        hasValue
-        cleanable
-        onClean={doneOp}
-      >
+      <Toggle title="title" hasValue cleanable onClean={doneOp}>
         Title
       </Toggle>
     );
@@ -41,18 +46,13 @@ describe('Toggle', () => {
   });
 
   it('Should have a custom className', () => {
-    const instance = ReactTestUtils.renderIntoDocument(
-      <Toggle className="custom" />
-    );
+    const instance = ReactTestUtils.renderIntoDocument(<Toggle className="custom" />);
     assert.ok(findDOMNode(instance).className.match(/\bcustom\b/));
   });
 
   it('Should have a custom style', () => {
     const fontSize = '12px';
-    const instance = ReactTestUtils.renderIntoDocument(
-      <Toggle style={{ fontSize }} />
-    );
+    const instance = ReactTestUtils.renderIntoDocument(<Toggle style={{ fontSize }} />);
     assert.equal(findDOMNode(instance).style.fontSize, fontSize);
   });
-
 });
