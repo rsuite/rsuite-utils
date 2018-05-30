@@ -1,3 +1,7 @@
+# 1.0.3
+
+* Add a `custom` className when `componentclass` changes.
+
 # 1.0.2
 
 * Support `componentClass` on `<Toggle>`
