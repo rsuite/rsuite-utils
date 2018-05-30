@@ -56,7 +56,8 @@ class Toggle extends React.Component<Props> {
       ...rest
     } = this.props;
 
-    const classes = classNames(classPrefix, className);
+    const defaultClassName = Component === 'a' ? classPrefix : this.addPrefix('custom');
+    const classes = classNames(defaultClassName, className);
     const unhandled = getUnhandledProps(Toggle, rest);
 
     return (

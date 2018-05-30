@@ -28,7 +28,7 @@ describe('Toggle', () => {
 
     const instanceDom = findDOMNode(instance);
     assert.equal(instanceDom.tagName, 'BUTTON');
-    assert.ok(instanceDom.className.match(/\btoggle\b/));
+    assert.ok(instanceDom.className.match(/\btoggle-custom\b/));
     assert.equal(instanceDom.innerText, Title);
   });
 
