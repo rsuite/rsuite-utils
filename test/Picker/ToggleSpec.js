@@ -32,6 +32,17 @@ describe('Toggle', () => {
     assert.equal(instanceDom.innerText, Title);
   });
 
+  it('Should be cleanable', () => {
+    const instance = ReactTestUtils.renderIntoDocument(
+      <Toggle title="title" cleanable>
+        Title
+      </Toggle>
+    );
+
+    const instanceDom = findDOMNode(instance);
+    assert.ok(instanceDom.className.match(/\btoggle-cleanable\b/));
+  });
+
   it('Should call `onClean` callback', done => {
     const doneOp = () => {
       done();
