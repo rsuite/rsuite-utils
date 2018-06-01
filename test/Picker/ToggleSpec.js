@@ -34,7 +34,7 @@ describe('Toggle', () => {
 
   it('Should be cleanable', () => {
     const instance = ReactTestUtils.renderIntoDocument(
-      <Toggle title="title" cleanable>
+      <Toggle title="title" cleanable hasValue>
         Title
       </Toggle>
     );
