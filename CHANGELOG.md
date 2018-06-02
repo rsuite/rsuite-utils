@@ -1,3 +1,7 @@
+# 1.0.6
+
+* Support `placement` value of `auto` on `OverlayTrigger`
+
 # 1.0.3
 
 * Add a `custom` className when `componentclass` changes.
