@@ -1,18 +1,28 @@
-import { ownerDocument, getOffset, getPosition, scrollTop } from 'dom-lib';
+import maxBy from 'lodash/maxBy';
+import minBy from 'lodash/minBy';
+import capitalize from 'lodash/capitalize';
+
+import { ownerDocument, getOffset, getPosition, scrollTop, scrollLeft } from 'dom-lib';
 
 function getContainerDimensions(containerNode) {
   let width;
   let height;
   let scroll;
+  let scrollX;
+  let scrollY;
   if (containerNode.tagName === 'BODY') {
     width = window.innerWidth;
     height = window.innerHeight;
-    scroll = scrollTop(ownerDocument(containerNode).documentElement) || scrollTop(containerNode);
+    scrollY = scrollTop(ownerDocument(containerNode).documentElement) || scrollTop(containerNode);
+    scrollX = scrollLeft(ownerDocument(containerNode).documentElement) || scrollLeft(containerNode);
+    scroll = scrollY;
   } else {
     ({ width, height } = getOffset(containerNode));
-    scroll = scrollTop(containerNode);
+    scrollY = scrollTop(containerNode);
+    scrollX = scrollLeft(containerNode);
+    scroll = scrollY;
   }
-  return { width, height, scroll };
+  return { width, height, scroll, scrollX, scrollY };
 }
 
 function getTopDelta(top, overlayHeight, container, padding) {
@@ -55,10 +65,41 @@ const utils = {
       container.tagName === 'BODY' ? getOffset(target) : getPosition(target, container);
     return offset;
   },
+  calcPlacement(targetOffset, container, overlay) {
+    const { width, height, scrollX, scrollY } = getContainerDimensions(container);
+    const left = targetOffset.left - scrollX - overlay.width;
+    const top = targetOffset.top - scrollY - overlay.height;
+    const right = width - targetOffset.left - targetOffset.width + scrollX - overlay.width;
+    const bottom = height - targetOffset.top - targetOffset.height + scrollY - overlay.height;
 
+    const lr = [{ key: 'left', value: left }, { key: 'right', value: right }];
+    const tb = [{ key: 'top', value: top }, { key: 'bottom', value: bottom }];
+
+    /**
+     * Precedence Vertical
+     * [...tb, ...lr]
+     */
+    const direction = maxBy([...tb, ...lr], o => o.value);
+    let align;
+
+    if (direction.key === 'left' || direction.key === 'right') {
+      align = minBy(tb, o => o.value);
+    } else {
+      align = minBy(lr, o => o.value);
+    }
+
+    return `${direction.key}${capitalize(align.key)}`;
+  },
   calcOverlayPosition(placement, overlayNode, target, container, padding) {
     const childOffset = utils.getPosition(target, container);
     const { height: overlayHeight, width: overlayWidth } = getOffset(overlayNode);
+
+    if (placement === 'auto') {
+      placement = this.calcPlacement(childOffset, container, {
+        height: overlayHeight,
+        width: overlayWidth
+      });
+    }
 
     let positionLeft;
     let positionTop;

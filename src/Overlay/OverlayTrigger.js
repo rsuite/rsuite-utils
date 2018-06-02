@@ -22,7 +22,7 @@ const unsupportedCreatePortal = !ReactDOM.createPortal;
 
 type Props = {
   target?: Function,
-  container?: HTMLElement | Function,
+  container?: HTMLElement | (() => HTMLElement),
   containerPadding?: number,
   placement?: Placement,
   show?: boolean,

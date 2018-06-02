@@ -15,10 +15,8 @@ type Props = {
   container?: HTMLElement | (() => HTMLElement),
   onRendered?: Function,
   children?: React.Node,
-  children?: React.Node,
   className?: string,
   target?: Function,
-  container?: HTMLElement | (() => HTMLElement),
   containerPadding?: number,
   placement?: Placement,
   shouldUpdatePosition?: boolean,
@@ -55,10 +53,8 @@ class Overlay extends React.Component<Props, States> {
 
   handleHidden = (...args: Array<any>) => {
     this.setState({ exited: true });
-
-    if (this.props.onExited) {
-      this.props.onExited(...args);
-    }
+    const { onExited } = this.props;
+    onExited && onExited(...args);
   };
 
   render() {

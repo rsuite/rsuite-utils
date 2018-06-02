@@ -1,7 +1,15 @@
 export type Dimension = 'height' | 'width';
 export type PlacementAround = 'top' | 'right' | 'bottom' | 'left';
-export type PlacementEighPoints = 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight' | 'leftTop' | 'rightTop' | 'leftBottom' | 'rightBottom';
-export type Placement = PlacementAround | PlacementEighPoints;
+export type PlacementEighPoints =
+  | 'bottomLeft'
+  | 'bottomRight'
+  | 'topLeft'
+  | 'topRight'
+  | 'leftTop'
+  | 'rightTop'
+  | 'leftBottom'
+  | 'rightBottom';
+export type Placement = PlacementAround | PlacementEighPoints | 'auto';
 export type TriggerName = 'click' | 'hover' | 'focus';
 
 export type DefaultEvent = SyntheticEvent<*>;

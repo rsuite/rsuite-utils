@@ -9,7 +9,7 @@ const Tooltip = ({ style, children, onMouseLeave, onMouseEnter }) => (
       display: 'inline-block',
       position: 'absolute',
       padding: 10,
-      width: 120,
+      width: 100,
       height: 100,
       background: '#fff',
       border: '1px solid #ddd',
@@ -93,7 +93,78 @@ class TriggerDemo extends React.Component {
             </tr>
           </tbody>
         </table>
+        <hr />
+        <h3>placement='auto'</h3>
+        <div
+          style={{
+            position: 'relative',
+            height: 200,
+            width: 100,
+            overflow: 'auto',
+            background: '#f1f1f1',
+            boxShadow: '#999 1px 1px 5px inset',
+            padding: 150
+          }}
+          ref={ref => {
+            this.container = ref;
+          }}
+        >
+          <div
+            style={{
+              height: 500,
+              width: 500
+            }}
+          >
+            <OverlayTrigger
+              container={() => {
+                return this.container;
+              }}
+              trigger="click"
+              placement="auto"
+              speaker={<Tooltip />}
+            >
+              <button>100*100</button>
+            </OverlayTrigger>
+            <br />
+            <OverlayTrigger
+              container={() => {
+                return this.container;
+              }}
+              trigger="click"
+              placement="auto"
+              speaker={
+                <Tooltip
+                  style={{
+                    width: 200,
+                    height: 50
+                  }}
+                />
+              }
+            >
+              <button>200*50</button>
+            </OverlayTrigger>
+            <br />
+            <OverlayTrigger
+              container={() => {
+                return this.container;
+              }}
+              trigger="click"
+              placement="auto"
+              speaker={
+                <Tooltip
+                  style={{
+                    width: 100,
+                    height: 200
+                  }}
+                />
+              }
+            >
+              <button>100*200</button>
+            </OverlayTrigger>
+          </div>
+        </div>
 
+        <hr />
         <h3>Trigger</h3>
 
         <OverlayTrigger trigger="click" speaker={<Tooltip />}>
@@ -107,13 +178,13 @@ class TriggerDemo extends React.Component {
         <OverlayTrigger trigger="hover" speaker={<Tooltip />}>
           <button>hover</button>
         </OverlayTrigger>
-
+        <hr />
         <h3>defaultOpen</h3>
 
         <OverlayTrigger trigger="click" speaker={<Tooltip />} placement="rightBottom" defaultOpen>
           <button>defaultOpen</button>
         </OverlayTrigger>
-
+        <hr />
         <h3>open</h3>
 
         <OverlayTrigger trigger="click" placement="rightBottom" speaker={<Tooltip />} open>

@@ -82,8 +82,9 @@ class Position extends React.Component<Props, States> {
 
   updatePosition(placementChanged?: boolean) {
     const target = this.getTargetSafe();
+    const { shouldUpdatePosition, placement, containerPadding } = this.props;
 
-    if (!this.props.shouldUpdatePosition && target === this.lastTarget && !placementChanged) {
+    if (!shouldUpdatePosition && target === this.lastTarget && !placementChanged) {
       return;
     }
 
@@ -105,11 +106,11 @@ class Position extends React.Component<Props, States> {
 
     this.setState(
       overlayPositionUtils.calcOverlayPosition(
-        this.props.placement,
+        placement,
         overlay,
         target,
         container,
-        this.props.containerPadding
+        containerPadding
       )
     );
   }
