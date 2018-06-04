@@ -123,7 +123,7 @@ class TriggerDemo extends React.Component {
               placement="auto"
               speaker={<Tooltip />}
             >
-              <button>100*100</button>
+              <button>auto-100*100</button>
             </OverlayTrigger>
             <br />
             <OverlayTrigger
@@ -141,7 +141,7 @@ class TriggerDemo extends React.Component {
                 />
               }
             >
-              <button>200*50</button>
+              <button>auto-200*50</button>
             </OverlayTrigger>
             <br />
             <OverlayTrigger
@@ -159,7 +159,83 @@ class TriggerDemo extends React.Component {
                 />
               }
             >
-              <button>100*200</button>
+              <button>auto-100*200</button>
+            </OverlayTrigger>
+
+            <br />
+            <OverlayTrigger
+              container={() => {
+                return this.container;
+              }}
+              trigger="click"
+              placement="autoVerticalLeft"
+              speaker={
+                <Tooltip
+                  style={{
+                    width: 100,
+                    height: 100
+                  }}
+                />
+              }
+            >
+              <button>autoVerticalLeft</button>
+            </OverlayTrigger>
+
+            <br />
+            <OverlayTrigger
+              container={() => {
+                return this.container;
+              }}
+              trigger="click"
+              placement="autoVerticalRight"
+              speaker={
+                <Tooltip
+                  style={{
+                    width: 100,
+                    height: 100
+                  }}
+                />
+              }
+            >
+              <button>autoVerticalRight</button>
+            </OverlayTrigger>
+
+            <br />
+            <OverlayTrigger
+              container={() => {
+                return this.container;
+              }}
+              trigger="click"
+              placement="autoHorizontalTop"
+              speaker={
+                <Tooltip
+                  style={{
+                    width: 100,
+                    height: 100
+                  }}
+                />
+              }
+            >
+              <button>autoHorizontalTop</button>
+            </OverlayTrigger>
+
+            <br />
+            <OverlayTrigger
+              container={() => {
+                return this.container;
+              }}
+              trigger="click"
+              placement="autoHorizontalBottom"
+              speaker={
+                <Tooltip
+                  style={{
+                    width: 100,
+                    height: 100
+                  }}
+                />
+              }
+            >
+              <button>autoHorizontalBottom</button>
             </OverlayTrigger>
           </div>
         </div>

@@ -9,7 +9,15 @@ export type PlacementEighPoints =
   | 'rightTop'
   | 'leftBottom'
   | 'rightBottom';
-export type Placement = PlacementAround | PlacementEighPoints | 'auto';
+
+export type PlacementAuto =
+  | 'auto'
+  | 'autoVerticalLeft'
+  | 'autoVerticalRight'
+  | 'autoHorizontalTop'
+  | 'autoHorizontalBottom';
+
+export type Placement = PlacementAround | PlacementEighPoints | PlacementAuto;
 export type TriggerName = 'click' | 'hover' | 'focus';
 
 export type DefaultEvent = SyntheticEvent<*>;

@@ -65,27 +65,37 @@ const utils = {
       container.tagName === 'BODY' ? getOffset(target) : getPosition(target, container);
     return offset;
   },
-  calcPlacement(targetOffset, container, overlay) {
+  calcAutoPlacement(placement, targetOffset, container, overlay) {
     const { width, height, scrollX, scrollY } = getContainerDimensions(container);
     const left = targetOffset.left - scrollX - overlay.width;
     const top = targetOffset.top - scrollY - overlay.height;
     const right = width - targetOffset.left - targetOffset.width + scrollX - overlay.width;
     const bottom = height - targetOffset.top - targetOffset.height + scrollY - overlay.height;
 
-    const lr = [{ key: 'left', value: left }, { key: 'right', value: right }];
-    const tb = [{ key: 'top', value: top }, { key: 'bottom', value: bottom }];
+    const horizontal = [{ key: 'left', value: left }, { key: 'right', value: right }];
+    const vertical = [{ key: 'top', value: top }, { key: 'bottom', value: bottom }];
+
+    let direction;
+    let align;
+
+    if (placement === 'autoVerticalLeft' || placement === 'autoVerticalRight') {
+      direction = maxBy(vertical, o => o.value);
+      return `${direction.key}${placement.replace('autoVertical', '')}`;
+    } else if (placement === 'autoHorizontalTop' || placement === 'autoHorizontalBottom') {
+      direction = maxBy(horizontal, o => o.value);
+      return `${direction.key}${placement.replace('autoHorizontal', '')}`;
+    }
 
     /**
      * Precedence Vertical
-     * [...tb, ...lr]
+     * [...vertical, ...horizontal]
      */
-    const direction = maxBy([...tb, ...lr], o => o.value);
-    let align;
+    direction = maxBy([...vertical, ...horizontal], o => o.value);
 
     if (direction.key === 'left' || direction.key === 'right') {
-      align = minBy(tb, o => o.value);
+      align = minBy(vertical, o => o.value);
     } else {
-      align = minBy(lr, o => o.value);
+      align = minBy(horizontal, o => o.value);
     }
 
     return `${direction.key}${capitalize(align.key)}`;
@@ -94,8 +104,8 @@ const utils = {
     const childOffset = utils.getPosition(target, container);
     const { height: overlayHeight, width: overlayWidth } = getOffset(overlayNode);
 
-    if (placement === 'auto') {
-      placement = this.calcPlacement(childOffset, container, {
+    if (placement && placement.indexOf('auto') >= 0) {
+      placement = this.calcAutoPlacement(placement, childOffset, container, {
         height: overlayHeight,
         width: overlayWidth
       });
@@ -118,7 +128,7 @@ const utils = {
       const topDelta = getTopDelta(positionTop, overlayHeight, container, padding);
 
       positionTop += topDelta;
-      arrowOffsetTop = `${50 * (1 - 2 * topDelta / overlayHeight)}%`;
+      arrowOffsetTop = `${50 * (1 - (2 * topDelta) / overlayHeight)}%`;
       arrowOffsetLeft = undefined;
     } else if (placement === 'top' || placement === 'bottom') {
       positionLeft = childOffset.left + (childOffset.width - overlayWidth) / 2;
@@ -131,7 +141,7 @@ const utils = {
 
       const leftDelta = getLeftDelta(positionLeft, overlayWidth, container, padding);
       positionLeft += leftDelta;
-      arrowOffsetLeft = `${50 * (1 - 2 * leftDelta / overlayWidth)}%`;
+      arrowOffsetLeft = `${50 * (1 - (2 * leftDelta) / overlayWidth)}%`;
       arrowOffsetTop = undefined;
     } else if (placement === 'topLeft') {
       positionLeft = childOffset.left;
