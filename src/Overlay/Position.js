@@ -22,7 +22,8 @@ type States = {
   positionLeft?: number,
   positionTop?: number,
   arrowOffsetLeft?: null | number,
-  arrowOffsetTop?: null | number
+  arrowOffsetTop?: null | number,
+  positionClassName?: string
 };
 
 class Position extends React.Component<Props, States> {
@@ -117,7 +118,7 @@ class Position extends React.Component<Props, States> {
 
   render() {
     const { children, className, ...rest } = this.props;
-    const { positionLeft, positionTop, ...arrowPosition } = this.state;
+    const { positionLeft, positionTop, positionClassName, ...arrowPosition } = this.state;
     const child = React.Children.only(children);
 
     return React.cloneElement(child, {
@@ -125,7 +126,7 @@ class Position extends React.Component<Props, States> {
       ...arrowPosition,
       positionLeft,
       positionTop,
-      className: classNames(className, child.props.className),
+      className: classNames(className, positionClassName, child.props.className),
       style: {
         ...child.props.style,
         left: positionLeft,

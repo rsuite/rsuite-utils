@@ -1,3 +1,7 @@
+# 1.0.8
+
+- Added `positionClassName` on `<Position>`
+
 # 1.0.7
 
 - Added support placement value of related `auto*`

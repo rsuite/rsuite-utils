@@ -1,6 +1,7 @@
 import maxBy from 'lodash/maxBy';
 import minBy from 'lodash/minBy';
 import capitalize from 'lodash/capitalize';
+import kebabCase from 'lodash/kebabCase';
 
 import { ownerDocument, getOffset, getPosition, scrollTop, scrollLeft } from 'dom-lib';
 
@@ -175,7 +176,8 @@ const utils = {
       positionLeft,
       positionTop,
       arrowOffsetLeft,
-      arrowOffsetTop
+      arrowOffsetTop,
+      positionClassName: `placement-${kebabCase(placement)}`
     };
   }
 };
