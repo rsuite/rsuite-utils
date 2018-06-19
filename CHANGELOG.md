@@ -1,3 +1,7 @@
+# 1.1.0
+
+- Added shallowEqual
+
 # 1.0.8
 
 - Added `positionClassName` on `<Position>`
