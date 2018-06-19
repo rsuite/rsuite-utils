@@ -9,4 +9,4 @@ export isOneOf from './isOneOf';
 export overlayPositionUtils from './overlayPositionUtils';
 export reactToString from './reactToString';
 export prefix from './prefix';
-
+export shallowEqual from './shallowEqual';
