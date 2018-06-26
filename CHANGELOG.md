@@ -1,3 +1,7 @@
+# 1.2.1
+
+- Support `autoVertical` and `autoHorizontal` on `<OverlayTrigger>`
+
 # 1.2.0
 
 - Added shallowEqualArray
