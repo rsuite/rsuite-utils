@@ -75,16 +75,18 @@ const utils = {
 
     const horizontal = [{ key: 'left', value: left }, { key: 'right', value: right }];
     const vertical = [{ key: 'top', value: top }, { key: 'bottom', value: bottom }];
+    const AV = 'autoVertical';
+    const AH = 'autoHorizontal';
 
     let direction;
     let align;
 
-    if (placement === 'autoVerticalLeft' || placement === 'autoVerticalRight') {
+    if (placement.indexOf(AV) !== -1) {
       direction = maxBy(vertical, o => o.value);
-      return `${direction.key}${placement.replace('autoVertical', '')}`;
-    } else if (placement === 'autoHorizontalTop' || placement === 'autoHorizontalBottom') {
+      return placement === AV ? direction.key : `${direction.key}${placement.replace(AV, '')}`;
+    } else if (placement.indexOf(AH) !== -1) {
       direction = maxBy(horizontal, o => o.value);
-      return `${direction.key}${placement.replace('autoHorizontal', '')}`;
+      return placement === AH ? direction.key : `${direction.key}${placement.replace(AH, '')}`;
     }
 
     /**
