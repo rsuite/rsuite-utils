@@ -169,6 +169,24 @@ class TriggerDemo extends React.Component {
                 return this.container;
               }}
               trigger="click"
+              placement="autoVertical"
+              speaker={
+                <Tooltip
+                  style={{
+                    width: 100,
+                    height: 100
+                  }}
+                />
+              }
+            >
+              <button>autoVertical</button>
+            </OverlayTrigger>
+            <br />
+            <OverlayTrigger
+              container={() => {
+                return this.container;
+              }}
+              trigger="click"
               placement="autoVerticalLeft"
               speaker={
                 <Tooltip
@@ -199,6 +217,25 @@ class TriggerDemo extends React.Component {
               }
             >
               <button>autoVerticalRight</button>
+            </OverlayTrigger>
+
+            <br />
+            <OverlayTrigger
+              container={() => {
+                return this.container;
+              }}
+              trigger="click"
+              placement="autoHorizontal"
+              speaker={
+                <Tooltip
+                  style={{
+                    width: 100,
+                    height: 100
+                  }}
+                />
+              }
+            >
+              <button>autoHorizontal</button>
             </OverlayTrigger>
 
             <br />

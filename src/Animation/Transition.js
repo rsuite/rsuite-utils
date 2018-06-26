@@ -45,12 +45,13 @@ type States = {
 };
 
 class Transition extends React.Component<Props, States> {
-  static displayName = 'Transition';
+
   /**
    * Note that `handledProps` are generated automatically during
    * build with `babel-plugin-transform-react-flow-handled-props`
    */
   static handledProps = [];
+  static displayName = 'Transition';
   static defaultProps = {
     timeout: 1000,
 

@@ -12,8 +12,10 @@ export type PlacementEighPoints =
 
 export type PlacementAuto =
   | 'auto'
+  | 'autoVertical'
   | 'autoVerticalLeft'
   | 'autoVerticalRight'
+  | 'autoHorizontal'
   | 'autoHorizontalTop'
   | 'autoHorizontalBottom';
 

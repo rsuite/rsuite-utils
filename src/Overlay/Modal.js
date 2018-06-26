@@ -57,6 +57,7 @@ const modalManager = new ModalManager();
 const noop = () => {};
 
 class Modal extends React.Component<Props, States> {
+  static manager = modalManager;
   static defaultProps = {
     backdrop: true,
     keyboard: true,
@@ -64,8 +65,6 @@ class Modal extends React.Component<Props, States> {
     enforceFocus: true,
     onHide: noop
   };
-
-  static manager = modalManager;
 
   constructor(props: Props) {
     super(props);
