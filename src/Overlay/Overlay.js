@@ -38,16 +38,15 @@ type Props = {
 };
 
 class Overlay extends React.Component<Props> {
-  static defaultProps = {
-    animation: true,
-    transition: Fade
-  };
-
   /**
    * Note that `handledProps` are generated automatically during
    * build with `babel-plugin-transform-react-flow-handled-props`
    */
   static handledProps = [];
+  static defaultProps = {
+    animation: true,
+    transition: Fade
+  };
 
   render() {
     let { children: child, animation, transition, ...props } = this.props;
