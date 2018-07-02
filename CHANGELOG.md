@@ -1,3 +1,7 @@
+# 1.2.2
+
+- Added tplTransform
+
 # 1.2.1
 
 - Support `autoVertical` and `autoHorizontal` on `<OverlayTrigger>`
