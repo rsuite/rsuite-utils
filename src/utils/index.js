@@ -11,3 +11,4 @@ export reactToString from './reactToString';
 export prefix from './prefix';
 export shallowEqual from './shallowEqual';
 export shallowEqualArray from './shallowEqualArray';
+export tplTransform from './tplTransform';
