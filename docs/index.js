@@ -4,6 +4,7 @@ import ModalDemo from './ModalDemo';
 import TriggerDemo from './TriggerDemo';
 import CollapseDemo from './CollapseDemo';
 import FadeDemo from './FadeDemo';
+import ClipboardDemo from './ClipboardDemo';
 
 import './less/index.less';
 
@@ -21,6 +22,8 @@ class App extends React.Component {
           <CollapseDemo />
           <hr />
           <FadeDemo />
+          <hr />
+          <ClipboardDemo />
         </div>
       </div>
     );
