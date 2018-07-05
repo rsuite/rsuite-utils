@@ -12,3 +12,4 @@ export prefix from './prefix';
 export shallowEqual from './shallowEqual';
 export shallowEqualArray from './shallowEqualArray';
 export tplTransform from './tplTransform';
+export copyToClipboard from './copyToClipboard';
