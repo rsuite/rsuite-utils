@@ -1,3 +1,7 @@
+# 1.2.4
+
+- Added copyToClipboard
+
 # 1.2.2
 
 - Added tplTransform
