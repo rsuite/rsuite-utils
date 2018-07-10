@@ -28,6 +28,8 @@ const Dropdown = ({ placement }) => (
   </OverlayTrigger>
 );
 
+let positionNode;
+
 class TriggerDemo extends React.Component {
   render() {
     return (
@@ -35,7 +37,24 @@ class TriggerDemo extends React.Component {
         <h2>OverlayTrigger</h2>
         <h3> 4 placement </h3>
         <div>
-          <OverlayTrigger trigger="click" placement="top" speaker={<Tooltip />}>
+          <button
+            onClick={() => {
+              console.log(positionNode.updatePosition(true));
+            }}
+          >
+            Update position
+          </button>
+        </div>
+        <div>
+          <OverlayTrigger
+            trigger="click"
+            placement="top"
+            open
+            speaker={<Tooltip />}
+            positionRef={ref => {
+              positionNode = ref;
+            }}
+          >
             <button>Top</button>
           </OverlayTrigger>
           <OverlayTrigger trigger="click" placement="bottom" speaker={<Tooltip />}>
