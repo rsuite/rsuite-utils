@@ -1,5 +1,9 @@
 # 1.2.4
 
+- Support `positionRef` on `<Overlay>`
+
+# 1.2.4
+
 - Added copyToClipboard
 
 # 1.2.2
