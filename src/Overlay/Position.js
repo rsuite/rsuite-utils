@@ -104,16 +104,14 @@ class Position extends React.Component<Props, States> {
     /* eslint-disable */
     const overlay = findDOMNode(this);
     const container = getContainer(this.props.container, ownerDocument(this).body);
-
-    this.setState(
-      overlayPositionUtils.calcOverlayPosition(
-        placement,
-        overlay,
-        target,
-        container,
-        containerPadding
-      )
+    const nextPosition = overlayPositionUtils.calcOverlayPosition(
+      placement,
+      overlay,
+      target,
+      container,
+      containerPadding
     );
+    this.setState(nextPosition);
   }
 
   render() {

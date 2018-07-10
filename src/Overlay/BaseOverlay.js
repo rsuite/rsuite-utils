@@ -30,7 +30,8 @@ type Props = {
   onEntered?: AnimationEventFunction,
   onExit?: AnimationEventFunction,
   onExiting?: AnimationEventFunction,
-  onExited?: AnimationEventFunction
+  onExited?: AnimationEventFunction,
+  positionRef?: React.ElementRef<*>
 };
 
 type States = {
@@ -69,6 +70,7 @@ class Overlay extends React.Component<Props, States> {
       transition: Transition,
       show,
       onHide,
+      positionRef,
       ...props
     } = this.props;
 
@@ -81,7 +83,10 @@ class Overlay extends React.Component<Props, States> {
     let child = children;
 
     child = (
-      <Position {...{ container, containerPadding, target, placement, shouldUpdatePosition }}>
+      <Position
+        {...{ container, containerPadding, target, placement, shouldUpdatePosition }}
+        ref={positionRef}
+      >
         {child}
       </Position>
     );

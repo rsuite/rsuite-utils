@@ -34,7 +34,8 @@ type Props = {
   rootClose?: boolean,
   onHide?: DefaultEventFunction,
   transition?: React.ElementType,
-  animation?: boolean
+  animation?: boolean,
+  positionRef?: React.ElementRef<*>
 };
 
 class Overlay extends React.Component<Props> {
