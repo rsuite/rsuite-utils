@@ -49,7 +49,6 @@ class TriggerDemo extends React.Component {
           <OverlayTrigger
             trigger="click"
             placement="top"
-            open
             speaker={<Tooltip />}
             positionRef={ref => {
               positionNode = ref;
@@ -300,27 +299,35 @@ class TriggerDemo extends React.Component {
         <hr />
         <h3>Trigger</h3>
 
-        <OverlayTrigger trigger="click" speaker={<Tooltip />}>
+        <OverlayTrigger trigger="click" speaker={<Tooltip>click</Tooltip>}>
           <button>click</button>
         </OverlayTrigger>
 
-        <OverlayTrigger trigger="focus" speaker={<Tooltip />}>
+        <OverlayTrigger trigger="focus" speaker={<Tooltip>focus</Tooltip>}>
           <input />
         </OverlayTrigger>
 
-        <OverlayTrigger trigger="hover" speaker={<Tooltip />}>
+        <OverlayTrigger trigger="hover" speaker={<Tooltip>hover</Tooltip>}>
           <button>hover</button>
         </OverlayTrigger>
+
+        <OverlayTrigger trigger="active" speaker={<Tooltip>active</Tooltip>}>
+          <div>
+            <button>active</button>
+            <p>active test</p>
+          </div>
+        </OverlayTrigger>
+
         <hr />
         <h3>defaultOpen</h3>
 
-        <OverlayTrigger trigger="click" speaker={<Tooltip />} placement="rightBottom" defaultOpen>
+        <OverlayTrigger trigger="click" speaker={<Tooltip />} placement="rightBottom">
           <button>defaultOpen</button>
         </OverlayTrigger>
         <hr />
         <h3>open</h3>
 
-        <OverlayTrigger trigger="click" placement="rightBottom" speaker={<Tooltip />} open>
+        <OverlayTrigger trigger="click" placement="rightBottom" speaker={<Tooltip />}>
           <button>open</button>
         </OverlayTrigger>
       </div>

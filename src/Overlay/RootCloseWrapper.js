@@ -47,7 +47,7 @@ class RootCloseWrapper extends React.Component<Props> {
 
     const { target } = this.props;
     if (target) {
-      if (event.target === target()) {
+      if (contains(target(), event.target)) {
         return;
       }
     }
