@@ -1,3 +1,7 @@
+# 1.2.6
+
+- Support `active` value for `trigger` on `OverlayTrigger`
+
 # 1.2.5
 
 - Support `positionRef` on `<Overlay>`
