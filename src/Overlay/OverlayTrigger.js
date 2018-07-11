@@ -123,6 +123,10 @@ class OverlayTrigger extends React.Component<Props, States> {
       overlayProps.onHide = this.hide;
     }
 
+    if (isOneOf('active', trigger)) {
+      overlayProps.onHide = this.hide;
+    }
+
     const speakerProps: Object = {
       onMouseEnter: this.handleSpeakerMouseEnter,
       onMouseLeave: this.handleSpeakerMouseLeave,
@@ -150,7 +154,7 @@ class OverlayTrigger extends React.Component<Props, States> {
   handleSpeakerMouseLeave = () => {
     const { trigger } = this.props;
     this.enterSpeaker = false;
-    if (!isOneOf('click', trigger)) {
+    if (!isOneOf('click', trigger) && !isOneOf('active', trigger)) {
       this.handleHide();
     }
   };
@@ -268,6 +272,10 @@ class OverlayTrigger extends React.Component<Props, States> {
     if (!disabled) {
       if (isOneOf('click', trigger)) {
         props.onClick = createChainedFunction(this.handleToggle, props.onClick);
+      }
+
+      if (isOneOf('active', trigger)) {
+        props.onClick = createChainedFunction(this.show, props.onClick);
       }
 
       if (isOneOf('hover', trigger)) {

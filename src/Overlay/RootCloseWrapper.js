@@ -15,7 +15,8 @@ function isModifiedEvent(event) {
 
 type Props = {
   children: React.Node,
-  onRootClose?: () => void
+  onRootClose?: () => void,
+  target?: Function
 };
 
 class RootCloseWrapper extends React.Component<Props> {
@@ -43,6 +44,14 @@ class RootCloseWrapper extends React.Component<Props> {
     if (isModifiedEvent(event) || !isLeftClickEvent(event)) {
       return;
     }
+
+    const { target } = this.props;
+    if (target) {
+      if (event.target === target()) {
+        return;
+      }
+    }
+
     const { onRootClose } = this.props;
     onRootClose && onRootClose();
   };

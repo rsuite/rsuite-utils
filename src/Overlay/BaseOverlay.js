@@ -110,7 +110,11 @@ class Overlay extends React.Component<Props, States> {
     }
 
     if (rootClose) {
-      child = <RootCloseWrapper onRootClose={onHide}>{child}</RootCloseWrapper>;
+      child = (
+        <RootCloseWrapper target={target} onRootClose={onHide}>
+          {child}
+        </RootCloseWrapper>
+      );
     }
 
     return <Portal container={container}>{child}</Portal>;

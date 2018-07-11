@@ -20,7 +20,7 @@ export type PlacementAuto =
   | 'autoHorizontalBottom';
 
 export type Placement = PlacementAround | PlacementEighPoints | PlacementAuto;
-export type TriggerName = 'click' | 'hover' | 'focus';
+export type TriggerName = 'click' | 'hover' | 'focus' | 'active';
 
 export type DefaultEvent = SyntheticEvent<*>;
 export type ReactFindDOMNode = null | Element | Text;
