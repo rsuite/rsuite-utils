@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import { ownerDocument, getContainer } from 'dom-lib';
 import overlayPositionUtils from '../utils/overlayPositionUtils';
+import shallowEqual from '../utils/shallowEqual';
 import type { Placement } from '../utils/TypeDefinition';
 
 export type Props = {
@@ -18,7 +19,7 @@ export type Props = {
   shouldUpdatePosition?: boolean
 };
 
-type States = {
+type State = {
   positionLeft?: number,
   positionTop?: number,
   arrowOffsetLeft?: null | number,
@@ -26,7 +27,7 @@ type States = {
   positionClassName?: string
 };
 
-class Position extends React.Component<Props, States> {
+class Position extends React.Component<Props, State> {
   static displayName = 'Position';
   static defaultProps = {
     containerPadding: 0,
@@ -48,8 +49,17 @@ class Position extends React.Component<Props, States> {
     this.updatePosition();
   }
 
-  componentWillReceiveProps() {
-    this.needsFlush = true;
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    if (!shallowEqual(nextProps, this.props)) {
+      this.needsFlush = true;
+      return true;
+    }
+
+    if (!shallowEqual(nextState, this.state)) {
+      return true;
+    }
+
+    return false;
   }
 
   componentDidUpdate(prevProps: Props) {
