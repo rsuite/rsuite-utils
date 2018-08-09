@@ -1,6 +1,8 @@
 // @flow
 
 import * as React from 'react';
+import { polyfill } from 'react-lifecycles-compat';
+
 import Portal from './Portal';
 import Position from './Position';
 import RootCloseWrapper from './RootCloseWrapper';
@@ -34,22 +36,23 @@ type Props = {
   positionRef?: React.ElementRef<*>
 };
 
-type States = {
+type State = {
   exited?: boolean
 };
 
-class Overlay extends React.Component<Props, States> {
+class Overlay extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { exited: !props.show };
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  static getDerivedStateFromProps(nextProps: Props) {
     if (nextProps.show) {
-      this.setState({ exited: false });
+      return { exited: false };
     } else if (!nextProps.transition) {
-      this.setState({ exited: true });
+      return { exited: true };
     }
+    return null;
   }
 
   handleHidden = (...args: Array<any>) => {
@@ -120,5 +123,7 @@ class Overlay extends React.Component<Props, States> {
     return <Portal container={container}>{child}</Portal>;
   }
 }
+
+polyfill(Overlay);
 
 export default Overlay;
