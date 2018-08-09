@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import { ownerDocument, canUseDom, activeElement, contains, getContainer, on } from 'dom-lib';
+import { polyfill } from 'react-lifecycles-compat';
 
 import Portal from './Portal';
 import ModalManager from './ModalManager';
@@ -76,19 +77,21 @@ class Modal extends React.Component<Props, States> {
     }
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  static getDerivedStateFromProps(nextProps: Props) {
     if (nextProps.show) {
-      this.setState({ exited: false });
+      return { exited: false };
     } else if (!nextProps.transition) {
       // Otherwise let handleHidden take care of marking exited.
-      this.setState({ exited: true });
+      return { exited: true };
     }
+    return null;
   }
 
-  componentWillUpdate(nextProps: Props) {
-    if (!this.props.show && nextProps.show) {
+  getSnapshotBeforeUpdate(prevProps: Props) {
+    if (this.props.show && !prevProps.show) {
       this.checkForFocus();
     }
+    return null;
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -322,5 +325,7 @@ class Modal extends React.Component<Props, States> {
     );
   }
 }
+
+polyfill(Modal);
 
 export default Modal;

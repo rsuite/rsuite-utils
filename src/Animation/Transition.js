@@ -5,6 +5,8 @@ import { findDOMNode } from 'react-dom';
 import { on, transition } from 'dom-lib';
 import classNames from 'classnames';
 import _ from 'lodash';
+import { polyfill } from 'react-lifecycles-compat';
+
 import type {
   ReactFindDOMNode,
   DefaultEvent,
@@ -40,12 +42,11 @@ type Props = {
   onExited: AnimationEventFunction
 };
 
-type States = {
+type State = {
   status?: number
 };
 
-class Transition extends React.Component<Props, States> {
-
+class Transition extends React.Component<Props, State> {
   /**
    * Note that `handledProps` are generated automatically during
    * build with `babel-plugin-transform-react-flow-handled-props`
@@ -81,21 +82,27 @@ class Transition extends React.Component<Props, States> {
     this.nextCallback = null;
   }
 
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    if (nextProps.in && nextProps.unmountOnExit) {
+      if (prevState.status === UNMOUNTED) {
+        // Start enter transition in componentDidUpdate.
+        return { status: EXITED };
+      }
+    }
+    return null;
+  }
+
   componentDidMount() {
     if (this.props.transitionAppear && this.props.in) {
       this.performEnter(this.props);
     }
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.in && this.props.unmountOnExit) {
-      if (this.state.status === UNMOUNTED) {
-        // Start enter transition in componentDidUpdate.
-        this.setState({ status: EXITED });
-      }
-    } else {
+  getSnapshotBeforeUpdate() {
+    if (!this.props.in || !this.props.unmountOnExit) {
       this.needsUpdate = true;
     }
+    return null;
   }
 
   componentDidUpdate() {
@@ -222,7 +229,7 @@ class Transition extends React.Component<Props, States> {
     }
   }
 
-  safeSetState(nextState: States, callback: Function) {
+  safeSetState(nextState: State, callback: Function) {
     this.setState(nextState, this.setNextCallback(callback));
   }
 
@@ -267,5 +274,7 @@ class Transition extends React.Component<Props, States> {
     });
   }
 }
+
+polyfill(Transition);
 
 export default Transition;

@@ -3,8 +3,10 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { getContainer, ownerDocument } from 'dom-lib';
+import { polyfill } from 'react-lifecycles-compat';
 
 import LegacyPortal from './LegacyPortal';
+import shallowEqual from '../utils/shallowEqual';
 
 export type Props = {
   /**
@@ -25,15 +27,22 @@ export type Props = {
  */
 class Portal extends React.Component<Props> {
   static displayName = 'Portal';
+
   componentDidMount() {
     this.setContainer();
     this.forceUpdate(this.props.onRendered);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  shouldComponentUpdate(nextProps: Props) {
     if (nextProps.container !== this.props.container) {
-      this.setContainer(nextProps);
+      this.setContainer();
     }
+
+    if (!shallowEqual(nextProps, this.props)) {
+      return true;
+    }
+
+    return false;
   }
 
   componentWillUnmount() {
@@ -55,5 +64,7 @@ class Portal extends React.Component<Props> {
       : null;
   }
 }
+
+polyfill(Portal);
 
 export default (ReactDOM.createPortal ? Portal : LegacyPortal);
