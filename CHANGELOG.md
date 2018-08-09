@@ -1,3 +1,7 @@
+# 1.3.0
+
+- Migrated to new lifecycle method
+
 # 1.2.6
 
 - Support `active` value for `trigger` on `OverlayTrigger`
