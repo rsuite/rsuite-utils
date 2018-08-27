@@ -1,3 +1,11 @@
+# 1.3.2
+
+- Fix: Backdrop set to `static` invalid on <Model>
+
+# 1.3.1
+
+- Migrated to new lifecycle method on Position
+
 # 1.3.0
 
 - Migrated to new lifecycle method
