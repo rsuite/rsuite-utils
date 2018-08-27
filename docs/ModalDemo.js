@@ -7,8 +7,10 @@ class ModalDemo extends React.Component {
     super(props, context);
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleHide = this.handleHide.bind(this);
+    this.handleChangeBackdrop = this.handleChangeBackdrop.bind(this);
     this.state = {
-      show: false
+      show: false,
+      backdrop: true
     };
   }
 
@@ -17,8 +19,20 @@ class ModalDemo extends React.Component {
       show: true
     });
   }
+
+  handleChangeBackdrop(event) {
+    const backdropValues = [true, false, 'static'];
+
+    this.setState({
+      backdrop: backdropValues[event.target.value]
+    });
+  }
   handleHide(e) {
     if (e && e.target !== e.currentTarget) {
+      return;
+    }
+
+    if (this.state.backdrop !== true) {
       return;
     }
     this.setState({
@@ -27,18 +41,24 @@ class ModalDemo extends React.Component {
   }
 
   render() {
+    const { backdrop, show } = this.state;
     return (
-
       <div className="row">
         <h2>Modal</h2>
         <button onClick={this.handleOpenModal}>open modal</button>
+        <select onChange={this.handleChangeBackdrop} defaultValue={0}>
+          <option value={0}>true</option>
+          <option value={1}>false</option>
+          <option value={2}>static</option>
+        </select>
         <Modal
-          backdrop
+          backdrop={backdrop}
           transition={Fade}
           backdropClassName={'modal-backdrop'}
           containerClassName={'modal-open'}
           onHide={this.handleHide}
-          show={this.state.show}>
+          show={show}
+        >
           <div
             className="modal"
             style={{
@@ -54,10 +74,8 @@ class ModalDemo extends React.Component {
               </div>
             </div>
           </div>
-
         </Modal>
       </div>
-
     );
   }
 }

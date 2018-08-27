@@ -227,36 +227,39 @@ class Modal extends React.Component<Props, States> {
   dialog = null;
   lastFocus = null;
 
+  bindBackdropRef = (ref: React.ElementRef<*>) => {
+    this.backdrop = ref;
+  };
+
   renderBackdrop() {
     const {
       transition: Transition,
+      backdrop,
       backdropTransitionTimeout,
       backdropStyle,
       backdropClassName
     } = this.props;
 
-    let backdrop = (
+    let backdropNode = (
       <div
-        ref={ref => {
-          this.backdrop = ref;
-        }}
+        ref={this.bindBackdropRef}
         style={backdropStyle}
         className={backdropClassName}
-        onClick={this.handleBackdropClick}
+        onClick={backdrop === true ? this.handleBackdropClick : undefined}
         role="button"
         tabIndex={-1}
       />
     );
 
     if (Transition) {
-      backdrop = (
+      backdropNode = (
         <Transition transitionAppear in={this.props.show} timeout={backdropTransitionTimeout}>
-          {backdrop}
+          {backdropNode}
         </Transition>
       );
     }
 
-    return backdrop;
+    return backdropNode;
   }
 
   render() {
