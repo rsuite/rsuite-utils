@@ -57,7 +57,15 @@ class TriggerDemo extends React.Component {
           </button>
         </div>
         <div>
-          <OverlayTrigger trigger="click" placement="top" speaker={<Tooltip />}>
+          <OverlayTrigger
+            trigger="click"
+            placement="top"
+            speaker={<Tooltip />}
+            open
+            onHide={() => {
+              console.log('hide');
+            }}
+          >
             <button>Top</button>
           </OverlayTrigger>
           <OverlayTrigger trigger="click" placement="bottom" speaker={<Tooltip />}>
