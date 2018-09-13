@@ -61,7 +61,6 @@ class TriggerDemo extends React.Component {
             trigger="click"
             placement="top"
             speaker={<Tooltip />}
-            open
             onHide={() => {
               console.log('hide');
             }}

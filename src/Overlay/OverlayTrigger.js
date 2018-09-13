@@ -111,7 +111,8 @@ class OverlayTrigger extends React.Component<Props, States> {
   getOverlayTarget = () => findDOMNode(this); // eslint-disable-line react/no-find-dom-node
 
   getOverlay() {
-    const { open, speaker, trigger } = this.props;
+    const { open, speaker, trigger, onHide } = this.props;
+
     const { isOverlayShown } = this.state;
     const overlayProps = {
       ..._.pick(this.props, Overlay.handledProps),
@@ -120,11 +121,9 @@ class OverlayTrigger extends React.Component<Props, States> {
     };
 
     if (isOneOf('click', trigger)) {
-      overlayProps.onHide = this.hide;
-    }
-
-    if (isOneOf('active', trigger)) {
-      overlayProps.onHide = this.hide;
+      overlayProps.onHide = createChainedFunction(this.hide, onHide);
+    } else if (isOneOf('active', trigger)) {
+      overlayProps.onHide = createChainedFunction(this.hide, onHide);
     }
 
     const speakerProps: Object = {
@@ -161,8 +160,6 @@ class OverlayTrigger extends React.Component<Props, States> {
 
   hide = () => {
     this.setState({ isOverlayShown: false });
-    const { onHide } = this.props;
-    onHide && onHide();
   };
 
   show = () => {
