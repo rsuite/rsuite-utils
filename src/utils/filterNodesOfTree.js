@@ -1,16 +1,26 @@
 import _ from 'lodash';
 
 export default function filterNodesOfTree(data, check) {
-  const findNodes = (nodes = []) =>
-    nodes.filter(item => {
-      if (_.isArray(item.children)) {
-        const nextChildren = findNodes(item.children);
+  const findNodes = (nodes = []) => {
+    const nextNodes = [];
+    for (let i = 0; i < nodes.length; i += 1) {
+      if (_.isArray(nodes[i].children)) {
+        const nextChildren = findNodes(nodes[i].children);
         if (nextChildren.length) {
+          let item = _.clone(nodes[i]);
           item.children = nextChildren;
-          return true;
+          nextNodes.push(item);
+          continue;
         }
       }
-      return check(item);
-    });
-  return findNodes(_.cloneDeep(data));
+
+      if (check(nodes[i])) {
+        nextNodes.push(nodes[i]);
+      }
+    }
+
+    return nextNodes;
+  };
+
+  return findNodes(data);
 }
