@@ -9,7 +9,7 @@ import prefix from '../utils/prefix';
 import type { DefaultEvent } from '../utils/TypeDefinition';
 
 type Props = {
-  classPrifix?: string,
+  classPrefix?: string,
   value?: string,
   placeholder?: string,
   className?: string,
@@ -19,7 +19,7 @@ type Props = {
 
 class SearchBar extends React.Component<Props> {
   static defaultProps = {
-    classPrifix: `${namespace}-search-bar`
+    classPrefix: `${namespace}-search-bar`
   };
 
   handleChange = (event: DefaultEvent) => {
@@ -28,13 +28,13 @@ class SearchBar extends React.Component<Props> {
   };
 
   render() {
-    const { value, children, className, classPrifix, placeholder, ...rest } = this.props;
+    const { value, children, className, classPrefix, placeholder, ...rest } = this.props;
 
-    const addPrefix = prefix(classPrifix);
+    const addPrefix = prefix(classPrefix);
     const unhandled = getUnhandledProps(SearchBar, rest);
 
     return (
-      <div {...unhandled} className={classNames(classPrifix, className)}>
+      <div {...unhandled} className={classNames(classPrefix, className)}>
         <input
           className={addPrefix('input')}
           value={value}
