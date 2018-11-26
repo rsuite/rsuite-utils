@@ -15,6 +15,8 @@ import type {
   ReactFindDOMNode
 } from '../utils/TypeDefinition';
 
+import { Fade } from '../Animation';
+
 type Props = {
   /** Portal Props */
   container?: HTMLElement | (() => HTMLElement),
@@ -233,7 +235,7 @@ class Modal extends React.Component<Props, States> {
 
   renderBackdrop() {
     const {
-      transition: Transition,
+      transition,
       backdrop,
       backdropTransitionTimeout,
       backdropStyle,
@@ -251,11 +253,11 @@ class Modal extends React.Component<Props, States> {
       />
     );
 
-    if (Transition) {
+    if (transition) {
       backdropNode = (
-        <Transition transitionAppear in={this.props.show} timeout={backdropTransitionTimeout}>
+        <Fade transitionAppear in={this.props.show} timeout={backdropTransitionTimeout}>
           {backdropNode}
-        </Transition>
+        </Fade>
       );
     }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from '../src/Overlay';
-import { Fade } from '../src/Animation';
+import { Bounce } from '../src/Animation';
 
 class ModalDemo extends React.Component {
   constructor(props, context) {
@@ -53,7 +53,7 @@ class ModalDemo extends React.Component {
         </select>
         <Modal
           backdrop={backdrop}
-          transition={Fade}
+          transition={Bounce}
           backdropClassName={'modal-backdrop'}
           containerClassName={'modal-open'}
           onHide={this.handleHide}

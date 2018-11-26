@@ -6,6 +6,7 @@ import { on, transition } from 'dom-lib';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { polyfill } from 'react-lifecycles-compat';
+import animationEnd from '../utils/animationEnd';
 
 import type {
   ReactFindDOMNode,
@@ -22,6 +23,7 @@ export const EXITING = 4;
 function noop() {}
 
 type Props = {
+  animation?: boolean,
   children?: React.Node,
   className?: string,
   in?: boolean,
@@ -140,8 +142,11 @@ class Transition extends React.Component<Props, State> {
     this.setNextCallback(handler);
 
     if (node) {
-      on(node, transition.end, this.nextCallback);
-      setTimeout(this.nextCallback, this.props.timeout);
+      const { timeout, animation } = this.props;
+      on(node, animation ? animationEnd : transition.end, this.nextCallback);
+      if (timeout !== null) {
+        setTimeout(this.nextCallback, timeout);
+      }
     } else {
       setTimeout(this.nextCallback, 0);
     }
@@ -174,24 +179,14 @@ class Transition extends React.Component<Props, State> {
 
     onEnter(node);
 
-    this.safeSetState(
-      {
-        status: ENTERING
-      },
-      () => {
-        onEntering(node);
-        this.onTransitionEnd(node, () => {
-          this.safeSetState(
-            {
-              status: ENTERED
-            },
-            () => {
-              onEntered(node);
-            }
-          );
+    this.safeSetState({ status: ENTERING }, () => {
+      onEntering(node);
+      this.onTransitionEnd(node, () => {
+        this.safeSetState({ status: ENTERED }, () => {
+          onEntered(node);
         });
-      }
-    );
+      });
+    });
   }
 
   performExit(props: Props) {
@@ -201,25 +196,15 @@ class Transition extends React.Component<Props, State> {
     const node = findDOMNode(this);
     onExit(node);
 
-    this.safeSetState(
-      {
-        status: EXITING
-      },
-      () => {
-        onExiting(node);
+    this.safeSetState({ status: EXITING }, () => {
+      onExiting(node);
 
-        this.onTransitionEnd(node, () => {
-          this.safeSetState(
-            {
-              status: EXITED
-            },
-            () => {
-              onExited(node);
-            }
-          );
+      this.onTransitionEnd(node, () => {
+        this.safeSetState({ status: EXITED }, () => {
+          onExited(node);
         });
-      }
-    );
+      });
+    });
   }
 
   cancelNextCallback() {
