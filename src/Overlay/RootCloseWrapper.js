@@ -9,7 +9,7 @@ function isLeftClickEvent(event) {
   return _.get(event, 'button') === 0;
 }
 
-function isModifiedEvent(event) {
+function isModifiedEvent(event: SyntheticKeyboardEvent<*>) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || _.get(event, 'shiftKey'));
 }
 
@@ -36,7 +36,7 @@ class RootCloseWrapper extends React.Component<Props> {
     this.onDocumentKeyupListener = on(doc, 'keyup', this.handleDocumentKeyUp);
   }
 
-  handleDocumentClick = (event: SyntheticEvent<*>) => {
+  handleDocumentClick = (event: SyntheticKeyboardEvent<*>) => {
     /* eslint-disable */
     if (contains(findDOMNode(this), event.target)) {
       return;
@@ -56,7 +56,7 @@ class RootCloseWrapper extends React.Component<Props> {
     onRootClose && onRootClose();
   };
 
-  handleDocumentKeyUp = (event: SyntheticEvent<*>) => {
+  handleDocumentKeyUp = (event: SyntheticKeyboardEvent<*>) => {
     if (event.keyCode === 27) {
       const { onRootClose } = this.props;
       onRootClose && onRootClose();

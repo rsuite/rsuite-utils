@@ -48,6 +48,7 @@ type Props = {
   autoFocus?: boolean,
   enforceFocus?: boolean,
 
+  role?: string,
   style?: Object,
   className?: string
 };
