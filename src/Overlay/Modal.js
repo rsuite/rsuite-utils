@@ -50,7 +50,8 @@ type Props = {
 
   role?: string,
   style?: Object,
-  className?: string
+  className?: string,
+  animationProps?: Object
 };
 
 type States = {
@@ -274,21 +275,20 @@ class Modal extends React.Component<Props, States> {
       style,
       className,
       container,
+      animationProps,
       ...rest
     } = this.props;
 
-    let { onExit, onExiting, onEnter, onEntering, onEntered } = rest;
-
-    let show = !!rest.show;
-    let dialog = React.Children.only(children);
-
+    const { onExit, onExiting, onEnter, onEntering, onEntered } = rest;
+    const show = !!rest.show;
     const mountModal = show || (Transition && !this.state.exited);
 
     if (!mountModal) {
       return null;
     }
 
-    let { role, tabIndex } = dialog.props;
+    let dialog = React.Children.only(children);
+    const { role, tabIndex } = dialog.props;
 
     if (role === undefined || tabIndex === undefined) {
       dialog = React.cloneElement(dialog, {
@@ -300,6 +300,7 @@ class Modal extends React.Component<Props, States> {
     if (Transition) {
       dialog = (
         <Transition
+          {...animationProps}
           transitionAppear
           unmountOnExit
           in={show}

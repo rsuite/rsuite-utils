@@ -19,16 +19,18 @@ class Slide extends React.Component<Props> {
 
   render() {
     const { timeout, placement, ...props } = this.props;
-    const enteringClassName = classNames('slide-in', placement, 'animated');
-    const exitingClassName = classNames('slide-out', placement, 'animated');
+    const enterClassName = classNames('slide-in', placement, 'animated');
+    const exitClassName = classNames('slide-out', placement, 'animated');
 
     return (
       <Transition
         {...props}
         animation
         timeout={timeout}
-        enteringClassName={enteringClassName}
-        exitingClassName={exitingClassName}
+        enteringClassName={enterClassName}
+        enteredClassName={enterClassName}
+        exitingClassName={exitClassName}
+        exitedClassName={exitClassName}
       />
     );
   }

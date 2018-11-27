@@ -22,7 +22,9 @@ class Bounce extends React.Component<Props> {
         animation
         timeout={timeout}
         enteringClassName="bounce-in animated"
+        enteredClassName="bounce-in animated"
         exitingClassName="bounce-out animated"
+        exitedClassName="bounce-out animated"
       />
     );
   }
