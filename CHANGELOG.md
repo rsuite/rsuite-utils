@@ -1,3 +1,19 @@
+# 1.5.0
+
+- Add Bounce and Slide for Animation
+
+# 1.4.3
+
+- Update filterNodesOfTree
+
+# 1.4.2
+
+- Update dom-lib and lodash
+
+# 1.4.0
+
+- Support `onHide` on `<OverlayTrigger>`
+
 # 1.3.2
 
 - Fix: Backdrop set to `static` invalid on <Model>
