@@ -1,3 +1,39 @@
 @import '../../node_modules/rsuite-theme/dist/less/rsuite.less';
+@import './keyframes';
+
 @base-color: #ff9800;
 
+// Bounce
+.bounce-out {
+  opacity: 1;
+  animation: bounceOut 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.bounce-in {
+  opacity: 0;
+  animation: bounceIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+// Slide
+.slide-in,
+.slide-out {
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.slide-in {
+  opacity: 1;
+  animation-timing-function: ease-in-out;
+  &.right {
+    animation-name: drawerMoveInRight;
+  }
+}
+
+.slide-out {
+  opacity: 0;
+  animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+
+  &.right {
+    animation-name: drawerMoveOutRight;
+  }
+}

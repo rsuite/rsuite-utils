@@ -35,13 +35,10 @@ class FadeDemo extends React.Component {
       <div className="row" style={{ height: 200 }}>
         <h2>Fade</h2>
         <button onClick={this.handleToggle}>toggle</button>
-        <Fade
-          in={this.state.show}
-        >
+        <Fade in={this.state.show}>
           <Panel />
         </Fade>
       </div>
-
     );
   }
 }

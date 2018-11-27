@@ -5,7 +5,8 @@ import ReactDOM from 'react-dom';
 import { ownerDocument, getContainer } from 'dom-lib';
 
 export type Props = {
-  container?: HTMLElement | (() => HTMLElement)
+  container?: HTMLElement | (() => HTMLElement),
+  children?: React.Node
 };
 
 class Portal extends React.Component<Props> {
@@ -62,7 +63,8 @@ class Portal extends React.Component<Props> {
   portalContainerNode = null;
 
   renderOverlay() {
-    let overlay = !this.props.children ? null : React.Children.only(this.props.children);
+    const { children } = this.props;
+    const overlay = !children ? null : React.Children.only(children);
 
     // Save reference for future access.
     if (overlay !== null) {

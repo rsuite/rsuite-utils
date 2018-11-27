@@ -1,5 +1,5 @@
 import React from 'react';
-import Collapse from '../src/Animation/Collapse';
+import Bounce from '../src/Animation/Bounce';
 
 const Panel = ({ ...props }) => (
   <div
@@ -15,7 +15,7 @@ const Panel = ({ ...props }) => (
   </div>
 );
 
-class CollapseDemo extends React.Component {
+class BounceDemo extends React.Component {
   constructor(props) {
     super(props);
     this.handleToggle = this.handleToggle.bind(this);
@@ -33,14 +33,34 @@ class CollapseDemo extends React.Component {
   render() {
     return (
       <div className="row" style={{ height: 200 }}>
-        <h2>Collapse</h2>
+        <h2>Bounce</h2>
         <button onClick={this.handleToggle}>toggle</button>
-        <Collapse in={this.state.show}>
+        <Bounce
+          in={this.state.show}
+          onEnter={() => {
+            console.log(1);
+          }}
+          onEntering={() => {
+            console.log(2);
+          }}
+          onEntered={() => {
+            console.log(3);
+          }}
+          onExit={() => {
+            console.log(4);
+          }}
+          onExiting={() => {
+            console.log(5);
+          }}
+          onExited={() => {
+            console.log(6);
+          }}
+        >
           <Panel />
-        </Collapse>
+        </Bounce>
       </div>
     );
   }
 }
 
-export default CollapseDemo;
+export default BounceDemo;

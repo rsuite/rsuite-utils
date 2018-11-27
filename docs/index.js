@@ -4,12 +4,13 @@ import ModalDemo from './ModalDemo';
 import TriggerDemo from './TriggerDemo';
 import CollapseDemo from './CollapseDemo';
 import FadeDemo from './FadeDemo';
+import BounceDemo from './BounceDemo';
+import SlideDemo from './SlideDemo';
 import ClipboardDemo from './ClipboardDemo';
 
 import './less/index.less';
 
 class App extends React.Component {
-
   render() {
     return (
       <div className="doc-page">
@@ -23,6 +24,10 @@ class App extends React.Component {
           <hr />
           <FadeDemo />
           <hr />
+          <BounceDemo />
+          <hr />
+          <SlideDemo />
+          <hr />
           <ClipboardDemo />
         </div>
       </div>
@@ -30,6 +35,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />,
-  document.getElementById('app')
-);
+ReactDOM.render(<App />, document.getElementById('app'));
