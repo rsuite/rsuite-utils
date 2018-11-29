@@ -6,6 +6,7 @@ import CollapseDemo from './CollapseDemo';
 import FadeDemo from './FadeDemo';
 import BounceDemo from './BounceDemo';
 import SlideDemo from './SlideDemo';
+import NestedAnimationDemo from './NestedAnimationDemo';
 import ClipboardDemo from './ClipboardDemo';
 
 import './less/index.less';
@@ -27,6 +28,8 @@ class App extends React.Component {
           <BounceDemo />
           <hr />
           <SlideDemo />
+          <hr />
+          <NestedAnimationDemo />
           <hr />
           <ClipboardDemo />
         </div>
