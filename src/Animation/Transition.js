@@ -138,12 +138,23 @@ class Transition extends React.Component<Props, State> {
     this.cancelNextCallback();
   }
 
+  animationEventListener = null;
+  instanceElement = null;
+
   onTransitionEnd(node: ReactFindDOMNode, handler: Function) {
     this.setNextCallback(handler);
 
+    if (this.animationEventListener) {
+      this.animationEventListener.off();
+    }
+
     if (node) {
       const { timeout, animation } = this.props;
-      on(node, animation ? animationEnd : transition.end, this.nextCallback);
+      this.animationEventListener = on(
+        node,
+        animation ? animationEnd : transition.end,
+        this.nextCallback
+      );
       if (timeout !== null) {
         setTimeout(this.nextCallback, timeout);
       }
@@ -155,13 +166,23 @@ class Transition extends React.Component<Props, State> {
   setNextCallback(callback: (event: DefaultEvent) => void) {
     let active = true;
 
-    this.nextCallback = (event: any) => {
-      if (active) {
-        active = false;
-        this.nextCallback = null;
-
-        callback(event);
+    this.nextCallback = (event?: DefaultEvent) => {
+      if (!active) {
+        return;
       }
+
+      if (event) {
+        if (this.instanceElement === event.target) {
+          callback(event);
+          active = false;
+          this.nextCallback = null;
+        }
+        return;
+      }
+
+      callback(event);
+      active = false;
+      this.nextCallback = null;
     };
 
     this.nextCallback.cancel = () => {
@@ -175,8 +196,9 @@ class Transition extends React.Component<Props, State> {
     const { onEnter, onEntering, onEntered } = props || this.props;
 
     this.cancelNextCallback();
-    const node: ReactFindDOMNode = findDOMNode(this);
+    const node = findDOMNode(this);
 
+    this.instanceElement = node;
     onEnter(node);
 
     this.safeSetState({ status: ENTERING }, () => {
@@ -194,6 +216,8 @@ class Transition extends React.Component<Props, State> {
 
     this.cancelNextCallback();
     const node = findDOMNode(this);
+
+    this.instanceElement = node;
     onExit(node);
 
     this.safeSetState({ status: EXITING }, () => {
