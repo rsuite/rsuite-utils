@@ -1,3 +1,7 @@
+# 1.5.1
+
+- Fix event bubbling can‘t work
+
 # 1.5.0
 
 - Add Bounce and Slide for Animation
