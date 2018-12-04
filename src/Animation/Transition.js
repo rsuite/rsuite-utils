@@ -116,7 +116,9 @@ class Transition extends React.Component<Props, State> {
         this.performEnter(this.props);
       } else {
         /*eslint-disable*/
-        this.setState({ status: UNMOUNTED });
+        if (this.instanceElement) {
+          this.setState({ status: UNMOUNTED });
+        }
       }
       return;
     }
@@ -136,6 +138,7 @@ class Transition extends React.Component<Props, State> {
 
   componentWillUnmount() {
     this.cancelNextCallback();
+    this.instanceElement = null;
   }
 
   animationEventListener = null;
@@ -239,7 +242,9 @@ class Transition extends React.Component<Props, State> {
   }
 
   safeSetState(nextState: State, callback: Function) {
-    this.setState(nextState, this.setNextCallback(callback));
+    if (this.instanceElement) {
+      this.setState(nextState, this.setNextCallback(callback));
+    }
   }
 
   nextCallback: any = null;

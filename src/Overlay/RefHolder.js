@@ -11,7 +11,7 @@ type Props = {
  */
 class RefHolder extends React.Component<Props> {
   render() {
-    return this.props.children;
+    return this.props.children || null;
   }
 }
 
