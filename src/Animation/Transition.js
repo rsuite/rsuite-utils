@@ -6,7 +6,7 @@ import { on, transition } from 'dom-lib';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { polyfill } from 'react-lifecycles-compat';
-import animationEnd from '../utils/animationEnd';
+import getAnimationEnd from '../utils/getAnimationEnd';
 
 import type {
   ReactFindDOMNode,
@@ -155,7 +155,7 @@ class Transition extends React.Component<Props, State> {
       const { timeout, animation } = this.props;
       this.animationEventListener = on(
         node,
-        animation ? animationEnd : transition.end,
+        animation ? getAnimationEnd() : transition.end,
         this.nextCallback
       );
       if (timeout !== null) {

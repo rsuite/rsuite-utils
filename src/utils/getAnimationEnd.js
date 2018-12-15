@@ -1,4 +1,4 @@
-function getAnimationEnd() {
+export default function getAnimationEnd() {
   const style = document.createElement('div').style;
   if ('webkitAnimation' in style) {
     return 'webkitAnimationEnd';
@@ -6,5 +6,3 @@ function getAnimationEnd() {
 
   return 'animationend';
 }
-
-export default getAnimationEnd();
