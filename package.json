@@ -1,6 +1,6 @@
 {
   "name": "rsuite-utils",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "description": "RSUITE Utils",
   "main": "lib/index.js",
   "directories": {
@@ -34,7 +34,7 @@
   ],
   "dependencies": {
     "classnames": "^2.2.5",
-    "dom-lib": "^1.0.0",
+    "dom-lib": "^1.1.0",
     "lodash": "^4.17.5",
     "react-lifecycles-compat": "^3.0.4"
   },

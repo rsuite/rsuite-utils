@@ -1,3 +1,7 @@
+# 1.6.0
+
+- Support server side rendering
+
 # 1.5.1
 
 - Fix event bubbling can‘t work
