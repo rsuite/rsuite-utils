@@ -13,28 +13,25 @@ import type {
 } from '../utils/TypeDefinition';
 
 type Props = {
-  container?: HTMLElement | (() => HTMLElement),
-  onRendered?: Function,
-  children: React.Element<any>,
-  className?: string,
-  target?: Function,
+  animation?: boolean,
   container?: HTMLElement | (() => HTMLElement),
   containerPadding?: number,
-  placement?: Placement,
+  children: React.Element<any>,
+  className?: string,
+  rootClose?: boolean,
+  show?: boolean,
   shouldUpdatePosition?: boolean,
-
+  target?: Function,
+  transition?: React.ElementType,
+  onRendered?: Function,
   onEnter?: AnimationEventFunction,
   onEntering?: AnimationEventFunction,
   onEntered?: AnimationEventFunction,
   onExit?: AnimationEventFunction,
   onExiting?: AnimationEventFunction,
   onExited?: AnimationEventFunction,
-
-  show?: boolean,
-  rootClose?: boolean,
   onHide?: DefaultEventFunction,
-  transition?: React.ElementType,
-  animation?: boolean,
+  placement?: Placement,
   positionRef?: React.ElementRef<*>
 };
 
