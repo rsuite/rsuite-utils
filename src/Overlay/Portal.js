@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import { getContainer, ownerDocument } from 'dom-lib';
 import { polyfill } from 'react-lifecycles-compat';
 
-import LegacyPortal from './LegacyPortal';
 import shallowEqual from '../utils/shallowEqual';
 
 export type Props = {
@@ -67,4 +66,4 @@ class Portal extends React.Component<Props> {
 
 polyfill(Portal);
 
-export default (ReactDOM.createPortal ? Portal : LegacyPortal);
+export default Portal;
