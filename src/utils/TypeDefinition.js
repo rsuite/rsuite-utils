@@ -1,23 +1,23 @@
 export type Dimension = 'height' | 'width';
 export type PlacementAround = 'top' | 'right' | 'bottom' | 'left';
 export type PlacementEighPoints =
-  | 'bottomLeft'
-  | 'bottomRight'
-  | 'topLeft'
-  | 'topRight'
-  | 'leftTop'
-  | 'rightTop'
-  | 'leftBottom'
-  | 'rightBottom';
+  | 'bottomStart'
+  | 'bottomEnd'
+  | 'topStart'
+  | 'topEnd'
+  | 'leftStart'
+  | 'leftEnd'
+  | 'rightStart'
+  | 'rightEnd';
 
 export type PlacementAuto =
   | 'auto'
   | 'autoVertical'
-  | 'autoVerticalLeft'
-  | 'autoVerticalRight'
+  | 'autoVerticalStart'
+  | 'autoVerticalEnd'
   | 'autoHorizontal'
-  | 'autoHorizontalTop'
-  | 'autoHorizontalBottom';
+  | 'autoHorizontalStart'
+  | 'autoHorizontalEnd';
 
 export type Placement = PlacementAround | PlacementEighPoints | PlacementAuto;
 export type TriggerName = 'click' | 'hover' | 'focus' | 'active';

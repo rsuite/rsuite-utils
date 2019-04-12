@@ -1,9 +1,15 @@
 import maxBy from 'lodash/maxBy';
 import minBy from 'lodash/minBy';
-import capitalize from 'lodash/capitalize';
 import kebabCase from 'lodash/kebabCase';
 
 import { ownerDocument, getOffset, getPosition, scrollTop, scrollLeft } from 'dom-lib';
+
+const AutoPlacement = {
+  left: 'Start',
+  right: 'End',
+  top: 'Start',
+  bottom: 'End'
+};
 
 function getContainerDimensions(containerNode) {
   let width;
@@ -101,7 +107,7 @@ const utils = {
       align = minBy(horizontal, o => o.value);
     }
 
-    return `${direction.key}${capitalize(align.key)}`;
+    return `${direction.key}${AutoPlacement[align.key]}`;
   },
   calcOverlayPosition(placement, overlayNode, target, container, padding) {
     const childOffset = utils.getPosition(target, container);
@@ -146,28 +152,28 @@ const utils = {
       positionLeft += leftDelta;
       arrowOffsetLeft = `${50 * (1 - (2 * leftDelta) / overlayWidth)}%`;
       arrowOffsetTop = undefined;
-    } else if (placement === 'topLeft') {
+    } else if (placement === 'topStart') {
       positionLeft = childOffset.left;
       positionTop = childOffset.top - overlayHeight;
-    } else if (placement === 'topRight') {
+    } else if (placement === 'topEnd') {
       positionLeft = childOffset.left + (childOffset.width - overlayWidth);
       positionTop = childOffset.top - overlayHeight;
-    } else if (placement === 'leftTop') {
+    } else if (placement === 'leftStart') {
       positionLeft = childOffset.left - overlayWidth;
       positionTop = childOffset.top;
-    } else if (placement === 'leftBottom') {
+    } else if (placement === 'leftEnd') {
       positionLeft = childOffset.left - overlayWidth;
       positionTop = childOffset.top + (childOffset.height - overlayHeight);
-    } else if (placement === 'bottomLeft') {
+    } else if (placement === 'bottomStart') {
       positionLeft = childOffset.left;
       positionTop = childOffset.top + childOffset.height;
-    } else if (placement === 'bottomRight') {
+    } else if (placement === 'bottomEnd') {
       positionLeft = childOffset.left + (childOffset.width - overlayWidth);
       positionTop = childOffset.top + childOffset.height;
-    } else if (placement === 'rightTop') {
+    } else if (placement === 'rightStart') {
       positionLeft = childOffset.left + childOffset.width;
       positionTop = childOffset.top;
-    } else if (placement === 'rightBottom') {
+    } else if (placement === 'rightEnd') {
       positionLeft = childOffset.left + childOffset.width;
       positionTop = childOffset.top + (childOffset.height - overlayHeight);
     } else {

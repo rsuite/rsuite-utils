@@ -84,40 +84,40 @@ class TriggerDemo extends React.Component {
             <tr>
               <td />
               <td>
-                <Dropdown placement="topLeft" />
+                <Dropdown placement="topStart" />
               </td>
               <td>
-                <Dropdown placement="topRight" />
+                <Dropdown placement="topEnd" />
               </td>
               <td />
             </tr>
             <tr>
               <td>
-                <Dropdown placement="leftTop" />
+                <Dropdown placement="leftStart" />
               </td>
               <td />
               <td />
               <td>
-                <Dropdown placement="rightTop" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Dropdown placement="leftBottom" />
-              </td>
-              <td />
-              <td />
-              <td>
-                <Dropdown placement="rightBottom" />
+                <Dropdown placement="rightStart" />
               </td>
             </tr>
             <tr>
+              <td>
+                <Dropdown placement="leftEnd" />
+              </td>
+              <td />
               <td />
               <td>
-                <Dropdown placement="bottomLeft" />
+                <Dropdown placement="rightEnd" />
+              </td>
+            </tr>
+            <tr>
+              <td />
+              <td>
+                <Dropdown placement="bottomStart" />
               </td>
               <td>
-                <Dropdown placement="bottomRight" />
+                <Dropdown placement="bottomEnd" />
               </td>
               <td />
             </tr>
@@ -216,7 +216,7 @@ class TriggerDemo extends React.Component {
                 return this.container;
               }}
               trigger="click"
-              placement="autoVerticalLeft"
+              placement="autoVerticalStart"
               speaker={
                 <Tooltip
                   style={{
@@ -226,7 +226,7 @@ class TriggerDemo extends React.Component {
                 />
               }
             >
-              <button>autoVerticalLeft</button>
+              <button>autoVerticalStart</button>
             </OverlayTrigger>
 
             <br />
@@ -235,7 +235,7 @@ class TriggerDemo extends React.Component {
                 return this.container;
               }}
               trigger="click"
-              placement="autoVerticalRight"
+              placement="autoVerticalEnd"
               speaker={
                 <Tooltip
                   style={{
@@ -245,7 +245,7 @@ class TriggerDemo extends React.Component {
                 />
               }
             >
-              <button>autoVerticalRight</button>
+              <button>autoVerticalEnd</button>
             </OverlayTrigger>
 
             <br />
@@ -273,7 +273,7 @@ class TriggerDemo extends React.Component {
                 return this.container;
               }}
               trigger="click"
-              placement="autoHorizontalTop"
+              placement="autoHorizontalStart"
               speaker={
                 <Tooltip
                   style={{
@@ -283,7 +283,7 @@ class TriggerDemo extends React.Component {
                 />
               }
             >
-              <button>autoHorizontalTop</button>
+              <button>autoHorizontalStart</button>
             </OverlayTrigger>
 
             <br />
@@ -292,7 +292,7 @@ class TriggerDemo extends React.Component {
                 return this.container;
               }}
               trigger="click"
-              placement="autoHorizontalBottom"
+              placement="autoHorizontalEnd"
               speaker={
                 <Tooltip
                   style={{
@@ -302,7 +302,7 @@ class TriggerDemo extends React.Component {
                 />
               }
             >
-              <button>autoHorizontalBottom</button>
+              <button>autoHorizontalEnd</button>
             </OverlayTrigger>
           </div>
         </div>
@@ -332,13 +332,13 @@ class TriggerDemo extends React.Component {
         <hr />
         <h3>defaultOpen</h3>
 
-        <OverlayTrigger trigger="click" speaker={<Tooltip />} placement="rightBottom" defaultOpen>
+        <OverlayTrigger trigger="click" speaker={<Tooltip />} placement="rightStart" defaultOpen>
           <button>defaultOpen</button>
         </OverlayTrigger>
         <hr />
         <h3>open</h3>
 
-        <OverlayTrigger trigger="click" placement="rightBottom" speaker={<Tooltip />} open>
+        <OverlayTrigger trigger="click" placement="rightStart" speaker={<Tooltip />} open>
           <button>open</button>
         </OverlayTrigger>
       </div>
