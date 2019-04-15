@@ -49,7 +49,8 @@ type Props = {
   onClick?: DefaultEventFunction,
   onBlur?: DefaultEventFunction,
   onFocus?: DefaultEventFunction,
-  disabled?: boolean
+  disabled?: boolean,
+  preventOverflow?: boolean
 };
 
 type OverlayTriggerProps = {
@@ -70,7 +71,7 @@ class OverlayTrigger extends React.Component<Props, States> {
   static defaultProps = {
     trigger: ['hover', 'focus'],
     delayHide: 200,
-    placement: 'bottomLeft',
+    placement: 'bottomStart',
     rootClose: true
   };
 

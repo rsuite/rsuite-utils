@@ -2,7 +2,15 @@ import maxBy from 'lodash/maxBy';
 import minBy from 'lodash/minBy';
 import kebabCase from 'lodash/kebabCase';
 
-import { ownerDocument, getOffset, getPosition, scrollTop, scrollLeft } from 'dom-lib';
+import {
+  ownerDocument,
+  getOffset,
+  getPosition,
+  scrollTop,
+  scrollLeft,
+  getWidth,
+  getHeight
+} from 'dom-lib';
 
 const AutoPlacement = {
   left: 'Start',
@@ -14,7 +22,6 @@ const AutoPlacement = {
 function getContainerDimensions(containerNode) {
   let width;
   let height;
-  let scroll;
   let scrollX;
   let scrollY;
   if (containerNode.tagName === 'BODY') {
@@ -22,23 +29,20 @@ function getContainerDimensions(containerNode) {
     height = window.innerHeight;
     scrollY = scrollTop(ownerDocument(containerNode).documentElement) || scrollTop(containerNode);
     scrollX = scrollLeft(ownerDocument(containerNode).documentElement) || scrollLeft(containerNode);
-    scroll = scrollY;
   } else {
     ({ width, height } = getOffset(containerNode));
     scrollY = scrollTop(containerNode);
     scrollX = scrollLeft(containerNode);
-    scroll = scrollY;
   }
-  return { width, height, scroll, scrollX, scrollY };
+  return { width, height, scrollX, scrollY };
 }
 
 function getTopDelta(top, overlayHeight, container, padding) {
   const containerDimensions = getContainerDimensions(container);
-  const containerScroll = containerDimensions.scroll;
-  const containerHeight = containerDimensions.height;
+  const { height: containerHeight, scrollY } = containerDimensions;
 
-  const topEdgeOffset = top - padding - containerScroll;
-  const bottomEdgeOffset = top + padding - containerScroll + overlayHeight;
+  const topEdgeOffset = top - padding - scrollY;
+  const bottomEdgeOffset = top + padding + overlayHeight - scrollY;
 
   if (topEdgeOffset < 0) {
     return -topEdgeOffset;
@@ -51,10 +55,10 @@ function getTopDelta(top, overlayHeight, container, padding) {
 
 function getLeftDelta(left, overlayWidth, container, padding) {
   const containerDimensions = getContainerDimensions(container);
-  const containerWidth = containerDimensions.width;
+  const { scrollX, width: containerWidth } = containerDimensions;
 
-  const leftEdgeOffset = left - padding;
-  const rightEdgeOffset = left + padding + overlayWidth;
+  const leftEdgeOffset = left - padding - scrollX;
+  const rightEdgeOffset = left + padding + overlayWidth - scrollX;
 
   if (leftEdgeOffset < 0) {
     return -leftEdgeOffset;
@@ -65,13 +69,57 @@ function getLeftDelta(left, overlayWidth, container, padding) {
   return 0;
 }
 
+function getPositionTopByTop(container, overlayHeight, childOffset) {
+  // 纵向滚动条的位置
+  const scrollY = scrollTop(container);
+  // top 的最小值不能少于纵向滚动条 y 的值
+  return Math.max(scrollY, childOffset.top - overlayHeight);
+}
+
+function getPositionLeftByLeft(container, overlayWidth, childOffset) {
+  // 横向滚动条的位置
+  const scrollX = scrollLeft(container);
+  // left 的最小值不能少于横向滚动条 x 的值
+  return Math.max(scrollX, childOffset.left - overlayWidth);
+}
+
+function getPositionTopByBottom(container, overlayHeight, childOffset) {
+  // 纵向滚动条的位置
+  const scrollY = scrollTop(container);
+
+  const containerHeight = getHeight(container);
+  const top = childOffset.top + childOffset.height;
+
+  // 判断 overlay 底部是否溢出，设置 top
+  if (overlayHeight + top > containerHeight + scrollY) {
+    return containerHeight - overlayHeight + scrollY;
+  }
+
+  return Math.max(scrollY, top);
+}
+
+function getPositionLeftByRight(container, overlayWidth, childOffset) {
+  // 横向滚动条的位置
+  const scrollX = scrollLeft(container);
+
+  const containerWidth = getWidth(container);
+  const left = childOffset.left + childOffset.width;
+
+  // 判断 overlay 右侧是否溢出，设置 left
+  if (overlayWidth + left > containerWidth + scrollX) {
+    return containerWidth - overlayWidth + scrollX;
+  }
+
+  return left;
+}
+
 const utils = {
-  getContainerDimensions,
   getPosition(target, container) {
     const offset =
       container.tagName === 'BODY' ? getOffset(target) : getPosition(target, container);
     return offset;
   },
+
   calcAutoPlacement(placement, targetOffset, container, overlay) {
     const { width, height, scrollX, scrollY } = getContainerDimensions(container);
     const left = targetOffset.left - scrollX - overlay.width;
@@ -109,9 +157,11 @@ const utils = {
 
     return `${direction.key}${AutoPlacement[align.key]}`;
   },
+  // 计算浮层的位置
   calcOverlayPosition(placement, overlayNode, target, container, padding) {
     const childOffset = utils.getPosition(target, container);
     const { height: overlayHeight, width: overlayWidth } = getOffset(overlayNode);
+    const { top, left } = childOffset;
 
     if (placement && placement.indexOf('auto') >= 0) {
       placement = this.calcAutoPlacement(placement, childOffset, container, {
@@ -129,9 +179,9 @@ const utils = {
       positionTop = childOffset.top + (childOffset.height - overlayHeight) / 2;
 
       if (placement === 'left') {
-        positionLeft = childOffset.left - overlayWidth;
+        positionLeft = getPositionLeftByLeft(container, overlayWidth, childOffset);
       } else {
-        positionLeft = childOffset.left + childOffset.width;
+        positionLeft = getPositionLeftByRight(container, overlayWidth, childOffset);
       }
 
       const topDelta = getTopDelta(positionTop, overlayHeight, container, padding);
@@ -140,44 +190,54 @@ const utils = {
       arrowOffsetTop = `${50 * (1 - (2 * topDelta) / overlayHeight)}%`;
       arrowOffsetLeft = undefined;
     } else if (placement === 'top' || placement === 'bottom') {
-      positionLeft = childOffset.left + (childOffset.width - overlayWidth) / 2;
+      positionLeft = left + (childOffset.width - overlayWidth) / 2;
 
       if (placement === 'top') {
-        positionTop = childOffset.top - overlayHeight;
+        // top 的最小值不能少于纵向滚动条 y 的值
+        positionTop = getPositionTopByTop(container, overlayHeight, childOffset);
       } else {
-        positionTop = childOffset.top + childOffset.height;
+        positionTop = getPositionTopByBottom(container, overlayHeight, childOffset);
       }
 
       const leftDelta = getLeftDelta(positionLeft, overlayWidth, container, padding);
       positionLeft += leftDelta;
+
       arrowOffsetLeft = `${50 * (1 - (2 * leftDelta) / overlayWidth)}%`;
       arrowOffsetTop = undefined;
-    } else if (placement === 'topStart') {
-      positionLeft = childOffset.left;
-      positionTop = childOffset.top - overlayHeight;
-    } else if (placement === 'topEnd') {
-      positionLeft = childOffset.left + (childOffset.width - overlayWidth);
-      positionTop = childOffset.top - overlayHeight;
-    } else if (placement === 'leftStart') {
-      positionLeft = childOffset.left - overlayWidth;
-      positionTop = childOffset.top;
-    } else if (placement === 'leftEnd') {
-      positionLeft = childOffset.left - overlayWidth;
-      positionTop = childOffset.top + (childOffset.height - overlayHeight);
-    } else if (placement === 'bottomStart') {
-      positionLeft = childOffset.left;
-      positionTop = childOffset.top + childOffset.height;
-    } else if (placement === 'bottomEnd') {
-      positionLeft = childOffset.left + (childOffset.width - overlayWidth);
-      positionTop = childOffset.top + childOffset.height;
-    } else if (placement === 'rightStart') {
-      positionLeft = childOffset.left + childOffset.width;
-      positionTop = childOffset.top;
-    } else if (placement === 'rightEnd') {
-      positionLeft = childOffset.left + childOffset.width;
-      positionTop = childOffset.top + (childOffset.height - overlayHeight);
     } else {
-      throw new Error(`calcOverlayPosition(): No such placement of "${placement}" found.`);
+      if (placement === 'topStart' || placement === 'bottomStart') {
+        positionLeft = left + getLeftDelta(left, overlayWidth, container, padding);
+      }
+
+      if (placement === 'topStart' || placement === 'topEnd') {
+        positionTop = getPositionTopByTop(container, overlayHeight, childOffset);
+      }
+
+      if (placement === 'topEnd' || placement === 'bottomEnd') {
+        let nextLeft = left + (childOffset.width - overlayWidth);
+        positionLeft = nextLeft + getLeftDelta(nextLeft, overlayWidth, container, padding);
+      }
+
+      if (placement === 'leftStart' || placement === 'leftEnd') {
+        positionLeft = getPositionLeftByLeft(container, overlayWidth, childOffset);
+      }
+
+      if (placement === 'leftStart' || placement === 'rightStart') {
+        positionTop = top + getTopDelta(top, overlayHeight, container, padding);
+      }
+
+      if (placement === 'leftEnd' || placement === 'rightEnd') {
+        const nextTop = top + (childOffset.height - overlayHeight);
+        positionTop = nextTop + getTopDelta(nextTop, overlayHeight, container, padding);
+      }
+
+      if (placement === 'bottomStart' || placement === 'bottomEnd') {
+        positionTop = getPositionTopByBottom(container, overlayHeight, childOffset);
+      }
+
+      if (placement === 'rightStart' || placement === 'rightEnd') {
+        positionLeft = getPositionLeftByRight(container, overlayWidth, childOffset);
+      }
     }
 
     return {

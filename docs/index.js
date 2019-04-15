@@ -8,6 +8,7 @@ import BounceDemo from './BounceDemo';
 import SlideDemo from './SlideDemo';
 import NestedAnimationDemo from './NestedAnimationDemo';
 import ClipboardDemo from './ClipboardDemo';
+import ScrollDemo from './ScrollDemo';
 
 import './less/index.less';
 
@@ -17,6 +18,8 @@ class App extends React.Component {
       <div className="doc-page">
         <div className="container">
           <h1>RSuite Utils</h1>
+          <ScrollDemo />
+          {/*
           <ModalDemo />
           <hr />
           <TriggerDemo />
@@ -32,6 +35,7 @@ class App extends React.Component {
           <NestedAnimationDemo />
           <hr />
           <ClipboardDemo />
+          */}
         </div>
       </div>
     );
