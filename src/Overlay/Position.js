@@ -49,7 +49,11 @@ class Position extends React.Component<Props, State> {
   componentDidMount() {
     this.updatePosition(false);
     if (this.container && this.props.preventOverflow) {
-      this.containerScrollListener = on(this.container, 'scroll', this.updatePosition);
+      this.containerScrollListener = on(
+        this.container.tagName === 'BODY' ? window : this.container,
+        'scroll',
+        this.updatePosition
+      );
     }
   }
 
@@ -144,7 +148,7 @@ class Position extends React.Component<Props, State> {
     const child = React.Children.only(children);
 
     return React.cloneElement(child, {
-      ..._.omit(rest, ['target', 'container', 'containerPadding']),
+      ..._.omit(rest, ['target', 'container', 'containerPadding', 'preventOverflow']),
       ...arrowPosition,
       positionLeft,
       positionTop,

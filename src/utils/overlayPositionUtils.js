@@ -1,16 +1,7 @@
 import maxBy from 'lodash/maxBy';
 import minBy from 'lodash/minBy';
 import kebabCase from 'lodash/kebabCase';
-
-import {
-  ownerDocument,
-  getOffset,
-  getPosition,
-  scrollTop,
-  scrollLeft,
-  getWidth,
-  getHeight
-} from 'dom-lib';
+import { ownerDocument, getOffset, getPosition, scrollTop, scrollLeft } from 'dom-lib';
 
 const AutoPlacement = {
   left: 'Start',
@@ -70,9 +61,7 @@ function getLeftDelta(left, overlayWidth, container, padding) {
 }
 
 function getPositionTop(container, overlayHeight, top) {
-  // 纵向滚动条的位置
-  const scrollY = scrollTop(container);
-  const containerHeight = getHeight(container);
+  const { scrollY, height: containerHeight } = getContainerDimensions(container);
 
   // 判断 overlay 底部是否溢出，设置 top
   if (overlayHeight + top > containerHeight + scrollY) {
@@ -84,9 +73,7 @@ function getPositionTop(container, overlayHeight, top) {
 }
 
 function getPositionLeft(container, overlayWidth, left) {
-  // 横向滚动条的位置
-  const scrollX = scrollLeft(container);
-  const containerWidth = getWidth(container);
+  const { scrollX, width: containerWidth } = getContainerDimensions(container);
 
   if (overlayWidth + left > containerWidth + scrollX) {
     return containerWidth - overlayWidth + scrollX;
