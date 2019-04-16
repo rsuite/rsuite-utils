@@ -69,48 +69,31 @@ function getLeftDelta(left, overlayWidth, container, padding) {
   return 0;
 }
 
-function getPositionTopByTop(container, overlayHeight, childOffset) {
+function getPositionTop(container, overlayHeight, top) {
   // 纵向滚动条的位置
   const scrollY = scrollTop(container);
-  // top 的最小值不能少于纵向滚动条 y 的值
-  return Math.max(scrollY, childOffset.top - overlayHeight);
-}
-
-function getPositionLeftByLeft(container, overlayWidth, childOffset) {
-  // 横向滚动条的位置
-  const scrollX = scrollLeft(container);
-  // left 的最小值不能少于横向滚动条 x 的值
-  return Math.max(scrollX, childOffset.left - overlayWidth);
-}
-
-function getPositionTopByBottom(container, overlayHeight, childOffset) {
-  // 纵向滚动条的位置
-  const scrollY = scrollTop(container);
-
   const containerHeight = getHeight(container);
-  const top = childOffset.top + childOffset.height;
 
   // 判断 overlay 底部是否溢出，设置 top
   if (overlayHeight + top > containerHeight + scrollY) {
     return containerHeight - overlayHeight + scrollY;
   }
 
+  // top 的最小值不能少于纵向滚动条 y 的值
   return Math.max(scrollY, top);
 }
 
-function getPositionLeftByRight(container, overlayWidth, childOffset) {
+function getPositionLeft(container, overlayWidth, left) {
   // 横向滚动条的位置
   const scrollX = scrollLeft(container);
-
   const containerWidth = getWidth(container);
-  const left = childOffset.left + childOffset.width;
 
-  // 判断 overlay 右侧是否溢出，设置 left
   if (overlayWidth + left > containerWidth + scrollX) {
     return containerWidth - overlayWidth + scrollX;
   }
 
-  return left;
+  // left 的最小值不能少于横向滚动条 x 的值
+  return Math.max(scrollX, left);
 }
 
 const utils = {
@@ -178,12 +161,6 @@ const utils = {
     if (placement === 'left' || placement === 'right') {
       positionTop = childOffset.top + (childOffset.height - overlayHeight) / 2;
 
-      if (placement === 'left') {
-        positionLeft = getPositionLeftByLeft(container, overlayWidth, childOffset);
-      } else {
-        positionLeft = getPositionLeftByRight(container, overlayWidth, childOffset);
-      }
-
       const topDelta = getTopDelta(positionTop, overlayHeight, container, padding);
 
       positionTop += topDelta;
@@ -192,52 +169,45 @@ const utils = {
     } else if (placement === 'top' || placement === 'bottom') {
       positionLeft = left + (childOffset.width - overlayWidth) / 2;
 
-      if (placement === 'top') {
-        // top 的最小值不能少于纵向滚动条 y 的值
-        positionTop = getPositionTopByTop(container, overlayHeight, childOffset);
-      } else {
-        positionTop = getPositionTopByBottom(container, overlayHeight, childOffset);
-      }
-
       const leftDelta = getLeftDelta(positionLeft, overlayWidth, container, padding);
       positionLeft += leftDelta;
 
       arrowOffsetLeft = `${50 * (1 - (2 * leftDelta) / overlayWidth)}%`;
       arrowOffsetTop = undefined;
-    } else {
-      if (placement === 'topStart' || placement === 'bottomStart') {
-        positionLeft = left + getLeftDelta(left, overlayWidth, container, padding);
-      }
+    }
 
-      if (placement === 'topStart' || placement === 'topEnd') {
-        positionTop = getPositionTopByTop(container, overlayHeight, childOffset);
-      }
+    if (placement === 'top' || placement === 'topStart' || placement === 'topEnd') {
+      positionTop = getPositionTop(container, overlayHeight, childOffset.top - overlayHeight);
+    }
 
-      if (placement === 'topEnd' || placement === 'bottomEnd') {
-        let nextLeft = left + (childOffset.width - overlayWidth);
-        positionLeft = nextLeft + getLeftDelta(nextLeft, overlayWidth, container, padding);
-      }
+    if (placement === 'bottom' || placement === 'bottomStart' || placement === 'bottomEnd') {
+      positionTop = getPositionTop(container, overlayHeight, childOffset.top + childOffset.height);
+    }
 
-      if (placement === 'leftStart' || placement === 'leftEnd') {
-        positionLeft = getPositionLeftByLeft(container, overlayWidth, childOffset);
-      }
+    if (placement === 'left' || placement === 'leftStart' || placement === 'leftEnd') {
+      positionLeft = getPositionLeft(container, overlayWidth, childOffset.left - overlayWidth);
+    }
 
-      if (placement === 'leftStart' || placement === 'rightStart') {
-        positionTop = top + getTopDelta(top, overlayHeight, container, padding);
-      }
+    if (placement === 'right' || placement === 'rightStart' || placement === 'rightEnd') {
+      positionLeft = getPositionLeft(container, overlayWidth, childOffset.left + childOffset.width);
+    }
 
-      if (placement === 'leftEnd' || placement === 'rightEnd') {
-        const nextTop = top + (childOffset.height - overlayHeight);
-        positionTop = nextTop + getTopDelta(nextTop, overlayHeight, container, padding);
-      }
+    if (placement === 'topStart' || placement === 'bottomStart') {
+      positionLeft = left + getLeftDelta(left, overlayWidth, container, padding);
+    }
 
-      if (placement === 'bottomStart' || placement === 'bottomEnd') {
-        positionTop = getPositionTopByBottom(container, overlayHeight, childOffset);
-      }
+    if (placement === 'leftStart' || placement === 'rightStart') {
+      positionTop = top + getTopDelta(top, overlayHeight, container, padding);
+    }
 
-      if (placement === 'rightStart' || placement === 'rightEnd') {
-        positionLeft = getPositionLeftByRight(container, overlayWidth, childOffset);
-      }
+    if (placement === 'topEnd' || placement === 'bottomEnd') {
+      let nextLeft = left + (childOffset.width - overlayWidth);
+      positionLeft = nextLeft + getLeftDelta(nextLeft, overlayWidth, container, padding);
+    }
+
+    if (placement === 'leftEnd' || placement === 'rightEnd') {
+      const nextTop = top + (childOffset.height - overlayHeight);
+      positionTop = nextTop + getTopDelta(nextTop, overlayHeight, container, padding);
     }
 
     return {
