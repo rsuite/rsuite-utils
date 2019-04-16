@@ -39,7 +39,7 @@ class TriggerDemo extends React.Component {
         <div>
           <OverlayTrigger
             trigger="click"
-            placement="left"
+            placement="top"
             speaker={<Tooltip />}
             open
             positionRef={ref => {
@@ -50,7 +50,7 @@ class TriggerDemo extends React.Component {
           </OverlayTrigger>
           <button
             onClick={() => {
-              console.log(positionNode, positionNode.updatePosition(true));
+              console.log(positionNode, positionNode.updatePosition());
             }}
           >
             Update
@@ -338,7 +338,7 @@ class TriggerDemo extends React.Component {
         <hr />
         <h3>open</h3>
 
-        <OverlayTrigger trigger="click" placement="rightStart" speaker={<Tooltip />} open>
+        <OverlayTrigger trigger="click" placement="right" speaker={<Tooltip />} open>
           <button>open</button>
         </OverlayTrigger>
       </div>

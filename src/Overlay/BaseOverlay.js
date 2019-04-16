@@ -22,6 +22,7 @@ type Props = {
   containerPadding?: number,
   placement?: Placement,
   shouldUpdatePosition?: boolean,
+  preventOverflow?: boolean,
 
   show?: boolean,
   rootClose?: boolean,
@@ -74,6 +75,7 @@ class Overlay extends React.Component<Props, State> {
       show,
       onHide,
       positionRef,
+      preventOverflow,
       ...props
     } = this.props;
 
@@ -85,11 +87,17 @@ class Overlay extends React.Component<Props, State> {
 
     let child = children;
 
+    const positionProps = {
+      container,
+      containerPadding,
+      target,
+      placement,
+      shouldUpdatePosition,
+      preventOverflow
+    };
+
     child = (
-      <Position
-        {...{ container, containerPadding, target, placement, shouldUpdatePosition }}
-        ref={positionRef}
-      >
+      <Position {...positionProps} ref={positionRef}>
         {child}
       </Position>
     );
