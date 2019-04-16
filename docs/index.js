@@ -18,11 +18,12 @@ class App extends React.Component {
       <div className="doc-page">
         <div className="container">
           <h1>RSuite Utils</h1>
-          <ScrollDemo />
-          {/*
+
           <ModalDemo />
           <hr />
           <TriggerDemo />
+          <hr />
+          <ScrollDemo />
           <hr />
           <CollapseDemo />
           <hr />
@@ -35,7 +36,6 @@ class App extends React.Component {
           <NestedAnimationDemo />
           <hr />
           <ClipboardDemo />
-          */}
         </div>
       </div>
     );
