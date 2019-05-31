@@ -23,7 +23,7 @@ function select(input) {
   return selectedText;
 }
 
-function copy(text, prevElem = document.body.firstChild) {
+function copy(text) {
   const isRTL = document.documentElement.getAttribute('dir') === 'rtl';
   const fakeElem = document.createElement('textarea');
   const yPosition = window.pageYOffset || document.documentElement.scrollTop;
@@ -45,10 +45,10 @@ function copy(text, prevElem = document.body.firstChild) {
 
   fakeElem.setAttribute('readonly', '');
   fakeElem.value = text;
-  prevElem && prevElem.after && prevElem.after(fakeElem);
+  document.body.appendChild(fakeElem);
   select(fakeElem);
   const result = execCommandCopy();
-  fakeElem.remove();
+  document.body.removeChild(fakeElem);
   return result;
 }
 
