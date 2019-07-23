@@ -28,7 +28,7 @@ class Slide extends React.Component<Props> {
         animation
         timeout={timeout}
         enteringClassName={enterClassName}
-        enteredClassName={enterClassName}
+        enteredClassName={placement}
         exitingClassName={exitClassName}
         exitedClassName={exitClassName}
       />
