@@ -1,6 +1,6 @@
 {
   "name": "rsuite-utils",
-  "version": "2.0.0-alpha.3",
+  "version": "2.0.0",
   "description": "RSUITE Utils",
   "main": "lib/index.js",
   "directories": {
@@ -14,6 +14,7 @@
     "tdd": "karma start",
     "lint": "eslint src  *.js",
     "test": "npm run lint &&  karma start --single-run",
+    "prepublish": "npm run test && npm run build",
     "flow": "flow"
   },
   "keywords": [
