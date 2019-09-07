@@ -109,14 +109,14 @@ import OverlayTrigger from 'rsuite-utils/lib/Overlay/OverlayTrigger';
 ```js
 type PlacementAround = 'top' | 'right' | 'bottom' | 'left';
 type PlacementEighPoints =
-  | 'bottomLeft'
-  | 'bottomRight'
-  | 'topLeft'
-  | 'topRight'
-  | 'leftTop'
-  | 'rightTop'
-  | 'leftBottom'
-  | 'rightBottom';
+  | 'bottomStart'
+  | 'bottomEnd'
+  | 'topStart'
+  | 'topEnd'
+  | 'leftStart'
+  | 'leftEnd'
+  | 'rightStart'
+  | 'rightEnd';
 type Placement = PlacementAround | PlacementEighPoints;
 ```
 

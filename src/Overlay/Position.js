@@ -4,7 +4,7 @@ import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 import _ from 'lodash';
-import { ownerDocument, getContainer } from 'dom-lib';
+import { ownerDocument, getContainer, on } from 'dom-lib';
 import overlayPositionUtils from '../utils/overlayPositionUtils';
 import shallowEqual from '../utils/shallowEqual';
 import type { Placement } from '../utils/TypeDefinition';
@@ -16,7 +16,8 @@ export type Props = {
   container?: HTMLElement | (() => HTMLElement),
   containerPadding?: number,
   placement?: Placement,
-  shouldUpdatePosition?: boolean
+  shouldUpdatePosition?: boolean,
+  preventOverflow?: boolean
 };
 
 type State = {
@@ -46,7 +47,14 @@ class Position extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    this.updatePosition();
+    this.updatePosition(false);
+    if (this.container && this.props.preventOverflow) {
+      this.containerScrollListener = on(
+        this.container.tagName === 'BODY' ? window : this.container,
+        'scroll',
+        this.updatePosition
+      );
+    }
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
@@ -71,6 +79,9 @@ class Position extends React.Component<Props, State> {
 
   componentWillUnmount() {
     this.lastTarget = null;
+    if (this.containerScrollListener) {
+      this.containerScrollListener.off();
+    }
   }
 
   getTargetSafe() {
@@ -90,12 +101,17 @@ class Position extends React.Component<Props, State> {
 
   lastTarget = false;
   needsFlush = null;
+  container = null;
+  containerScrollListener = null;
 
-  updatePosition(placementChanged?: boolean) {
+  updatePosition = (placementChanged?: boolean = true) => {
     const target = this.getTargetSafe();
     const { shouldUpdatePosition, placement, containerPadding } = this.props;
 
-    if (!shouldUpdatePosition && target === this.lastTarget && !placementChanged) {
+    /**
+     * 如果 target 没有变化，同时不允许更新位置，placement 位置也没有改变，则返回
+     */
+    if (target === this.lastTarget && !shouldUpdatePosition && !placementChanged) {
       return;
     }
 
@@ -121,8 +137,10 @@ class Position extends React.Component<Props, State> {
       container,
       containerPadding
     );
+
+    this.container = container;
     this.setState(nextPosition);
-  }
+  };
 
   render() {
     const { children, className, ...rest } = this.props;
@@ -130,7 +148,7 @@ class Position extends React.Component<Props, State> {
     const child = React.Children.only(children);
 
     return React.cloneElement(child, {
-      ..._.omit(rest, ['target', 'container', 'containerPadding']),
+      ..._.omit(rest, ['target', 'container', 'containerPadding', 'preventOverflow']),
       ...arrowPosition,
       positionLeft,
       positionTop,

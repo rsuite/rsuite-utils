@@ -21,6 +21,7 @@ type Props = {
   rootClose?: boolean,
   show?: boolean,
   shouldUpdatePosition?: boolean,
+  preventOverflow?: boolean,
   target?: Function,
   transition?: React.ElementType,
   onRendered?: Function,
