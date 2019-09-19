@@ -32,7 +32,7 @@ class RootCloseWrapper extends React.Component<Props> {
 
   bindRootCloseHandlers() {
     let doc = window.document;
-    this.onDocumentClickListener = on(doc, 'click', this.handleDocumentClick);
+    this.onDocumentClickListener = on(doc, 'click', this.handleDocumentClick, true);
     this.onDocumentKeyupListener = on(doc, 'keyup', this.handleDocumentKeyUp);
   }
 
