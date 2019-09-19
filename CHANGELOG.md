@@ -1,3 +1,7 @@
+# 2.0.1
+
+- Fix unable to find node on an unmounted component
+
 # 1.6.1
 
 - Fix problem with copy method in IE
