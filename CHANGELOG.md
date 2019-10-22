@@ -1,3 +1,9 @@
+# 2.1.0
+
+- Adjust the implementation logic of `preventOverflow` #14
+- Update `dom-lib`  to 1.2.1
+
+
 # 2.0.1
 
 - Fix unable to find node on an unmounted component
