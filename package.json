@@ -35,7 +35,7 @@
   ],
   "dependencies": {
     "classnames": "^2.2.5",
-    "dom-lib": "^1.1.0",
+    "dom-lib": "^1.2.1",
     "lodash": "^4.17.5",
     "react-lifecycles-compat": "^3.0.4"
   },
