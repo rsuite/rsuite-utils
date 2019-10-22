@@ -44,6 +44,11 @@ class Position extends React.Component<Props, State> {
       arrowOffsetLeft: null,
       arrowOffsetTop: null
     };
+    this.utils = overlayPositionUtils({
+      placement: props.placement,
+      preventOverflow: props.preventOverflow,
+      padding: props.containerPadding
+    });
   }
 
   componentDidMount() {
@@ -106,7 +111,7 @@ class Position extends React.Component<Props, State> {
 
   updatePosition = (placementChanged?: boolean = true) => {
     const target = this.getTargetSafe();
-    const { shouldUpdatePosition, placement, containerPadding } = this.props;
+    const { shouldUpdatePosition } = this.props;
 
     /**
      * 如果 target 没有变化，同时不允许更新位置，placement 位置也没有改变，则返回
@@ -130,13 +135,7 @@ class Position extends React.Component<Props, State> {
     /* eslint-disable */
     const overlay = findDOMNode(this);
     const container = getContainer(this.props.container, ownerDocument(this).body);
-    const nextPosition = overlayPositionUtils.calcOverlayPosition(
-      placement,
-      overlay,
-      target,
-      container,
-      containerPadding
-    );
+    const nextPosition = this.utils.calcOverlayPosition(overlay, target, container);
 
     this.container = container;
     this.setState(nextPosition);

@@ -68,6 +68,7 @@ module.exports = {
     'react/prefer-stateless-function': OFF,
     'react/require-default-props': OFF,
     'react/no-find-dom-node': OFF,
+    'react/sort-comp': OFF,
 
     /**
      * Flowtype
