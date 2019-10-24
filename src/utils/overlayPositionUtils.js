@@ -205,16 +205,25 @@ export default props => {
       }
 
       if (placement === 'topStart' || placement === 'bottomStart') {
-        positionLeft = left + getLeftDelta(left, overlayWidth, container);
+        if (document.dir === 'rtl') {
+          let nextLeft = left + (childOffset.width - overlayWidth);
+          positionLeft = nextLeft + getLeftDelta(nextLeft, overlayWidth, container);
+        } else {
+          positionLeft = left + getLeftDelta(left, overlayWidth, container);
+        }
+      }
+
+      if (placement === 'topEnd' || placement === 'bottomEnd') {
+        if (document.dir === 'rtl') {
+          positionLeft = left + getLeftDelta(left, overlayWidth, container);
+        } else {
+          let nextLeft = left + (childOffset.width - overlayWidth);
+          positionLeft = nextLeft + getLeftDelta(nextLeft, overlayWidth, container);
+        }
       }
 
       if (placement === 'leftStart' || placement === 'rightStart') {
         positionTop = top + getTopDelta(top, overlayHeight, container);
-      }
-
-      if (placement === 'topEnd' || placement === 'bottomEnd') {
-        let nextLeft = left + (childOffset.width - overlayWidth);
-        positionLeft = nextLeft + getLeftDelta(nextLeft, overlayWidth, container);
       }
 
       if (placement === 'leftEnd' || placement === 'rightEnd') {
