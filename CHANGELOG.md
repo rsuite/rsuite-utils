@@ -1,8 +1,11 @@
+# 2.2.0
+
+- Support for rtl in Position
+
 # 2.1.0
 
 - Adjust the implementation logic of `preventOverflow` #14
-- Update `dom-lib`  to 1.2.1
-
+- Update `dom-lib` to 1.2.1
 
 # 2.0.1
 
