@@ -150,8 +150,10 @@ export default props => {
       const { height: overlayHeight, width: overlayWidth } = getOffset(overlayNode);
       const { top, left } = childOffset;
 
+      let nextPlacement = placement;
+
       if (placement && placement.indexOf('auto') >= 0) {
-        placement = this.calcAutoPlacement(childOffset, container, {
+        nextPlacement = this.calcAutoPlacement(childOffset, container, {
           height: overlayHeight,
           width: overlayWidth
         });
@@ -162,7 +164,7 @@ export default props => {
       let arrowOffsetLeft;
       let arrowOffsetTop;
 
-      if (placement === 'left' || placement === 'right') {
+      if (nextPlacement === 'left' || nextPlacement === 'right') {
         positionTop = childOffset.top + (childOffset.height - overlayHeight) / 2;
 
         const topDelta = getTopDelta(positionTop, overlayHeight, container);
@@ -170,7 +172,7 @@ export default props => {
         positionTop += topDelta;
         arrowOffsetTop = `${50 * (1 - (2 * topDelta) / overlayHeight)}%`;
         arrowOffsetLeft = undefined;
-      } else if (placement === 'top' || placement === 'bottom') {
+      } else if (nextPlacement === 'top' || nextPlacement === 'bottom') {
         positionLeft = left + (childOffset.width - overlayWidth) / 2;
 
         const leftDelta = getLeftDelta(positionLeft, overlayWidth, container);
@@ -180,11 +182,15 @@ export default props => {
         arrowOffsetTop = undefined;
       }
 
-      if (placement === 'top' || placement === 'topStart' || placement === 'topEnd') {
+      if (nextPlacement === 'top' || nextPlacement === 'topStart' || nextPlacement === 'topEnd') {
         positionTop = getPositionTop(container, overlayHeight, childOffset.top - overlayHeight);
       }
 
-      if (placement === 'bottom' || placement === 'bottomStart' || placement === 'bottomEnd') {
+      if (
+        nextPlacement === 'bottom' ||
+        nextPlacement === 'bottomStart' ||
+        nextPlacement === 'bottomEnd'
+      ) {
         positionTop = getPositionTop(
           container,
           overlayHeight,
@@ -192,11 +198,19 @@ export default props => {
         );
       }
 
-      if (placement === 'left' || placement === 'leftStart' || placement === 'leftEnd') {
+      if (
+        nextPlacement === 'left' ||
+        nextPlacement === 'leftStart' ||
+        nextPlacement === 'leftEnd'
+      ) {
         positionLeft = getPositionLeft(container, overlayWidth, childOffset.left - overlayWidth);
       }
 
-      if (placement === 'right' || placement === 'rightStart' || placement === 'rightEnd') {
+      if (
+        nextPlacement === 'right' ||
+        nextPlacement === 'rightStart' ||
+        nextPlacement === 'rightEnd'
+      ) {
         positionLeft = getPositionLeft(
           container,
           overlayWidth,
@@ -204,7 +218,27 @@ export default props => {
         );
       }
 
-      if (placement === 'topStart' || placement === 'bottomStart') {
+      if (
+        document.dir === 'rtl' &&
+        (nextPlacement === 'left' ||
+          nextPlacement === 'leftStart' ||
+          nextPlacement === 'leftEnd' ||
+          nextPlacement === 'right' ||
+          nextPlacement === 'rightStart' ||
+          nextPlacement === 'rightEnd')
+      ) {
+        /**
+         * When laying out in rtl, if the width of the container
+         * is less than the width of the container scrolling,
+         * you need to recalculate the left value.
+         */
+        const { width: containerWidth } = getContainerDimensions(container);
+        if (container.scrollWidth > containerWidth) {
+          positionLeft = containerWidth + positionLeft - container.scrollWidth;
+        }
+      }
+
+      if (nextPlacement === 'topStart' || nextPlacement === 'bottomStart') {
         if (document.dir === 'rtl') {
           let nextLeft = left + (childOffset.width - overlayWidth);
           positionLeft = nextLeft + getLeftDelta(nextLeft, overlayWidth, container);
@@ -213,7 +247,7 @@ export default props => {
         }
       }
 
-      if (placement === 'topEnd' || placement === 'bottomEnd') {
+      if (nextPlacement === 'topEnd' || nextPlacement === 'bottomEnd') {
         if (document.dir === 'rtl') {
           positionLeft = left + getLeftDelta(left, overlayWidth, container);
         } else {
@@ -222,11 +256,11 @@ export default props => {
         }
       }
 
-      if (placement === 'leftStart' || placement === 'rightStart') {
+      if (nextPlacement === 'leftStart' || nextPlacement === 'rightStart') {
         positionTop = top + getTopDelta(top, overlayHeight, container);
       }
 
-      if (placement === 'leftEnd' || placement === 'rightEnd') {
+      if (nextPlacement === 'leftEnd' || nextPlacement === 'rightEnd') {
         const nextTop = top + (childOffset.height - overlayHeight);
         positionTop = nextTop + getTopDelta(nextTop, overlayHeight, container);
       }
@@ -236,7 +270,7 @@ export default props => {
         positionTop,
         arrowOffsetLeft,
         arrowOffsetTop,
-        positionClassName: `placement-${kebabCase(placement)}`
+        positionClassName: `placement-${kebabCase(nextPlacement)}`
       };
     }
   };
