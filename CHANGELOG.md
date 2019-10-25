@@ -1,6 +1,10 @@
+# 2.2.1
+
+- Fix the problem that the left value is incorrect in the rtl direction #16
+
 # 2.2.0
 
-- Support for rtl in Position
+- Support for rtl in Position #15
 
 # 2.1.0
 
