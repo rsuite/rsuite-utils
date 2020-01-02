@@ -53,13 +53,13 @@ class ModalManager {
       this.data[containerIdx].modals.push(modal);
       return modalIdx;
     }
-
+    const paddingProp = document.dir === 'rtl' ? 'paddingLeft' : 'paddingRight';
     const data = {
       modals: [modal],
       classes: className ? className.split(/\s+/) : [],
       style: {
         overflow: container.style.overflow,
-        paddingRight: container.style.paddingRight
+        [paddingProp]: container.style[paddingProp]
       },
       overflowing: isOverflowing(container)
     };
@@ -67,8 +67,8 @@ class ModalManager {
     if (data.overflowing) {
       /*eslint-disable */
       const style = {
-        paddingRight:
-          parseInt(getStyle(container, 'paddingRight') || 0, 10) + getScrollbarSize() + 'px'
+        [paddingProp]:
+          parseInt(getStyle(container, paddingProp) || 0, 10) + getScrollbarSize() + 'px'
       };
       addStyle(container, style);
     }
